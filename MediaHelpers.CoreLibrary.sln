@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaHelpers.CoreLibrary", "MediaHelpers.CoreLibrary.csproj", "{3C621CD0-7375-4222-B4E7-C184BB44238A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C621CD0-7375-4222-B4E7-C184BB44238A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C621CD0-7375-4222-B4E7-C184BB44238A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C621CD0-7375-4222-B4E7-C184BB44238A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C621CD0-7375-4222-B4E7-C184BB44238A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D9BC7F45-C938-4CE0-9359-906E0257822F}
+	EndGlobalSection
+EndGlobal
