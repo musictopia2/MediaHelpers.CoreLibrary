@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommonBasicLibraries" Version="4.0.3" />
+    <PackageReference Include="CommonBasicLibraries" Version="5.0.1" />
   </ItemGroup>
 
 </Project>

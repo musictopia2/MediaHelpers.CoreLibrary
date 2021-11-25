@@ -21,6 +21,6 @@ global using cs = CommonBasicLibraries.DatabaseHelpers.ConditionClasses.Conditio
 global using MediaHelpers.CoreLibrary.Music.BasicRandomizer;
 global using MediaHelpers.CoreLibrary.Music.PlayListCreaterClasses;
 global using MediaHelpers.CoreLibrary.Music.DB.Helpers;
-global using fs = CommonBasicLibraries.AdvancedGeneralFunctionsAndProcesses.JsonSerializers.NewtonJsonStrings;
+global using fs = CommonBasicLibraries.AdvancedGeneralFunctionsAndProcesses.JsonSerializers.SystemTextJsonStrings;
 global using static MediaHelpers.CoreLibrary.Music.BasicRandomizer.Globals;
 global using static CommonBasicLibraries.AdvancedGeneralFunctionsAndProcesses.FileFunctions.FileFunctions;
