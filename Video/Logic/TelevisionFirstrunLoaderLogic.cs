@@ -8,10 +8,13 @@ public class TelevisionFirstrunLoaderLogic : ITelevisionLoaderLogic
     }
     async Task ITelevisionLoaderLogic.AddToHistoryAsync(IEpisodeTable episode)
     {
+        await AddToHistoryAsync(episode);
+    }
+    private async Task AddToHistoryAsync(IEpisodeTable episode)
+    {
         _data.CurrentEpisode = episode;
         await _data.AddFirstRunViewHistoryAsync();
     }
-
     async Task ITelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
     {
         await EndEpisodeAsync(episode);
@@ -46,5 +49,11 @@ public class TelevisionFirstrunLoaderLogic : ITelevisionLoaderLogic
     {
         _data.CurrentEpisode = episode;
         return _data.ModifyHolidayCategoryForEpisodeAsync(holiday);
+    }
+    //was going to not support it but decided that if somehow it happened, then go ahead and close out and go back in (even on firstrun shows).
+    async Task ITelevisionLoaderLogic.ReloadAppAsync(IEpisodeTable newEpisode)
+    {
+        await AddToHistoryAsync(newEpisode);
+        _data.ReloadApp();
     }
 }
