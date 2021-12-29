@@ -10,8 +10,7 @@ public class TelevisionRerunsLoaderLogic : ITelevisionLoaderLogic
     }
     async Task ITelevisionLoaderLogic.AddToHistoryAsync(IEpisodeTable episode)
     {
-        _data.CurrentEpisode = episode;
-        await _data.AddReRunViewHistory();
+        await AddToHistoryAsync(episode);
     }
     async Task ITelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
     {
@@ -47,5 +46,20 @@ public class TelevisionRerunsLoaderLogic : ITelevisionLoaderLogic
     {
         _data.CurrentEpisode = episode;
         return _data.ModifyHolidayCategoryForEpisodeAsync(holiday);
+    }
+    private async Task AddToHistoryAsync(IEpisodeTable episode)
+    {
+        _data.CurrentEpisode = episode;
+        await _data.AddReRunViewHistory();
+    }
+    /// <summary>
+    /// this will add to history and make the context for television decide how to reload again
+    /// </summary>
+    /// <param name="newEpisode">this is the new episode chosen</param>
+    /// <returns></returns>
+    async Task ITelevisionLoaderLogic.ReloadAppAsync(IEpisodeTable newEpisode)
+    {
+        await AddToHistoryAsync(newEpisode);
+        _data.ReloadApp();
     }
 }
