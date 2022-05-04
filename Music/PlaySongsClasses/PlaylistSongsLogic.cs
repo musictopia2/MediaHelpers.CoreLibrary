@@ -135,7 +135,7 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
         await _data.AddSeveralPlayListSongsAsync(newList);
         await StartUpAsync();
     }
-    async Task<bool> IProgressMusicPlayer.NextSongAsync()
+    private async Task<bool> NextSongAsync()
     {
         if (_playlistId == null)
         {
@@ -156,8 +156,17 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
         {
             throw new CustomBasicException("No current song was sent.  Rethink");
         }
+        if (_currentSong.DeleteThis)
+        {
+            return await NextSongAsync();
+        }
         await _changeSong.UpdateSongAsync?.Invoke(_currentSong, 0)!;
         return true;
+    }
+    async Task<bool> IProgressMusicPlayer.NextSongAsync()
+    {
+        return await NextSongAsync();
+        
     }
     private async Task StartUpAsync()
     {
@@ -213,6 +222,11 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
             return;
         }
         UpdateProgress.Invoke();
+        if (_currentSong.DeleteThis)
+        {
+            await NextSongAsync();
+            return;
+        }
         await _changeSong.UpdateSongAsync?.Invoke(_currentSong, resumeat)!;
     }
 }
