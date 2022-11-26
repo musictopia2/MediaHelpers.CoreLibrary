@@ -1,0 +1,11 @@
+﻿@if (DataContext is null)
+{
+    return;
+}
+@if (CanPause == false)
+{
+    return;
+}
+<button @onclick="() => DataContext.PlayPause()" style="font-family: 'Webdings'; font-size: 80px; font-weight: bold; background-color: navy; color: aqua; margin-top: 10px; margin-left: 50px; ">
+    ;
+</button>

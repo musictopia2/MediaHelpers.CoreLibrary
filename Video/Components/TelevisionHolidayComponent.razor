@@ -1,0 +1,22 @@
+﻿@if (DataContext is null || DataContext.IsLoaded == false)
+{
+    return;
+}
+<div>
+    <VideoButton Visible="DataContext.HolidayHalfVisible"
+                 OnClick="() => ChoseHolidayEpisode(EnumTelevisionLengthType.HalfHour)"
+                 >
+        @DataContext.HolidayHalfText
+    </VideoButton>
+</div>
+<div>
+    <VideoButton Visible="DataContext.HolidayFullVisible"
+                 OnClick="() => ChoseHolidayEpisode(EnumTelevisionLengthType.FullHour)">
+        @DataContext.HolidayFullText
+    </VideoButton>
+</div>
+<div>
+    <VideoButton OnClick="OnBackToMain">
+        Choose Shows With Non Holiday Episodes
+    </VideoButton>
+</div>

@@ -1,0 +1,24 @@
+﻿@typeparam V
+@if (VideoChanged.HasDelegate == false)
+{
+    <FullComboGenericLayout ItemList="DataContext!.VideoList!"
+                            RetrieveValue="RetrieveValue!"
+                            TValue="V"
+                            IsChild="@IsChild"
+                            @ref="_page"
+                            Style="_style"
+                            @bind-Value="DataContext.SelectedItem"
+                            Title="@Title"
+                            ComboEnterPressed="VideoSelected" />
+    return;
+}
+<FullComboGenericLayout ItemList="DataContext!.VideoList!"
+                        RetrieveValue="RetrieveValue!"
+                        TValue="V"
+                        IsChild="@IsChild"
+                        @ref="_page"
+                        Style="_style"
+                        Value="DataContext.SelectedItem"
+                        ValueChanged="PrivateChange"
+                        Title="@Title"
+                        ComboEnterPressed="VideoSelected" />

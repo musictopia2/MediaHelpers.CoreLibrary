@@ -79,7 +79,7 @@ public class JukeboxLogic : IJukeboxLogic, IProgressMusicPlayer
             {
                 conList.AppendCondition(nameof(IBaseSong.Christmas), true);
             }
-            conList.AppendCondition(nameof(IBaseSong.SongName), cs.Like, searchTerm);
+            conList.AppendCondition(nameof(IBaseSong.SongName), cs1.Like, searchTerm);
             var tempList = _dats.GetCompleteSongList(conList, true);
             nextList = tempList.ToBasicList();
         }

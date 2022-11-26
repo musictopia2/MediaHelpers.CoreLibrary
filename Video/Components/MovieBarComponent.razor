@@ -1,0 +1,7 @@
+﻿<VideoBarComponent DataContext="DataContext"
+                   V="IMainMovieTable"
+                   >
+    <VideoButton OnMouseOut="Player!.HideCursor" OnMouseOver="Player!.ShowCursor" Visible="@DataContext!.Button3Visible" OnClick="DataContext.Button3ProcessAsync">
+        @DataContext.Button3Text
+    </VideoButton>
+</VideoBarComponent>

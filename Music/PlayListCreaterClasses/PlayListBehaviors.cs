@@ -17,7 +17,7 @@ public class PlayListBehaviors<S> where S : IBaseSong
             }
             else
             {
-                tempList.AppendCondition(nameof(IBaseSong.YearSong), cs.Equals, currentObj.EarliestYear);
+                tempList.AppendCondition(nameof(IBaseSong.YearSong), cs1.Equals, currentObj.EarliestYear);
             }
             action?.Invoke(tempList);
         }
@@ -75,7 +75,7 @@ public class PlayListBehaviors<S> where S : IBaseSong
             hadOne = true;
             if (currentObj.UseLikeInSpecializedFormat == true)
             {
-                tempList.AppendCondition(nameof(IBaseSong.SpecialFormat), cs.Like, currentObj.SpecializedFormat);
+                tempList.AppendCondition(nameof(IBaseSong.SpecialFormat), cs1.Like, currentObj.SpecializedFormat);
             }
             else
             {

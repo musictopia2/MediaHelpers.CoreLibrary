@@ -1,0 +1,8 @@
+﻿@if (DataContext is null)
+{
+    return;
+}
+<button style="background-color: transparent; font-size: 40px; font-weight: bold; margin-top: 5px; margin-left: 5px; color: navy"
+        @onclick="() => DataContext.NextSongAsync()">
+    Next Song
+</button>

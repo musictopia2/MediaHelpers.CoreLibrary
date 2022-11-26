@@ -1,12 +1,9 @@
 ﻿namespace MediaHelpers.CoreLibrary.BasicInterfaces;
-public interface IVideoPlayer : IBasicMediaPlayer
+public interface IFullVideoPlayer : IBasicMediaPlayer, ISimpleVideoPlayer
 {
     int HowLongBeforeRemovingCursor { get; set; }
     void Init();
     bool IsCursorVisible();
-    void OtherMouseMove();
-    void ShowCursor();
-    void HideCursor();
     event Action MediaEnded;
     bool ProcessingBeginning();
     event Action<string, string> Progress;
@@ -14,7 +11,7 @@ public interface IVideoPlayer : IBasicMediaPlayer
     int TimeElapsed();
     bool PossibleSkips { get; set; }
     TimeSpan TimeLimit { get; set; }
-    double SpeedRatio { get; set; }
+    double SpeedRatio { get; set; } //this is for sure needed.
     void AddScenesToSkip(BasicList<SkipSceneClass> SkipList);
-    bool FullScreen { get; set; }
+    bool FullScreen { get; set; } //i think this is still needed (?)
 }

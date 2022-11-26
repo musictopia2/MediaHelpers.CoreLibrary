@@ -1,0 +1,20 @@
+﻿<PlaylistNavigationComponent Stage="@_stage" StageChanged="PrivateSetStage" />
+@if (_stage == EnumPlaylistUIStage.Songs)
+{
+    <PlaylistSongDashboardComponent StageChanged="PrivateSetStage"
+                                    NeedsToClear="_needsToClear" />
+}
+else if (_stage == EnumPlaylistUIStage.ChooseSections)
+{
+    <PlaylistSongBuilderComponent StageChanged="(stage) => _stage = stage" />
+}
+else if (_stage == EnumPlaylistUIStage.Creater || PartOfCreater)
+{
+    if (PlaylistCreaterRenderType is null)
+    {
+        <div>There is no playlist creater currently found.</div>
+        return;
+    }
+    <DynamicComponent Type="@PlaylistCreaterRenderType" />
+}
+<PlaylistSongProgressComponent />

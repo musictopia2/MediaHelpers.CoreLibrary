@@ -1,0 +1,40 @@
+﻿@if (DataContext is null)
+{
+    return;
+}
+@using BasicBlazorLibrary.Components.InputNavigations
+@using BasicBlazorLibrary.Components.Forms
+@using BasicBlazorLibrary.Components.Inputs 
+@using Microsoft.AspNetCore.Components.Forms 
+<ColumnLayout Columns="8fr 2fr" ColumnGap="10px">
+    <div>
+        <div style="font-weight: bold">
+            Songs For Section
+        </div>
+        <div>
+            @DataContext.SubLists.First().Description
+        </div>
+    </div>
+    <div>
+        <InputTabOrderNavigationContainer @ref="_navs">
+            <SubmitForm Model="DataContext"
+                        OnValidSubmit="DataContext.ChooseSongsAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <InputEnterNumber 
+                                  FocusFirst="true"
+                                  @bind-Value="DataContext.HowManySongsWanted"
+                                  Title="Songs For Section"
+                                  HeaderFontSize="20px" />
+                <InputEnterNumber 
+                                  WasSubmit="true"
+                                  @bind-Value="DataContext.Percentage"
+                                  Title="Max Percent:"
+                                  HeaderFontSize="20px" />
+                <div style="font-size: 20px; font-weight: bold;">
+                    Total Songs: @DataContext.SongsActuallyChosen
+                </div>
+            </SubmitForm>
+        </InputTabOrderNavigationContainer>
+    </div>
+</ColumnLayout>

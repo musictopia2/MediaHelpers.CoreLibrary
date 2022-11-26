@@ -1,0 +1,8 @@
+﻿<FullComboGenericLayout ItemList="DataContext!.VideoList!"
+                        RetrieveValue="(item) =>  item!.ShowName"
+                        TValue="IShowTable"
+                        @ref="_page"
+                        Style="_style"
+                        @bind-Value="DataContext.SelectedItem"
+                        Title="Choose Rerun Test Show"
+                        ComboEnterPressed="DoChooseVideo" />

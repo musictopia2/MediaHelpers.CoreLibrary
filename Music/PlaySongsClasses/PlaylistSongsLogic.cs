@@ -97,7 +97,7 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
             Percent = percentage,
             HowManySongs = howmanySongs
         };
-        P data = await fs.DeserializeObjectAsync<P>(detail.JsonData);
+        P data = await fs1.DeserializeObjectAsync<P>(detail.JsonData);
         BasicList<ICondition> firstList = _query.GetMusicList(data);
         section.SongList = _data.GetCompleteSongList(firstList);
         if (section.SongList.Any() == false)

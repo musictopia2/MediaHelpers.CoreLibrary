@@ -1,0 +1,18 @@
+﻿@if (DataContext is null)
+{
+    return;
+}
+<BasicSongProgressComponent AlsoStart = "@AlsoStart">
+    <GridTwoByTwo>
+        <LabelPairComponent Row="1"
+                            HeaderText="Up To"
+                            MainText="@DataContext.UpTo"
+                            UseGrid="true"
+                            FontSize="30px" />
+        <LabelPairComponent Row="2"
+                            HeaderText="Songs Left"
+                            MainText="@DataContext.SongsLeft"
+                            UseGrid="true"
+                            FontSize="30px" />
+    </GridTwoByTwo>
+</BasicSongProgressComponent>

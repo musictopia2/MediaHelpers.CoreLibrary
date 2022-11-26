@@ -1,0 +1,15 @@
+﻿@using MediaHelpers.CoreLibrary.Video.TelevisionMiscClasses
+@if (DataContext is not null && DataContext.IsLoaded == false)
+{
+    return;
+}
+@if (_hadPrevious)
+{
+    return;
+}
+@if (DataContext!.CurrentHoliday != EnumTelevisionHoliday.None)
+{
+    <TelevisionHolidayComponent Holiday="DataContext.CurrentHoliday" OnBackToMain="DataContext.ResetHoliday" />
+    return;
+}
+<TelevisionListComponent />

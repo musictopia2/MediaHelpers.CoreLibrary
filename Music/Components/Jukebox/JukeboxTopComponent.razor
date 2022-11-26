@@ -1,0 +1,64 @@
+﻿@if (DataContext is null)
+{
+    return;
+}
+<ColumnLayout Columns="1fr 1fr 1fr" ColumnGap="10px">
+    <div style="font-size: @StandardFontSize; font-weight: bold;">
+        <div>
+            <span style="margin-right: 40px;">Search By Song:</span>
+            <RadioButtonGroupComponent Name="Option">
+                <RadioButtonItemComponent ShowLabel="true"
+                                          @bind-Value="DataContext.SearchOption"
+                                          WidthHeight="50px"
+                                          SelectedValue="EnumJukeboxSearchOption.KeyWords" />
+                <RadioButtonItemComponent ShowLabel="true"
+                                          @bind-Value="DataContext.SearchOption"
+                                          WidthHeight="50px"
+                                          SelectedValue="EnumJukeboxSearchOption.SpecificWords" />
+            </RadioButtonGroupComponent>
+        </div>
+        <div>
+            <TextComponent Style="width: 100%; font-size: 1rem; font-weight: normal;" @bind-Value="DataContext.SearchTerm" OnEnterPressed="SearchSongs" />
+        </div>
+    </div>
+    <div>
+        <button @onclick="() => DataContext.ChristmasToggle()" style="background-color: transparent; font-size: 35px; color:black; font-weight: bold; margin: 0 auto;">
+            @ChristmasText
+        </button>
+    </div>
+</ColumnLayout>
+<ColumnLayout Columns="1fr 1fr 1fr" ColumnGap="10px">
+    <FullComboGenericLayout IsChild="true"
+                            ManuelHeight="@ComboHeight"
+                            Virtualized="true"
+                            TValue="ArtistResult"
+                            ItemList="DataContext.Artists"
+                            RetrieveValue="(item) => item.ArtistName"
+                            @bind-Value="DataContext.ArtistChosen"
+                            HeaderFontSize="@StandardFontSize"
+                            Title="Search By Artist:"
+                            ComboEnterPressed="DataContext.ChooseArtist"
+                            @ref="_artistCombo" />
+    <FullComboGenericLayout IsChild="true"
+                            FirstFocus="false"
+                            ManuelHeight="@ComboHeight"
+                            TValue="SongResult"
+                            @ref="_resultCombo"
+                            HeaderFontSize="@StandardFontSize"
+                            ItemList="DataContext.ResultList"
+                            Title="@ResultsText"
+                            ComboEnterPressed="DataContext.AddSongToListAsync"
+                            RetrieveValue="(item) => item.ResultDisplay"
+                            @bind-Value="DataContext.SongChosen" />
+    <FullComboGenericLayout IsChild="true"
+                            FirstFocus="false"
+                            TValue="SongResult"
+                            ManuelHeight="@ComboHeight"
+                            HeaderFontSize="@StandardFontSize"
+                            ItemList="DataContext.SongsToPlay"
+                            @bind-Value="DataContext.DeleteChosen"
+                            Style="_lastModel"
+                            Title="PlayList:"
+                            RetrieveValue="(item) => item.PlayListDisplay"
+                            ComboEnterPressed="RemoveFromPlayListAsync" />
+</ColumnLayout>

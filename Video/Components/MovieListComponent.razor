@@ -1,0 +1,68 @@
+﻿@if (DataContext is null)
+{
+    return;
+}
+<ColumnLayout Columns="6fr 3fr" ColumnGap="5px">
+    <VideoListComponent V="IMainMovieTable"
+                        DataContext="DataContext"
+                        IsChild="true"
+                        VideoChanged="Refresh"
+                        Title="Movie List"
+                        RetrieveValue="(item) => item!.Title"
+                        VideoSelected="DoChooseMovie" />
+
+    <div style="font-size: 30px; font-weight: bold; ">
+        <div style="@GetMargins">
+            <VideoButton IsEnabled="DataContext.SelectedItem is not null"
+                         OnClick="DoChooseMovie">
+                Choose Movie
+            </VideoButton>
+        </div>
+        <RadioButtonGroupComponent Name="Main">
+            <div style="@GetMargins">
+                <RadioButtonItemComponent TValue="EnumMovieSelectionMode"
+                                          @bind-Value="DataContext.SelectionMode"
+                                          SelectedValue="EnumMovieSelectionMode.AllMovies"
+                                          ShowLabel="true"
+                                          Zoom="3" />
+            </div>
+            <div style="@GetMargins">
+                <RadioButtonItemComponent TValue="EnumMovieSelectionMode"
+                                          @bind-Value="DataContext.SelectionMode"
+                                          SelectedValue="EnumMovieSelectionMode.NewMovies"
+                                          ShowLabel="true"
+                                          Zoom="3" />
+            </div>
+            <div style="@GetMargins">
+                <RadioButtonItemComponent TValue="EnumMovieSelectionMode"
+                                          @bind-Value="DataContext.SelectionMode"
+                                          SelectedValue="EnumMovieSelectionMode.AlreadyWatched"
+                                          ShowLabel="true"
+                                          Zoom="3" />
+            </div>
+            <div style="@GetMargins">
+                <VideoButton OnClick="DataContext.GetMovieListAsync">
+                    List Movies
+                </VideoButton>
+            </div>
+            <div style="@GetMargins">
+                <VideoButton IsEnabled="DataContext.CanAutoResume" OnClick="AutoResume">
+                    Auto Resume
+                </VideoButton>
+            </div>
+            <div style="@GetMargins">
+                <VideoButton IsEnabled="DataContext.CanShowLastWatched"
+                             OnClick="DataContext.ShowLastWatchedAsync"
+                             >
+                    Last Watched
+                </VideoButton>
+            </div>
+            <div style="@GetMargins">
+                <VideoButton IsEnabled="DataContext.CanShowInfoLast"
+                             OnClick="DataContext.ShowInfoLastAsync">
+                    Info Last
+                </VideoButton>
+            </div>
+        </RadioButtonGroupComponent>
+    </div>
+</ColumnLayout>

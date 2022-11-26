@@ -1,0 +1,42 @@
+﻿@if (DataContext is null)
+{
+    return;
+}
+<RadioButtonGroupComponent Name="PlaylistSongs">
+    <div style="font-weight: bold; margin-bottom: 5px; font-size: 20px;">
+        <RadioButtonItemComponent ShowLabel="true"
+                                  WidthHeight="50px"
+                                  SelectedValue="EnumPlayListOption.PlaySongsDefault"
+                                  @bind-Value="DataContext.PlayListOption" />
+    </div>
+    <div style="font-weight: bold; margin-bottom: 5px; font-size: 20px;">
+        <RadioButtonItemComponent ShowLabel="true"
+                                  WidthHeight="50px"
+                                  SelectedValue="EnumPlayListOption.DeletePlayLists"
+                                  @bind-Value="DataContext.PlayListOption" />
+    </div>
+    <div style="font-weight: bold; margin-bottom: 5px; font-size: 20px;">
+        <RadioButtonItemComponent ShowLabel="true"
+                                  WidthHeight="50px"
+                                  SelectedValue="EnumPlayListOption.ClearPlayLists"
+                                  @bind-Value="DataContext.PlayListOption" />
+    </div>
+</RadioButtonGroupComponent>
+<div>
+    @if (DataContext.CanChooseRecentPlayList)
+    {
+        <button @onclick="() => DataContext.ChooseRecentPlayListAsync()" style="background-color: transparent; font-weight: bold; font-size: 20px">
+            Current Playlist
+        </button>
+    }
+</div>
+<FullComboGenericLayout HeaderFontSize="20px"
+                        IsChild="true"
+                        ManuelHeight="600px"
+                        @ref="_combo"
+                        ItemList="DataContext.Playlists"
+                        TValue="IPlayListMain"
+                        @bind-Value="DataContext.ChosenPlayList"
+                        RetrieveValue="(item) => item.PlayListName"
+                        ComboEnterPressed="DataContext.SmartChooseOptionAsync"
+                        Title="Choose Playlist" />

@@ -1,0 +1,8 @@
+﻿@if (Container is null)
+{
+    return;
+}
+ @* needed this one to test the dynamiccomponent part *@
+<div style="color: navy; font-size: 30px">
+    <DynamicComponent Type="@Container.RenderType" />
+</div>

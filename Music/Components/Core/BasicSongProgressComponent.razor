@@ -1,0 +1,52 @@
+﻿@if (DataContext is null)
+{
+    return;
+}
+@if (DataContext.IsSongPlaying == false)
+{
+    return;
+}
+<StackLayout Orientation="EnumOrientation.Vertical">
+    <StackItem>
+        @if (ChildContent is null)
+        {
+            <NextSongButtonComponent />
+            return;
+        }
+        <StackLayout Orientation="EnumOrientation.Horizontal">
+            <StackItem>
+                <NextSongButtonComponent />
+            </StackItem>
+            <StackItem>
+                @ChildContent
+            </StackItem>
+        </StackLayout>
+    </StackItem>
+    <StackItem Length="30px">
+        
+    </StackItem>
+    <StackItem>
+        <GridTwoByTwo ColumnLength="max-content" ColumnGap="5px" >
+            <LabelPairComponent Row="1"
+                                HeaderText="Artist" 
+                                MainText="@DataContext.ArtistName"
+                                UseGrid="true"
+                                FontSize="30px"
+                                />
+            <LabelPairComponent Row="2" 
+                                HeaderText="Song"
+                                MainText="@DataContext.SongName"
+                                UseGrid="true"
+                                FontSize="30px"
+                                />
+        </GridTwoByTwo>
+    </StackItem>
+    <StackItem>
+        <div style="font-size: 40px">
+            @DataContext.ProgressText
+        </div>
+    </StackItem>
+    <StackItem>
+        <PauseButtonComponent CanPause="DataContext.CanPause" />
+    </StackItem>
+</StackLayout>
