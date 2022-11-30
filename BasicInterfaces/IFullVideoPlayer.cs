@@ -3,7 +3,6 @@ public interface IFullVideoPlayer : IBasicMediaPlayer, ISimpleVideoPlayer
 {
     int HowLongBeforeRemovingCursor { get; set; }
     void Init();
-    bool IsCursorVisible();
     event Action MediaEnded;
     bool ProcessingBeginning();
     event Action<string, string> Progress;
@@ -13,5 +12,6 @@ public interface IFullVideoPlayer : IBasicMediaPlayer, ISimpleVideoPlayer
     TimeSpan TimeLimit { get; set; }
     double SpeedRatio { get; set; } //this is for sure needed.
     void AddScenesToSkip(BasicList<SkipSceneClass> SkipList);
+    bool IsCursorVisible();
     bool FullScreen { get; set; } //i think this is still needed (?)
 }

@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class TelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>
+public class TelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>, ITelevisionLoaderViewModel
 {
     private readonly ITelevisionLoaderLogic _loadLogiclogic;
     private readonly TelevisionHolidayViewModel _holidayViewModel;

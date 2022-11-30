@@ -4,4 +4,5 @@ public interface ISimpleVideoPlayer
     void OtherMouseMove();
     void ShowCursor();
     void HideCursor();
+
 }

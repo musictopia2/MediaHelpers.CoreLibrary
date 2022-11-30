@@ -3,6 +3,20 @@
 {
     return;
 }
+@if (ShowProgress == false)
+{
+    <VideoButton OnMouseOut="Player!.HideCursor" OnMouseOver="Player!.ShowCursor" Visible="@DataContext.PlayButtonVisible" OnClick="DataContext.PlayPause">
+        Pause
+    </VideoButton>
+    <VideoButton OnMouseOut="Player!.HideCursor" OnMouseOver="Player!.ShowCursor" Visible="@DataContext.CloseButtonVisible" OnClick="DataContext.CloseScreenAsync">
+        Close
+    </VideoButton>
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+    return;
+}
 <div @onmousemove="Player.OtherMouseMove">
     @DataContext.ProgressText
     <VideoButton OnMouseOut="Player!.HideCursor" OnMouseOver="Player!.ShowCursor" Visible="@DataContext.PlayButtonVisible" OnClick="DataContext.PlayPause">

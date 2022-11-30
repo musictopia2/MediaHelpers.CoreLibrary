@@ -5,6 +5,22 @@
 }
 @if (_hadPrevious)
 {
+    if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+    return;
+}
+@if (ShowContentManually)
+{
+    if (ChildContent is null)
+    {
+        <div>
+            You need to set up the content to show since you specified to show manually
+        </div>
+        return;
+    }
+    @ChildContent
     return;
 }
 @if (DataContext!.CurrentHoliday != EnumTelevisionHoliday.None)
