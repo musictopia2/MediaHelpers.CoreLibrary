@@ -11,7 +11,7 @@
 	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommonBasicLibraries" Version="7.0.10" />
-	  <PackageReference Include="BasicBlazorLibrary" Version="7.0.13" />
+	  <PackageReference Include="BasicBlazorLibrary" Version="7.0.14" />
   </ItemGroup>
 
 </Project>
