@@ -12,9 +12,13 @@ public class PrepareSong : IPrepareSong
     private static bool IsMp3(string path)
     {
         if (path.ToLower().EndsWith(".mp3") == true)
+        {
             return true;
+        }
         if (path.ToLower().EndsWith(".and") == true)
+        {
             return false;
+        }
         throw new CustomBasicException("Must End With .mp3 or .and");
     }
     private static string ConvertToMp3(string path)
@@ -32,11 +36,13 @@ public class PrepareSong : IPrepareSong
             await RenameFileAsync(OldPath, paths);
         }
         if (FileExists(paths) == false)
+        {
             if (ShowErrors == true)
             {
                 _error.ShowSystemError($"Cannot find the path {paths}  when trying to play a song.  Maybe the hard drive is having problems or you have been disconnected from the network");
                 return false;
             }
+        }
         _mP3.Path = paths;
         if (resumeAt == 0)
         {
