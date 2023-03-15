@@ -1,4 +1,4 @@
-﻿using System.Timers; //not common enough.
+﻿//using System.Timers; //not common enough.
 namespace MediaHelpers.CoreLibrary.Music.ViewModels;
 public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
 {
@@ -6,6 +6,7 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
     private readonly IProgressMusicPlayer _player;
     private readonly IPrepareSong _prepare;
     private readonly IToast _toast;
+    public static Func<bool> CanMusicPlay { get; set; } = () => true; //default to music can always play.
     public BasicSongProgressViewModel(IMP3Player mp3,
         IProgressMusicPlayer player,
         IPrepareSong prepare,
@@ -89,14 +90,25 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
     {
         _mp3.Pause();
     }
-    private async void TimerElapsed(object sender, ElapsedEventArgs e)
-    {
-        await FirstShowProgressAsync();
-    }
+    //private async void TimerElapsed(object sender, ElapsedEventArgs e)
+    //{
+    //    await FirstShowProgressAsync();
+    //}
     private async Task FirstShowProgressAsync()
     {
         if (IsSongPlaying == false)
         {
+            return;
+        }
+        bool isAllowed = CanMusicPlay();
+        if (isAllowed == false)
+        {
+            //specialized stuff needs to happen.
+            if (_mp3.IsPaused() == false)
+            {
+                _mp3.Pause(); //do pause because its not allowed.
+            }
+            //can't even send to remote control because not allowed.
             return;
         }
         if (_mp3.IsFinished())
