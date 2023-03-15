@@ -83,11 +83,19 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
     public bool CanPause => CurrentSong is not null;
     public async Task NextSongAsync()
     {
+        if (CanMusicPlay() == false)
+        {
+            return; //if you can't play the music, then don't even go to the next song.
+        }
         IsSongPlaying = await _player.NextSongAsync();
         StateChanged?.Invoke();
     }
     public void PlayPause()
     {
+        if (CanMusicPlay() == false)
+        {
+            return; //forgot that if you can't even play the music, then don't even play/pause music.
+        }
         _mp3.Pause();
     }
     //private async void TimerElapsed(object sender, ElapsedEventArgs e)
