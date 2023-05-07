@@ -5,6 +5,7 @@ public class MockMusicRemoteControlHostService : IMusicRemoteControlHostService
     Func<Task>? IMusicRemoteControlHostService.DeleteSong { get; set; }
     Func<Task>? IMusicRemoteControlHostService.IncreaseWeight { get; set; }
     Func<Task>? IMusicRemoteControlHostService.DecreaseWeight { get; set; }
+    Action? IMusicRemoteControlHostService.PlayPause { get; set; }
     Task IMusicRemoteControlHostService.InitializeAsync()
     {
         return Task.CompletedTask;
