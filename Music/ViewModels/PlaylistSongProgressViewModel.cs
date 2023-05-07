@@ -50,7 +50,10 @@ public class PlaylistSongProgressViewModel : BasicSongProgressViewModel
             }
             await remoteData.DecreaseWeightAsync(CurrentSong!);
         };
-        _hostService.PlayPause = PlayPause; //i think.
+        _hostService.PlayPause = () =>
+        {
+            Execute.OnUIThread(PlayPause);
+        };
     }
     protected override async Task InitPossibleRemoteControl()
     {
