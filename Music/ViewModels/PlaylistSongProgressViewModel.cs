@@ -19,6 +19,10 @@ public class PlaylistSongProgressViewModel : BasicSongProgressViewModel
         _player.UpdateProgress = UpdateProgress;
         _hostService.DeleteSong = async () =>
         {
+            if (CanMusicPlay() == false)
+            {
+                return; //because if you can't play, then should not try to delete the song.
+            }
             try
             {
                 await remoteData.DeleteSongAsync(CurrentSong!);
@@ -29,16 +33,24 @@ public class PlaylistSongProgressViewModel : BasicSongProgressViewModel
 
                 throw;
             }
-            
         };
         _hostService.IncreaseWeight = async () =>
         {
+            if (CanMusicPlay() == false)
+            {
+                return; //because if you can't play, then should not try to delete the song.
+            }
             await remoteData.IncreaseWeightAsync(CurrentSong!);
         };
         _hostService.DecreaseWeight = async () =>
         {
+            if (CanMusicPlay() == false)
+            {
+                return; //because if you can't play, then should not try to delete the song.
+            }
             await remoteData.DecreaseWeightAsync(CurrentSong!);
         };
+        _hostService.PlayPause = PlayPause; //i think.
     }
     protected override async Task InitPossibleRemoteControl()
     {

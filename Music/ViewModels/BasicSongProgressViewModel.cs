@@ -112,11 +112,17 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
         if (isAllowed == false)
         {
             //specialized stuff needs to happen.
-            if (_mp3.IsPaused() == false)
+            if (_mp3.GetState() == EnumMusicState.Playing)
             {
-                _mp3.Pause(); //do pause because its not allowed.
+                _mp3.Pause(); //try this way.
             }
+            //if (_mp3.IsPaused() == false)
+            //{
+            //    _mp3.Pause(); //do pause because its not allowed.
+            //}
             //can't even send to remote control because not allowed.
+            //Start(); //has to start again just in case you later can do something.
+            LaterCheck(); //has to later check
             return;
         }
         if (_mp3.IsFinished())
@@ -144,6 +150,18 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
         IsSongPlaying = await _prepare.PrepareSongAsync(CurrentSong, ResumeAt);
         Start();
         StateChanged?.Invoke();
+    }
+    private async void LaterCheck()
+    {
+        do
+        {
+            await Task.Delay(400);
+            if (CanMusicPlay())
+            {
+                Start();
+                return;
+            }
+        } while (true);
     }
     public async void Start()
     {

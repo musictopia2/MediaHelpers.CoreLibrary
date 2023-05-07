@@ -3,4 +3,5 @@ public interface IMP3Player : IBasicMediaPlayer
 {
     string TimeElapsedLabel();
     string TotalInLabel();
+    EnumMusicState GetState();
 }
