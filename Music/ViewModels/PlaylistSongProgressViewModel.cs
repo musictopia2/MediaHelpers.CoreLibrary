@@ -55,9 +55,30 @@ public class PlaylistSongProgressViewModel : BasicSongProgressViewModel
             Execute.OnUIThread(PlayPause);
         };
     }
-    protected override async Task InitPossibleRemoteControl()
+    protected override Task InitPossibleRemoteControl()
     {
-        await _hostService.InitializeAsync();
+        TryToInitRemoteControl(); //just keep trying to initialize.
+        return Task.CompletedTask;
+        //await _hostService.InitializeAsync();
+    }
+    async void TryToInitRemoteControl()
+    {
+        await Task.Run(async () =>
+        {
+            do
+            {
+                try
+                {
+                    await _hostService!.InitializeAsync();
+                    return;
+                }
+                catch (Exception)
+                {
+                    await Task.Delay(2000); //try again in 2 seconds.
+                }
+
+            } while (true);
+        });
     }
     private void UpdateProgress()
     {
