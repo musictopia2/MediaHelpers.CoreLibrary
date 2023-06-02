@@ -4,6 +4,7 @@ public class PlaylistSongProgressViewModel : BasicSongProgressViewModel
     private readonly IPlaylistSongProgressPlayer _player;
     private readonly IMusicRemoteControlDataAccess _remoteData;
     private readonly IMusicRemoteControlHostService _hostService;
+    public static bool NoDelete { get; set; }
     public PlaylistSongProgressViewModel(IMP3Player mp3,
         IPlaylistSongProgressPlayer player,
         IPrepareSong prepare,
@@ -25,8 +26,12 @@ public class PlaylistSongProgressViewModel : BasicSongProgressViewModel
             }
             try
             {
-                await remoteData.DeleteSongAsync(CurrentSong!);
-                await _player.NextSongAsync(); //go to next song automatically as well.
+                if (NoDelete == false)
+                {
+                    await remoteData.DeleteSongAsync(CurrentSong!);
+                }
+                await Execute.OnUIThreadAsync(_player.NextSongAsync);
+                //await _player.NextSongAsync(); //go to next song automatically as well.
             }
             catch (Exception)
             {
