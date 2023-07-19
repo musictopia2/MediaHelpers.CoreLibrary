@@ -25,7 +25,7 @@ public class PrepareSong : IPrepareSong
     {
         return $"{path.Substring(0, path.Length - 4)}.mp3";
     }
-    async Task<bool> IPrepareSong.PrepareSongAsync(IBaseSong currentSong, int resumeAt)
+    async Task<bool> IPrepareSong.PrepareSongAsync(IPlaySong currentSong, int resumeAt)
     {
         _mP3.StopPlay();
         string paths = currentSong.FullPath;

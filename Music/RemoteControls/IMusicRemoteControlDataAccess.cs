@@ -1,8 +1,8 @@
 ﻿namespace MediaHelpers.CoreLibrary.Music.RemoteControls;
 public interface IMusicRemoteControlDataAccess
 {
-    Task IncreaseWeightAsync(IBaseSong song);
-    Task DecreaseWeightAsync(IBaseSong song);
-    int GetWeight(IBaseSong song);
-    Task DeleteSongAsync(IBaseSong song);
+    Task IncreaseWeightAsync(IPlaySong song);
+    Task DecreaseWeightAsync(IPlaySong song);
+    int GetWeight(IPlaySong song);
+    Task DeleteSongAsync(IPlaySong song);
 }

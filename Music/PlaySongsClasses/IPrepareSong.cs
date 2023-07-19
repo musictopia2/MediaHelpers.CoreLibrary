@@ -7,5 +7,5 @@ public interface IPrepareSong
     /// </summary>
     /// <param name="action"></param>
     /// <returns></returns>
-    Task<bool> PrepareSongAsync(IBaseSong currentSong, int resumeAt);
+    Task<bool> PrepareSongAsync(IPlaySong currentSong, int resumeAt);
 }

@@ -8,4 +8,6 @@ public interface IBaseSong : IPlaySong
     bool WorkOut { get; set; }
     string SpecialFormat { get; set; }
     string ShowType { get; set; }
+    bool DeleteThis { get; set; } //looks like there needs to be a field for whether a song is deleted or not.
+    int SongNumber { get; set; }
 }

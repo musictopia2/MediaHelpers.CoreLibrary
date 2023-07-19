@@ -32,8 +32,8 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
         await FirstShowProgressAsync();
     }
     public Action? StateChanged { get; set; }
-    private IBaseSong? _currentSong;
-    public IBaseSong? CurrentSong
+    private IPlaySong? _currentSong;
+    public IPlaySong? CurrentSong
     {
         get => _currentSong;
         set
