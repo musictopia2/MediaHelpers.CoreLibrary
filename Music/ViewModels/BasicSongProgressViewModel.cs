@@ -143,7 +143,7 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
     {
         _toast.ShowUserErrorToast(message);
     }
-    public async Task UpdateSongAsync(IBaseSong song, int resumeAt)
+    public async Task UpdateSongAsync(IPlaySong song, int resumeAt)
     {
         CurrentSong = song;
         ResumeAt = resumeAt;
