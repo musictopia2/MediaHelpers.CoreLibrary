@@ -97,6 +97,10 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
             return; //forgot that if you can't even play the music, then don't even play/pause music.
         }
         _mp3.Pause();
+        if (_mp3.GetState() == EnumMusicState.Playing)
+        {
+            Start(); //start again now i think.
+        }
     }
     //private async void TimerElapsed(object sender, ElapsedEventArgs e)
     //{
@@ -104,15 +108,20 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
     //}
     private async Task FirstShowProgressAsync()
     {
+        EnumMusicState state = _mp3.GetState();
         if (IsSongPlaying == false)
         {
             return;
+        }
+        if (state == EnumMusicState.Paused)
+        {
+            return; //i don't think we need to show anything because its paused.
         }
         bool isAllowed = CanMusicPlay();
         if (isAllowed == false)
         {
             //specialized stuff needs to happen.
-            if (_mp3.GetState() == EnumMusicState.Playing)
+            if (state == EnumMusicState.Playing)
             {
                 _mp3.Pause(); //try this way.
             }
@@ -153,6 +162,7 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
     }
     private async void LaterCheck()
     {
+        _processing = false;
         do
         {
             await Task.Delay(400);
