@@ -1,4 +1,11 @@
-﻿<RowLayout Rows="auto 1fr 1fr">
-    <JukeboxTopComponent />
+﻿@if (_updating)
+{
+    <div>
+        Updating Jukebox.  Please Wait
+    </div>
+    return;
+}
+<RowLayout Rows="auto 1fr 1fr">
+    <JukeboxTopComponent OnJukeboxUpdating="UpdateJukebox" />
     <BasicSongProgressComponent />
 </RowLayout>

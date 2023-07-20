@@ -13,6 +13,7 @@ public class JukeboxViewModel
         IsChristmas = CalculateChristmas();
         LoadArtistList();
     }
+    public static Func<Task>? UpdateJukebox { get; set; } //this method would call if necessary 
     public EnumJukeboxSearchOption SearchOption { get; set; }
     public BasicList<SongResult> SongsToPlay { get; private set; }
     public string SearchTerm { get; set; } = "";

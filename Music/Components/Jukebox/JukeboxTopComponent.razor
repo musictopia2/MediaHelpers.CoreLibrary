@@ -22,10 +22,20 @@
         </div>
     </div>
     <div>
-        <button @onclick="() => DataContext.ChristmasToggle()" style="background-color: transparent; font-size: 35px; color:black; font-weight: bold; margin: 0 auto;">
-            @ChristmasText
-        </button>
+        <div>
+            <button @onclick="() => DataContext.ChristmasToggle()" class="custombutton">
+                @ChristmasText
+            </button>
+        </div>
+        @if (JukeboxViewModel.UpdateJukebox is not null && ProgressContext!.IsSongPlaying == false)
+        {
+            <button @onclick=OnJukeboxUpdating class="custombutton">
+                Update Jukebox
+            </button>
+        }
+
     </div>
+    
 </ColumnLayout>
 <ColumnLayout Columns="1fr 1fr 1fr" ColumnGap="10px">
     <FullComboGenericLayout IsChild="true"

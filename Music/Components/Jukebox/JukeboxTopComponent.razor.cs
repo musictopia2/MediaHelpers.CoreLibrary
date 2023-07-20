@@ -5,6 +5,10 @@ public partial class JukeboxTopComponent
     private JukeboxViewModel? DataContext { get; set; }
     [Inject]
     private ChangeSongContainer? Container { get; set; }
+    [Inject]
+    private BasicSongProgressViewModel? ProgressContext { get; set; }
+    [Parameter]
+    public EventCallback OnJukeboxUpdating { get; set; }
     private FullComboGenericLayout<ArtistResult>? _artistCombo;
     private FullComboGenericLayout<SongResult>? _resultCombo;
     private static string StandardFontSize => "20px";
