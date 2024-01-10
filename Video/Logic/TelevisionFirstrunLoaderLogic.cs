@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionFirstrunLoaderLogic(IFirstRunTelevisionContext data) : IFirstRunTelevisionLoaderLogic
+public class TelevisionFirstrunLoaderLogic(IFirstRunLoaderTelevisionContext data) : IFirstRunTelevisionLoaderLogic
 {
     async Task IBasicTelevisionLoaderLogic.InitializeEpisodeAsync(IEpisodeTable episode)
     {

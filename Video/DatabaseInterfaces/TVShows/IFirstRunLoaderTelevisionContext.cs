@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
-public interface IFirstRunTelevisionContext : IStartTelevisionContext
+public interface IFirstRunLoaderTelevisionContext : IStartLoaderTelevisionContext
 {
     Task FinishVideoFirstRunAsync();
     Task FinishVideoFirstRunAsync(int showID);

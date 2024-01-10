@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionRerunsLoaderLogic(IRerunTelevisionContext data) : IRerunTelevisionLoaderLogic
+public class TelevisionRerunsLoaderLogic(IRerunLoaderTelevisionContext data) : IRerunTelevisionLoaderLogic
 {
     async Task IBasicTelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
     {

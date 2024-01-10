@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionListRerunLogic(IRerunTelevisionContext data, IMessageBox message, IExit exit) : ITelevisionListLogic
+public class TelevisionListRerunLogic(IRerunListTelevisionContext data, IMessageBox message, IExit exit) : ITelevisionListLogic
 {
     async Task<IEpisodeTable?> ITelevisionListLogic.GetNextEpisodeAsync(IShowTable selectedItem)
     {

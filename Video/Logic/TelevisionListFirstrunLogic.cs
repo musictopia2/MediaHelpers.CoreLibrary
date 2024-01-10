@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionListFirstrunLogic(IFirstRunTelevisionContext data) : ITelevisionListLogic
+public class TelevisionListFirstrunLogic(IFirstRunListTelevisionContext data) : ITelevisionListLogic
 {
     async Task<IEpisodeTable?> ITelevisionListLogic.GetNextEpisodeAsync(IShowTable selectedItem)
     {

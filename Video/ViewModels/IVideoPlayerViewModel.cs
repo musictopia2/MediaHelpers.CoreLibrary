@@ -5,5 +5,5 @@ public interface IVideoPlayerViewModel
     bool PlayButtonVisible { get; set; }
     bool CloseButtonVisible { get; set; }
     bool FullScreen { get; set; }
-    bool CanPlay { get; }
+    //bool CanPlay { get; }
 }

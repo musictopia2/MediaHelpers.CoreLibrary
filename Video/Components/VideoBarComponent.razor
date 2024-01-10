@@ -3,6 +3,13 @@
 {
     return;
 }
+@if (DataContext.CanPlay == false)
+{
+    <div style="font-size: 20vh;">
+        Waiting For Remote Control
+    </div>
+    return;
+}
 @if (ShowProgress == false)
 {
     <VideoButton OnMouseOut="Player!.HideCursor" OnMouseOver="Player!.ShowCursor" Visible="@DataContext.PlayButtonVisible" OnClick="DataContext.PlayPause">

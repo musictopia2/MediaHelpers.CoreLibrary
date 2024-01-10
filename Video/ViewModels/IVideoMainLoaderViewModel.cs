@@ -15,6 +15,7 @@ public interface IVideoMainLoaderViewModel<V> where V : class
     Task CloseScreenAsync();
     Task InitAsync();
     void PlayPause();
+    bool CanPlay { get; }
     //hopefully not needed (?)
     //Task SaveProgressAsync();
     //Task VideoFinishedAsync();
