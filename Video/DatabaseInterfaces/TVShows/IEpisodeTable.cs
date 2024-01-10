@@ -6,7 +6,8 @@ public interface IEpisodeTable
     int? StartAt { get; set; }
     int? OpeningLength { get; set; }
     int? ClosingLength { get; set; }
-    bool AlreadySkippedOpening { get; set; }
+    //maybe does not even need whether the opening was skipped or not now
+    //bool AlreadySkippedOpening { get; set; }
     //bool Finished { get; set; }
     bool AlwaysSkipBeginning { get; set; }
     int BeginAt { get; set; }
