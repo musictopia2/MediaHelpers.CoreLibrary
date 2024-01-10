@@ -3,7 +3,8 @@ public interface ITelevisionContext
 {
     int Seconds { get; set; }
     IEpisodeTable CurrentEpisode { get; set; }
-    BasicList<IEpisodeTable> GetHolidayList(EnumTelevisionHoliday currentHoliday, int currentWeight);
+    //if weights are needed, something else has to be created for it.
+    BasicList<IEpisodeTable> GetHolidayList(EnumTelevisionHoliday currentHoliday);
     bool HadPreviousShow();
     Task InitializeFirstRunEpisodeAsync();
     Task InitializeRerunEpisodeAsync();

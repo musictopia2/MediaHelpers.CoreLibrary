@@ -8,16 +8,8 @@ public class TelevisionHolidayLogic : ITelevisionHolidayLogic
     }
     async Task<BasicList<IEpisodeTable>> ITelevisionHolidayLogic.GetHolidayEpisodeListAsync(EnumTelevisionHoliday currentHoliday)
     {
-        int currentWeight;
         await Task.CompletedTask;
-        if (currentHoliday == EnumTelevisionHoliday.Christmas)
-        {
-            currentWeight = 6;
-        }
-        else
-        {
-            currentWeight = 4;
-        }
-        return _dats.GetHolidayList(currentHoliday, currentWeight); //something else has the try catch statement.
+        
+        return _dats.GetHolidayList(currentHoliday);
     }
 }
