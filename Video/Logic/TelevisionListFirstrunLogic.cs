@@ -13,6 +13,6 @@ public class TelevisionListFirstrunLogic(ITelevisionContext data) : ITelevisionL
     }
     Task<BasicList<IShowTable>> ITelevisionListLogic.GetShowListAsync()
     {
-        return data.ListShowsAsync(EnumTelevisionCategory.FirstRun);
+        return data.ListShowsAsync();
     }
 }

@@ -12,7 +12,8 @@ public interface ITelevisionContext
     Task InitializeRerunEpisodeAsync();
     //Task AddFirstRunViewHistoryAsync();
     //Task AddReRunViewHistory();
-    Task<BasicList<IShowTable>> ListShowsAsync(EnumTelevisionCategory televisionCategory);
+    //figure out a way where does not care what television category it is anymore.  so an app has to register proper stuff
+    Task<BasicList<IShowTable>> ListShowsAsync();
 
     //BasicList<IShowTable> ListShows(EnumTelevisionCategory televisionCategory);
     //if there was a previous show, this is responsible for getting the show as well.

@@ -14,6 +14,6 @@ public class TelevisionListRerunLogic(ITelevisionContext data, IMessageBox messa
     }
     Task<BasicList<IShowTable>> ITelevisionListLogic.GetShowListAsync()
     {
-        return data.ListShowsAsync(EnumTelevisionCategory.Reruns);
+        return data.ListShowsAsync();
     }
 }
