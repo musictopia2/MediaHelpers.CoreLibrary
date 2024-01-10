@@ -24,7 +24,7 @@ public class TelevisionFirstrunLoaderLogic(ITelevisionContext data) : ITelevisio
     {
         episode.ResumeAt = null;
         data.CurrentEpisode = episode;
-        await data.FinishVideoFirstRunAsync();
+        await data.FinishVideoFirstRunAsync(); //should not need a way to be able to end episode since it most likely will close out.
     }
     async Task ITelevisionLoaderLogic.FinishTVEpisodeAsync(IEpisodeTable episode)
     {
@@ -55,8 +55,8 @@ public class TelevisionFirstrunLoaderLogic(ITelevisionContext data) : ITelevisio
     {
         //may have to rethink if one is youtube and the other is not.
         await InitializeEpisodeAsync(newEpisode); //i think.
+        await data.ReloadAppAsync();
         //await AddToHistoryAsync(newEpisode);
-        data.ReloadApp();
     }
 
     Task ITelevisionLoaderLogic.TemporarilySKipEpisodeAsync(IEpisodeTable episode)

@@ -34,5 +34,9 @@ public interface ITelevisionContext
     Task ForeverSkipEpisodeAsync();
     Task TemporarilySkipEpisodeAsync(); //this means will do so temporarily.
     Task ModifyHolidayCategoryForEpisodeAsync(EnumTelevisionHoliday holiday);
-    void ReloadApp();
+
+    Task ReloadAppAsync();
+    Task EndEpisodeAsync(); //if episode is needed, should be under CurrentEpisode.
+
+    //void ReloadApp();
 }

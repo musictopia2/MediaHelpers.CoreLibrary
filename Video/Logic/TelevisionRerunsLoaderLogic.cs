@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionRerunsLoaderLogic(ITelevisionContext data, IExit exit) : ITelevisionLoaderLogic
+public class TelevisionRerunsLoaderLogic(ITelevisionContext data) : ITelevisionLoaderLogic
 {
     async Task ITelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
     {
@@ -14,7 +14,7 @@ public class TelevisionRerunsLoaderLogic(ITelevisionContext data, IExit exit) : 
     async Task ITelevisionLoaderLogic.FinishTVEpisodeAsync(IEpisodeTable episode)
     {
         await FinishEpisodeAsync(episode);
-        exit.ExitApp();
+        await data.EndEpisodeAsync(); //may reopen for another episode (depends)
     }
     Task ITelevisionLoaderLogic.ForeverSkipEpisodeAsync(IEpisodeTable episode)
     {
@@ -49,7 +49,7 @@ public class TelevisionRerunsLoaderLogic(ITelevisionContext data, IExit exit) : 
     async Task ITelevisionLoaderLogic.ReloadAppAsync(IEpisodeTable newEpisode)
     {
         await InitializeEpisodeAsync(newEpisode);
-        data.ReloadApp();
+        await data.ReloadAppAsync();
     }
     async Task ITelevisionLoaderLogic.InitializeEpisodeAsync(IEpisodeTable episode)
     {
