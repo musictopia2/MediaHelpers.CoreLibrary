@@ -5,8 +5,10 @@ public interface ITelevisionContext
     IEpisodeTable CurrentEpisode { get; set; }
     BasicList<IEpisodeTable> GetHolidayList(EnumTelevisionHoliday currentHoliday, int currentWeight);
     bool HadPreviousShow();
-    Task AddFirstRunViewHistoryAsync();
-    Task AddReRunViewHistory();
+    Task InitializeFirstRunEpisodeAsync();
+    Task InitializeRerunEpisodeAsync();
+    //Task AddFirstRunViewHistoryAsync();
+    //Task AddReRunViewHistory();
     BasicList<IShowTable> ListShows(EnumTelevisionCategory televisionCategory);
     void LoadResumeTVEpisodeForReruns();
     Task UpdateEpisodeAsync();

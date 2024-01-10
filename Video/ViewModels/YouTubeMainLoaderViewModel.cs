@@ -1,11 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public abstract class YouTubeMainLoaderViewModel<V> : IVideoPlayerViewModel, ITelevisionLoaderViewModel where V : class
+public abstract class YouTubeMainLoaderViewModel<V>(IExit exit) : IVideoPlayerViewModel, ITelevisionLoaderViewModel where V : class
 {
-    private readonly IExit _exit;
-    public YouTubeMainLoaderViewModel(IExit exit)
-    {
-        _exit = exit;
-    }
     public V? SelectedItem { get; protected set; }
     public Action? StateHasChanged { get; set; }
     public bool PlayButtonVisible { get; set; }
@@ -21,7 +16,7 @@ public abstract class YouTubeMainLoaderViewModel<V> : IVideoPlayerViewModel, ITe
     public async Task CloseScreenAsync()
     {
         await SaveProgressAsync();
-        _exit.ExitApp();
+        exit.ExitApp();
     }
     //this is going to be iffy
     public void PlayPause()

@@ -1,13 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class TelevisionRerunsShellViewModel : ITelevisionShellViewModel
+public class TelevisionRerunsShellViewModel(ITelevisionShellLogic logic, IDateOnlyPicker datePicker) : ITelevisionShellViewModel
 {
-    private readonly ITelevisionShellLogic _logic;
-    private readonly IDateOnlyPicker _datePicker;
-    public TelevisionRerunsShellViewModel(ITelevisionShellLogic logic, IDateOnlyPicker datePicker)
-    {
-        _logic = logic;
-        _datePicker = datePicker;
-    }
     public EnumTelevisionHoliday CurrentHoliday { get; private set; } = EnumTelevisionHoliday.None;
     public IEpisodeTable? PreviousEpisode { get; private set; }
     public bool IsLoaded { get; private set; }
@@ -15,10 +8,10 @@ public class TelevisionRerunsShellViewModel : ITelevisionShellViewModel
 
     public async Task InitAsync()
     {
-        PreviousEpisode = await _logic.GetPreviousShowAsync();
+        PreviousEpisode = await logic.GetPreviousShowAsync();
         if (PreviousEpisode is null)
         {
-            CurrentHoliday = _datePicker.GetCurrentDate.WhichHoliday();
+            CurrentHoliday = datePicker.GetCurrentDate.WhichHoliday();
             //if there are no episodes then needs to somehow show the normal list.
 
         }

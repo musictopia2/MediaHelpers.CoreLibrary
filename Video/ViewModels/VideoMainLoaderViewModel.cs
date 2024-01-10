@@ -1,13 +1,7 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public abstract class VideoMainLoaderViewModel<V> : IVideoPlayerViewModel, IVideoMainLoaderViewModel<V> where V : class
+public abstract class VideoMainLoaderViewModel<V>(IFullVideoPlayer player, ISystemError error, IExit exit) : IVideoPlayerViewModel, IVideoMainLoaderViewModel<V> where V : class
 {
-    public VideoMainLoaderViewModel(IFullVideoPlayer player, ISystemError error, IExit exit)
-    {
-        Player = player;
-        _error = error;
-        _exit = exit;
-    }
-    protected IFullVideoPlayer Player { get; }
+    protected IFullVideoPlayer Player { get; } = player;
     public V? SelectedItem { get; protected set; }
     public async Task InitAsync()
     {
@@ -59,7 +53,7 @@ public abstract class VideoMainLoaderViewModel<V> : IVideoPlayerViewModel, IVide
         }
         if (VideoLength == -1)
         {
-            _error.ShowSystemError("Movie Length can't be -1");
+            error.ShowSystemError("Movie Length can't be -1");
             return;
         }
         if (VideoPosition > VideoLength)
@@ -80,7 +74,7 @@ public abstract class VideoMainLoaderViewModel<V> : IVideoPlayerViewModel, IVide
     public async Task CloseScreenAsync()
     {
         await SaveProgressAsync();
-        _exit.ExitApp();
+        exit.ExitApp();
     }
     public abstract Task SaveProgressAsync();
     public abstract Task VideoFinishedAsync();
@@ -89,8 +83,7 @@ public abstract class VideoMainLoaderViewModel<V> : IVideoPlayerViewModel, IVide
         await VideoFinishedAsync();
     }
     private int _attempts;
-    private readonly ISystemError _error;
-    private readonly IExit _exit;
+
     private async void ThisPlayer_Progress(string timeElapsed, string totalTime)
     {
         try
@@ -102,7 +95,7 @@ public abstract class VideoMainLoaderViewModel<V> : IVideoPlayerViewModel, IVide
                 _attempts++;
                 if (_attempts > 10)
                 {
-                    _error.ShowSystemError("Somehow; its failing to autoresume no matter what.  Already tried 10 times.  Therefore; its being closed out");
+                    error.ShowSystemError("Somehow; its failing to autoresume no matter what.  Already tried 10 times.  Therefore; its being closed out");
                     return;
                 }
                 await Player.PlayAsync(VideoLength, ResumeSecs);
@@ -117,7 +110,7 @@ public abstract class VideoMainLoaderViewModel<V> : IVideoPlayerViewModel, IVide
         }
         catch (Exception ex)
         {
-            _error.ShowSystemError(ex.Message);
+            error.ShowSystemError(ex.Message);
         }
     }
     protected virtual Task SendOtherDataAsync() { return Task.CompletedTask; }
@@ -128,6 +121,6 @@ public abstract class VideoMainLoaderViewModel<V> : IVideoPlayerViewModel, IVide
     }
     private void ThisPlayer_ErrorRaised(string message)
     {
-        _error.ShowSystemError(message);
+        error.ShowSystemError(message);
     }
 }

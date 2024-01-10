@@ -1,15 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class TelevisionHolidayViewModel
+public class TelevisionHolidayViewModel(ITelevisionHolidayLogic logic, ISystemError error, IExit exit)
 {
-    private readonly ITelevisionHolidayLogic _logic;
-    private readonly ISystemError _error;
-    private readonly IExit _exit;
-    public TelevisionHolidayViewModel(ITelevisionHolidayLogic logic, ISystemError error, IExit exit)
-    {
-        _logic = logic;
-        _error = error;
-        _exit = exit;
-    }
     public string NonHolidayText { get; set; } = "";
     public bool HolidayFullVisible { get; set; }
     public string HolidayFullText { get; set; } = "Full Hour";
@@ -26,32 +17,32 @@ public class TelevisionHolidayViewModel
     {
         if (IsLoaded == false)
         {
-            _exit.ExitApp();
+            exit.ExitApp();
             return null;
         }
         var episodeList = _holidayList.GetConditionalItems(xx => xx.ShowTable.LengthType == lengthType);
         if (episodeList.Count == 0)
         {
-            _exit.ExitApp(); //just exit period.
+            exit.ExitApp(); //just exit period.
             return null;
         }
         ManuallyChoseHoliday = true;
         IEpisodeTable episode = episodeList.GetRandomItem();
         return episode;
     }
-    private BasicList<IEpisodeTable> _holidayList = new();
+    private BasicList<IEpisodeTable> _holidayList = [];
     public async Task InitAsync(EnumTelevisionHoliday holiday) //has to send in.  so i can mock a holiday if needed to make sure holidays work before they happen.
     {
         IsLoaded = false;
         if (holiday == EnumTelevisionHoliday.None)
         {
-            _error.ShowSystemError("Should have never shown the holiday view model because no holiday was chosene");
+            error.ShowSystemError("Should have never shown the holiday view model because no holiday was chosene");
             return;
         }
         //WasHoliday = true;
         try
         {
-            _holidayList = await _logic.GetHolidayEpisodeListAsync(holiday);
+            _holidayList = await logic.GetHolidayEpisodeListAsync(holiday);
             string p;
             NonHolidayText = $"Choose Shows With Non {holiday} Episodes";
             if (_holidayList.Exists(items => items.ShowTable.LengthType == EnumTelevisionLengthType.FullHour) == false)
@@ -82,7 +73,7 @@ public class TelevisionHolidayViewModel
         }
         catch (Exception ex)
         {
-            _error.ShowSystemError(ex.Message);
+            error.ShowSystemError(ex.Message);
             throw;
         }
     }

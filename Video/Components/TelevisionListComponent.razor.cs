@@ -7,11 +7,7 @@ public partial class TelevisionListComponent
     private ITelevisionVideoLoader? Loader { get; set; }
     private async Task DoChooseShowAsync()
     {
-        IEpisodeTable? ee = await DataContext!.GetEpisodeChosenAsync();
-        if (ee is null)
-        {
-            throw new CustomBasicException("There was no episode chosen");
-        }
+        IEpisodeTable? ee = await DataContext!.GetEpisodeChosenAsync() ?? throw new CustomBasicException("There was no episode chosen");
         Loader!.ChoseEpisode(ee);
     }
 }

@@ -150,7 +150,7 @@ public class TelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>
         {
             await base.BeforePlayerInitAsync();
             BeforeInitEpisode();
-            await _loadLogiclogic.AddToHistoryAsync(SelectedItem!);
+            await _loadLogiclogic.InitializeEpisodeAsync(SelectedItem!);
         }
         catch (Exception ex)
         {
