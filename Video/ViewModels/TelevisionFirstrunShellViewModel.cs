@@ -1,16 +1,15 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class TelevisionFirstrunShellViewModel : ITelevisionShellViewModel
+public class TelevisionFirstrunShellViewModel(ITelevisionShellLogic logic) : ITelevisionShellViewModel
 {
     public EnumTelevisionHoliday CurrentHoliday { get; private set; } = EnumTelevisionHoliday.None;
     public IEpisodeTable? PreviousEpisode { get; private set; }
     public bool IsLoaded { get; private set; }
     public bool DidReset => false; //always false for this implementation for it.
-    public Task InitAsync()
+    public async Task InitAsync()
     {
-        IsLoaded = false;
-        PreviousEpisode = null;
+        PreviousEpisode = await logic.GetPreviousEpisodeAsync();
         IsLoaded = true;
-        return Task.CompletedTask;
+        //may now have previous episode.
     }
     public void ResetHoliday() //nothing for holidays
     {

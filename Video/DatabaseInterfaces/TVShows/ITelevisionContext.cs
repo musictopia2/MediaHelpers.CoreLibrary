@@ -7,7 +7,7 @@ public interface ITelevisionContext
 
     Task<BasicList<IEpisodeTable>> GetHolidayListAsync(EnumTelevisionHoliday currentHoliday);
 
-    bool HadPreviousShow();
+    Task<bool> HadPreviousEpisodeAsync();
     Task InitializeFirstRunEpisodeAsync();
     Task InitializeRerunEpisodeAsync();
     //Task AddFirstRunViewHistoryAsync();
@@ -15,7 +15,9 @@ public interface ITelevisionContext
     Task<BasicList<IShowTable>> ListShowsAsync(EnumTelevisionCategory televisionCategory);
 
     //BasicList<IShowTable> ListShows(EnumTelevisionCategory televisionCategory);
-    void LoadResumeTVEpisodeForReruns();
+    //if there was a previous show, this is responsible for getting the show as well.
+
+    //void LoadResumeTVEpisodeForReruns();
     Task UpdateEpisodeAsync();
     Task FinishVideoFirstRunAsync(); 
     Task FinishVideoFirstRunAsync(int showID);

@@ -8,7 +8,7 @@ public class TelevisionRerunsShellViewModel(ITelevisionShellLogic logic, IDateOn
 
     public async Task InitAsync()
     {
-        PreviousEpisode = await logic.GetPreviousShowAsync();
+        PreviousEpisode = await logic.GetPreviousEpisodeAsync();
         if (PreviousEpisode is null)
         {
             CurrentHoliday = datePicker.GetCurrentDate.WhichHoliday();
