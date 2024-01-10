@@ -1,15 +1,11 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionHolidayLogic : ITelevisionHolidayLogic
+public class TelevisionHolidayLogic(ITelevisionContext dats) : ITelevisionHolidayLogic
 {
-    private readonly ITelevisionContext _dats;
-    public TelevisionHolidayLogic(ITelevisionContext dats)
-    {
-        _dats = dats;
-    }
     async Task<BasicList<IEpisodeTable>> ITelevisionHolidayLogic.GetHolidayEpisodeListAsync(EnumTelevisionHoliday currentHoliday)
     {
-        await Task.CompletedTask;
+        //await Task.CompletedTask;
         
-        return _dats.GetHolidayList(currentHoliday);
+        //return dats.GetHolidayList(currentHoliday);
+        return await dats.GetHolidayListAsync(currentHoliday);
     }
 }

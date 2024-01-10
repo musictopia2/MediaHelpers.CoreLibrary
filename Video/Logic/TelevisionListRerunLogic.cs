@@ -12,9 +12,8 @@ public class TelevisionListRerunLogic(ITelevisionContext data, IMessageBox messa
         }
         return episode;
     }
-    async Task<BasicList<IShowTable>> ITelevisionListLogic.GetShowListAsync()
+    Task<BasicList<IShowTable>> ITelevisionListLogic.GetShowListAsync()
     {
-        await Task.CompletedTask;
-        return data.ListShows(EnumTelevisionCategory.Reruns);
+        return data.ListShowsAsync(EnumTelevisionCategory.Reruns);
     }
 }
