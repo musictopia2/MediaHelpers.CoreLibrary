@@ -1,12 +1,6 @@
-﻿using System.Net.NetworkInformation;
-
-namespace MediaHelpers.CoreLibrary.Video.Logic;
+﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
 public class TelevisionRerunsLoaderLogic(ITelevisionContext data, IExit exit) : ITelevisionLoaderLogic
 {
-    //async Task ITelevisionLoaderLogic.AddToHistoryAsync(IEpisodeTable episode)
-    //{
-    //    await AddToHistoryAsync(episode);
-    //}
     async Task ITelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
     {
         await FinishEpisodeAsync(episode);
@@ -48,7 +42,7 @@ public class TelevisionRerunsLoaderLogic(ITelevisionContext data, IExit exit) : 
     //    await _data.AddReRunViewHistory();
     //}
     /// <summary>
-    /// this will add to history and make the context for television decide how to reload again
+    /// this will initialize the episode so it can do whatever is needed.  then the context has to decide how it will reload
     /// </summary>
     /// <param name="newEpisode">this is the new episode chosen</param>
     /// <returns></returns>
@@ -57,7 +51,6 @@ public class TelevisionRerunsLoaderLogic(ITelevisionContext data, IExit exit) : 
         await InitializeEpisodeAsync(newEpisode);
         data.ReloadApp();
     }
-
     async Task ITelevisionLoaderLogic.InitializeEpisodeAsync(IEpisodeTable episode)
     {
         await InitializeEpisodeAsync(episode);
@@ -66,5 +59,11 @@ public class TelevisionRerunsLoaderLogic(ITelevisionContext data, IExit exit) : 
     {
         data.CurrentEpisode = episode;
         await data.InitializeRerunEpisodeAsync();
+    }
+
+    async Task ITelevisionLoaderLogic.TemporarilySKipEpisodeAsync(IEpisodeTable episode)
+    {
+        data.CurrentEpisode = episode;
+        await data.TemporarilySkipEpisodeAsync();
     }
 }

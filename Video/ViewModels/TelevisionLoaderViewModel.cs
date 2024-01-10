@@ -43,14 +43,9 @@ public class TelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>
             throw new CustomBasicException("There was no episode chosen.  Rethink");
         }
         _hostService.NewClient = SendOtherDataAsync;
-        _hostService.SkipEpisodeForever = async () =>
-        {
-            await SkipEpisodeForeverAsync();
-        };
-        _hostService.ModifyHoliday = async (item) =>
-        {
-            await ModifyHolidayAsync(item);
-        };
+        _hostService.SkipEpisodeForever = SkipEpisodeForeverAsync;
+        _hostService.ModifyHoliday = ModifyHolidayAsync;
+        _hostService.SkipEpisodeTemporarily = SkipEpisodeTemporarilyAsync;
         SelectedItem = containerClass.EpisodeChosen;
     }
     private async Task ModifyHolidayAsync(EnumTelevisionHoliday holiday)
@@ -62,6 +57,17 @@ public class TelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>
         }
         var tempItem = StopEpisode();
         await _loadLogiclogic.ModifyHolidayAsync(tempItem, holiday);
+        await StartNextEpisodeAsync(tempItem);
+    }
+    private async Task SkipEpisodeTemporarilyAsync()
+    {
+        var tempItem = StopEpisode();
+        await _loadLogiclogic.TemporarilySKipEpisodeAsync(tempItem);
+        if (_wasHoliday && _holidayViewModel.ManuallyChoseHoliday == false)
+        {
+            _exit.ExitApp();
+            return;
+        }
         await StartNextEpisodeAsync(tempItem);
     }
     private async Task SkipEpisodeForeverAsync()

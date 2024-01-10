@@ -26,5 +26,6 @@ public interface ITelevisionLoaderLogic
     /// <returns></returns>
     Task ReloadAppAsync(IEpisodeTable newEpisode);
     Task ForeverSkipEpisodeAsync(IEpisodeTable episode);
+    Task TemporarilySKipEpisodeAsync(IEpisodeTable episode);
     Task ModifyHolidayAsync(IEpisodeTable episode, EnumTelevisionHoliday holiday);
 }

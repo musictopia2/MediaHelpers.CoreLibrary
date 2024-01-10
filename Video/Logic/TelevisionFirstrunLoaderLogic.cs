@@ -59,5 +59,9 @@ public class TelevisionFirstrunLoaderLogic(ITelevisionContext data) : ITelevisio
         data.ReloadApp();
     }
 
-    
+    Task ITelevisionLoaderLogic.TemporarilySKipEpisodeAsync(IEpisodeTable episode)
+    {
+        data.CurrentEpisode = episode;
+        return data.TemporarilySkipEpisodeAsync();
+    }
 }

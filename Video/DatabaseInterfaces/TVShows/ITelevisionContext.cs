@@ -24,6 +24,7 @@ public interface ITelevisionContext
     /// <returns></returns>
     IEpisodeTable GetManuelEpisode(int showID, int episodeID);
     Task ForeverSkipEpisodeAsync();
+    Task TemporarilySkipEpisodeAsync(); //this means will do so temporarily.
     Task ModifyHolidayCategoryForEpisodeAsync(EnumTelevisionHoliday holiday);
     void ReloadApp();
 }
