@@ -1,9 +1,9 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionListFirstrunLogic(ITelevisionContext data) : ITelevisionListLogic
+public class TelevisionListFirstrunLogic(IFirstRunTelevisionContext data) : ITelevisionListLogic
 {
     async Task<IEpisodeTable?> ITelevisionListLogic.GetNextEpisodeAsync(IShowTable selectedItem)
     {
-        var episode = data.GetNextFirstRunEpisode(selectedItem.ID);
+        IEpisodeTable? episode = await data.GetNextEpisodeAsync(selectedItem.ID);
         if (episode is null)
         {
             await data.FinishVideoFirstRunAsync(selectedItem.ID);

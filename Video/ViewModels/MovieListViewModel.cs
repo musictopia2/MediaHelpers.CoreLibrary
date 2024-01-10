@@ -1,19 +1,12 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class MovieListViewModel : MainVideoListViewModel<IMainMovieTable>
+public class MovieListViewModel(IMovieListLogic movieListLogic, IMessageBox message) : MainVideoListViewModel<IMainMovieTable>
 {
-    private readonly IMovieListLogic _movieListLogic;
-    private readonly IMessageBox _message;
-    public MovieListViewModel(IMovieListLogic movieListLogic, IMessageBox message)
-    {
-        _movieListLogic = movieListLogic;
-        _message = message;
-    }
     public EnumMovieSelectionMode SelectionMode { get; set; } = EnumMovieSelectionMode.AlreadyWatched;
     private IMainMovieTable? _lastMovie;
     public async Task GetMovieListAsync()
     {
-        VideoList = await _movieListLogic.GetMovieListAsync(SelectionMode);
-        _lastMovie = _movieListLogic.GetLastMovie(VideoList);
+        VideoList = await movieListLogic.GetMovieListAsync(SelectionMode);
+        _lastMovie = movieListLogic.GetLastMovie(VideoList);
         CanAutoResume = _lastMovie != null;
         FocusCombo?.Invoke();
     }
@@ -35,10 +28,10 @@ public class MovieListViewModel : MainVideoListViewModel<IMainMovieTable>
         }
         if (SelectedItem.LastWatched.HasValue == false)
         {
-            await _message.ShowMessageAsync("You never watched this movie before");
+            await message.ShowMessageAsync("You never watched this movie before");
             return;
         }
-        await _message.ShowMessageAsync($"The last time you watched the movie was {SelectedItem.LastWatched!.Value}");
+        await message.ShowMessageAsync($"The last time you watched the movie was {SelectedItem.LastWatched!.Value}");
     }
     public bool CanShowInfoLast => CanAutoResume;
     public async Task ShowInfoLastAsync()
@@ -47,7 +40,7 @@ public class MovieListViewModel : MainVideoListViewModel<IMainMovieTable>
         {
             throw new CustomBasicException("Cannot show last info because was nothing.  Rethink");
         }
-        await _message.ShowMessageAsync($"The Last Movie You Need To Watch Was {_lastMovie.Title}");
+        await message.ShowMessageAsync($"The Last Movie You Need To Watch Was {_lastMovie.Title}");
     }
     public override async Task InitAsync()
     {

@@ -13,6 +13,8 @@ public abstract class YouTubeMainLoaderViewModel<V>(IExit exit) : IVideoPlayerVi
     public int VideoPosition { get; set; } //this will need to be set somehow (?)
     public string VideoID { get; set; } = "";
     public int ResumeSecs { get; set; }
+    public bool CanPlay => true;
+
     public async Task CloseScreenAsync()
     {
         await SaveProgressAsync();

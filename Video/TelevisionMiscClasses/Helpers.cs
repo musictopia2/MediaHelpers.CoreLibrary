@@ -1,7 +1,7 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.TelevisionMiscClasses;
 public static class Helpers
 {
-    public static int GetSeconds(this IEpisodeTable episode, ITelevisionContext data)
+    public static int GetSeconds(this IEpisodeTable episode, IStartTelevisionContext data)
     {
         data.CurrentEpisode = episode;
         int secs = data.Seconds;

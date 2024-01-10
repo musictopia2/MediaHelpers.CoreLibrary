@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public interface ITelevisionLoaderLogic
+public interface IBasicTelevisionLoaderLogic
 {
     /// <summary>
     /// this needs to not only do a simple function but also do other calculations.
@@ -26,6 +26,9 @@ public interface ITelevisionLoaderLogic
     /// <returns></returns>
     Task ReloadAppAsync(IEpisodeTable newEpisode);
     Task ForeverSkipEpisodeAsync(IEpisodeTable episode);
-    Task TemporarilySKipEpisodeAsync(IEpisodeTable episode);
+
+    //not everything can temporarily skip though.
+
+    //Task TemporarilySKipEpisodeAsync(IEpisodeTable episode);
     Task ModifyHolidayAsync(IEpisodeTable episode, EnumTelevisionHoliday holiday);
 }

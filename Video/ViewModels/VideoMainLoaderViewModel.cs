@@ -67,6 +67,8 @@ public abstract class VideoMainLoaderViewModel<V>(IFullVideoPlayer player, ISyst
     public bool PlayButtonVisible { get; set; }
     public bool CloseButtonVisible { get; set; }
     public Action? StateHasChanged { get; set; }
+    public abstract bool CanPlay { get; }
+
     public void PlayPause()
     {
         Player.Pause();

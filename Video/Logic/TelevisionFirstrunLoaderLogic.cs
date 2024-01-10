@@ -1,7 +1,7 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionFirstrunLoaderLogic(ITelevisionContext data) : ITelevisionLoaderLogic
+public class TelevisionFirstrunLoaderLogic(IFirstRunTelevisionContext data) : IFirstRunTelevisionLoaderLogic
 {
-    async Task ITelevisionLoaderLogic.InitializeEpisodeAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic.InitializeEpisodeAsync(IEpisodeTable episode)
     {
         await InitializeEpisodeAsync(episode);
     }
@@ -12,10 +12,10 @@ public class TelevisionFirstrunLoaderLogic(ITelevisionContext data) : ITelevisio
     private async Task InitializeEpisodeAsync(IEpisodeTable episode)
     {
         data.CurrentEpisode = episode;
-        await data.InitializeFirstRunEpisodeAsync();
+        await data.InitializeEpisodeAsync();
         //await _data.AddFirstRunViewHistoryAsync();
     }
-    async Task ITelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
     {
         await EndEpisodeAsync(episode);
     }
@@ -26,32 +26,32 @@ public class TelevisionFirstrunLoaderLogic(ITelevisionContext data) : ITelevisio
         data.CurrentEpisode = episode;
         await data.FinishVideoFirstRunAsync(); //should not need a way to be able to end episode since it most likely will close out.
     }
-    async Task ITelevisionLoaderLogic.FinishTVEpisodeAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic.FinishTVEpisodeAsync(IEpisodeTable episode)
     {
         await EndEpisodeAsync(episode);
     }
-    int ITelevisionLoaderLogic.GetSeconds(IEpisodeTable episode)
+    int IBasicTelevisionLoaderLogic.GetSeconds(IEpisodeTable episode)
     {
         return episode.GetSeconds(data);
     }
-    Task ITelevisionLoaderLogic.UpdateTVShowProgressAsync(IEpisodeTable episode, int position)
+    Task IBasicTelevisionLoaderLogic.UpdateTVShowProgressAsync(IEpisodeTable episode, int position)
     {
         data.CurrentEpisode = episode;
         data.Seconds = position;
         return Task.CompletedTask;
     }
-    Task ITelevisionLoaderLogic.ForeverSkipEpisodeAsync(IEpisodeTable episode) //even reruns can skip forever.
+    Task IBasicTelevisionLoaderLogic.ForeverSkipEpisodeAsync(IEpisodeTable episode) //even reruns can skip forever.
     {
         data.CurrentEpisode = episode;
         return data.ForeverSkipEpisodeAsync();
     }
-    Task ITelevisionLoaderLogic.ModifyHolidayAsync(IEpisodeTable episode, EnumTelevisionHoliday holiday)
+    Task IBasicTelevisionLoaderLogic.ModifyHolidayAsync(IEpisodeTable episode, EnumTelevisionHoliday holiday)
     {
         data.CurrentEpisode = episode;
         return data.ModifyHolidayCategoryForEpisodeAsync(holiday);
     }
     //was going to not support it but decided that if somehow it happened, then go ahead and close out and go back in (even on firstrun shows).
-    async Task ITelevisionLoaderLogic.ReloadAppAsync(IEpisodeTable newEpisode)
+    async Task IBasicTelevisionLoaderLogic.ReloadAppAsync(IEpisodeTable newEpisode)
     {
         //may have to rethink if one is youtube and the other is not.
         await InitializeEpisodeAsync(newEpisode); //i think.
@@ -59,9 +59,14 @@ public class TelevisionFirstrunLoaderLogic(ITelevisionContext data) : ITelevisio
         //await AddToHistoryAsync(newEpisode);
     }
 
-    Task ITelevisionLoaderLogic.TemporarilySKipEpisodeAsync(IEpisodeTable episode)
+    Task IFirstRunTelevisionLoaderLogic.IntroBeginsAsync(IEpisodeTable episode)
     {
         data.CurrentEpisode = episode;
-        return data.TemporarilySkipEpisodeAsync();
+        return data.IntroBeginsAsync();
+    }
+    Task IFirstRunTelevisionLoaderLogic.ThemeSongOverAsync(IEpisodeTable episode)
+    {
+        data.CurrentEpisode = episode;
+        return data.ThemeSongOverAsync();
     }
 }

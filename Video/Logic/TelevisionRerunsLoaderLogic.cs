@@ -1,7 +1,7 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionRerunsLoaderLogic(ITelevisionContext data) : ITelevisionLoaderLogic
+public class TelevisionRerunsLoaderLogic(IRerunTelevisionContext data) : IRerunTelevisionLoaderLogic
 {
-    async Task ITelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
     {
         await FinishEpisodeAsync(episode);
     }
@@ -11,27 +11,27 @@ public class TelevisionRerunsLoaderLogic(ITelevisionContext data) : ITelevisionL
         data.CurrentEpisode = episode;
         await data.UpdateEpisodeAsync();
     }
-    async Task ITelevisionLoaderLogic.FinishTVEpisodeAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic.FinishTVEpisodeAsync(IEpisodeTable episode)
     {
         await FinishEpisodeAsync(episode);
         await data.EndEpisodeAsync(); //may reopen for another episode (depends)
     }
-    Task ITelevisionLoaderLogic.ForeverSkipEpisodeAsync(IEpisodeTable episode)
+    Task IBasicTelevisionLoaderLogic.ForeverSkipEpisodeAsync(IEpisodeTable episode)
     {
         data.CurrentEpisode = episode; //just in case.
         return data.ForeverSkipEpisodeAsync();
     }
-    int ITelevisionLoaderLogic.GetSeconds(IEpisodeTable episode)
+    int IBasicTelevisionLoaderLogic.GetSeconds(IEpisodeTable episode)
     {
         return episode.GetSeconds(data);
     }
-    Task ITelevisionLoaderLogic.UpdateTVShowProgressAsync(IEpisodeTable episode, int position)
+    Task IBasicTelevisionLoaderLogic.UpdateTVShowProgressAsync(IEpisodeTable episode, int position)
     {
         data.CurrentEpisode = episode;
         data.Seconds = position;
         return Task.CompletedTask;
     }
-    Task ITelevisionLoaderLogic.ModifyHolidayAsync(IEpisodeTable episode, EnumTelevisionHoliday holiday)
+    Task IBasicTelevisionLoaderLogic.ModifyHolidayAsync(IEpisodeTable episode, EnumTelevisionHoliday holiday)
     {
         data.CurrentEpisode = episode;
         return data.ModifyHolidayCategoryForEpisodeAsync(holiday);
@@ -46,24 +46,29 @@ public class TelevisionRerunsLoaderLogic(ITelevisionContext data) : ITelevisionL
     /// </summary>
     /// <param name="newEpisode">this is the new episode chosen</param>
     /// <returns></returns>
-    async Task ITelevisionLoaderLogic.ReloadAppAsync(IEpisodeTable newEpisode)
+    async Task IBasicTelevisionLoaderLogic.ReloadAppAsync(IEpisodeTable newEpisode)
     {
         await InitializeEpisodeAsync(newEpisode);
         await data.ReloadAppAsync();
     }
-    async Task ITelevisionLoaderLogic.InitializeEpisodeAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic.InitializeEpisodeAsync(IEpisodeTable episode)
     {
         await InitializeEpisodeAsync(episode);
     }
     private async Task InitializeEpisodeAsync(IEpisodeTable episode)
     {
         data.CurrentEpisode = episode;
-        await data.InitializeRerunEpisodeAsync();
+        await data.InitializeEpisodeAsync();
     }
 
-    async Task ITelevisionLoaderLogic.TemporarilySKipEpisodeAsync(IEpisodeTable episode)
+    async Task IRerunTelevisionLoaderLogic.TemporarilySKipEpisodeAsync(IEpisodeTable episode)
     {
         data.CurrentEpisode = episode;
         await data.TemporarilySkipEpisodeAsync();
+    }
+
+    Task<bool> IRerunTelevisionLoaderLogic.CanGoToNextEpisodeAsync()
+    {
+        return data.CanAutomaticallyGoToNextEpisodeAsync();
     }
 }

@@ -126,6 +126,9 @@ public class MovieLoaderViewModel : VideoMainLoaderViewModel<IMainMovieTable>
         }
     }
     public bool CanButton3Process => Button3Visible;
+
+    public override bool CanPlay => true; //for now, can always play a movie.
+
     public async Task Button3ProcessAsync()
     {
         if (Button3Text == "Movie Started")
