@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
+﻿namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
 public interface IStartBasicTelevisionContext
 {
-    IEpisodeTable CurrentEpisode { get; set; } //this is needed so if there is a previous show, can set it to use later.
+    IEpisodeTable? CurrentEpisode { get; set; } //this is needed so if there is a previous show, can set it to use later.
     Task<IEpisodeTable?> GetNextEpisodeAsync(int showID);
+    //has to be async so if the newing up has to call it, can work.
 }

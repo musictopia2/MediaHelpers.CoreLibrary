@@ -21,4 +21,6 @@ public static class Helpers
         }
         return secs;
     }
+    //i think it needs to be global.
+    public static int? EpisodeChosen { get; set; }
 }

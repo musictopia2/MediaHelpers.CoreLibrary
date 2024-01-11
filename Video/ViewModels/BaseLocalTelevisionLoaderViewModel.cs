@@ -1,10 +1,12 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
 public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>, ITelevisionLoaderViewModel
 {
-    private readonly IBasicTelevisionLoaderLogic _loadLogiclogic;
+    private readonly IBasicTelevisionLoaderLogic _loadLogic;
     private readonly TelevisionHolidayViewModel _holidayViewModel;
     private readonly IBasicTelevisionRemoteControlHostService _hostService;
-    private readonly ITelevisionListLogic _listLogic;
+    private readonly INextEpisodeLogic _nextLogic;
+
+    //private readonly ITelevisionListLogic _listLogic;
     private readonly ISystemError _error;
     private readonly IToast _toast;
     private readonly IExit _exit;
@@ -16,14 +18,15 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
         IDateOnlyPicker picker,
         TelevisionContainerClass containerClass,
         IBasicTelevisionRemoteControlHostService hostService,
-        ITelevisionListLogic listLogic,
+        INextEpisodeLogic nextLogic,
+        //ITelevisionListLogic listLogic,
         ITelevisionShellViewModel shellViewModel,
         ISystemError error,
         IToast toast,
         IExit exit
         ) : base(player, error, exit)
     {
-        _loadLogiclogic = loadLogic;
+        _loadLogic = loadLogic;
         _holidayViewModel = holidayViewModel;
         if (shellViewModel.DidReset)
         {
@@ -35,10 +38,17 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
             WasHoliday = temps is not EnumTelevisionHoliday.None; //its dependent on date period now.
         }
         _hostService = hostService;
-        _listLogic = listLogic;
+        _nextLogic = nextLogic;
+        //_listLogic = listLogic;
         _error = error;
         _toast = toast;
         _exit = exit;
+        if (ee1.EpisodeChosen.HasValue == false)
+        {
+            throw new CustomBasicException("No episode was chosen");
+        }
+        containerClass.EpisodeChosen = _loadLogic.GetChosenEpisode();
+        //_loadLogiclogic.PopulateChosenEpisode()
         if (containerClass.EpisodeChosen is null)
         {
             throw new CustomBasicException("There was no episode chosen.  Rethink");
@@ -58,14 +68,14 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
             return;
         }
         var tempItem = StopEpisode();
-        await _loadLogiclogic.ModifyHolidayAsync(tempItem, holiday);
+        await _loadLogic.ModifyHolidayAsync(tempItem, holiday);
         await StartNextEpisodeAsync(tempItem);
     }
     
     private async Task SkipEpisodeForeverAsync()
     {
         var tempItem = StopEpisode();
-        await _loadLogiclogic.ForeverSkipEpisodeAsync(tempItem);
+        await _loadLogic.ForeverSkipEpisodeAsync(tempItem);
         if (WasHoliday && _holidayViewModel.ManuallyChoseHoliday == false)
         {
             _exit.ExitApp();
@@ -107,7 +117,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
             return;
             //throw new CustomBasicException("Holidays for starting next episode should have exited the app because too many possibilities");
         }
-        SelectedItem = _holidayViewModel.ManuallyChoseHoliday ? _holidayViewModel.GetHolidayEpisode(show.LengthType) : await _listLogic.GetNextEpisodeAsync(show);
+        SelectedItem = _holidayViewModel.ManuallyChoseHoliday ? _holidayViewModel.GetHolidayEpisode(show.LengthType) : await _nextLogic.GetNextEpisodeAsync(show);
         if (SelectedItem is null)
         {
             _error.ShowSystemError("Selected Item Was Null");
@@ -115,7 +125,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
         }
         try
         {
-            await _loadLogiclogic.ReloadAppAsync(SelectedItem!);
+            await _loadLogic.ReloadAppAsync(SelectedItem!);
         }
         catch (Exception ex)
         {
@@ -127,16 +137,16 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
     }
     public override Task SaveProgressAsync()
     {
-        return _loadLogiclogic.UpdateTVShowProgressAsync(SelectedItem!, VideoPosition);
+        return _loadLogic.UpdateTVShowProgressAsync(SelectedItem!, VideoPosition);
     }
     public override Task VideoFinishedAsync()
     {
-        return _loadLogiclogic.FinishTVEpisodeAsync(SelectedItem!);
+        return _loadLogic.FinishTVEpisodeAsync(SelectedItem!);
     }
     private bool _hasIntro;
     private void BeforeInitEpisode()
     {
-        int secs = _loadLogiclogic.GetSeconds(SelectedItem!);
+        int secs = _loadLogic.GetSeconds(SelectedItem!);
         ResumeSecs = secs;
         VideoPosition = ResumeSecs;
         VideoPath = SelectedItem!.FullPath();
@@ -148,7 +158,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
         {
             await base.BeforePlayerInitAsync();
             BeforeInitEpisode();
-            await _loadLogiclogic.InitializeEpisodeAsync(SelectedItem!);
+            await _loadLogic.InitializeEpisodeAsync(SelectedItem!);
         }
         catch (Exception ex)
         {

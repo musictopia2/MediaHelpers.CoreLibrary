@@ -1,9 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
-public interface IFirstRunListTelevisionContext : IStartListTelevisionContext
+public interface IFirstRunListTelevisionContext : IStartListTelevisionContext, IFirstRunBasicTelevisionContext
 {
-    Task FinishVideoFirstRunAsync();
-    Task FinishVideoFirstRunAsync(int showID);
-    Task IntroBeginsAsync();
-    Task ThemeSongOverAsync();
+    
     
 }

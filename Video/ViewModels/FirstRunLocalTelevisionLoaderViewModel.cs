@@ -10,11 +10,11 @@ public class FirstRunLocalTelevisionLoaderViewModel : BaseLocalTelevisionLoaderV
         TelevisionHolidayViewModel holidayViewModel,
         IDateOnlyPicker picker, TelevisionContainerClass containerClass,
         IFirstRunTelevisionRemoteControlHostService hostService,
-        ITelevisionListLogic listLogic,
+        INextEpisodeLogic nextLogic,
         ITelevisionShellViewModel shellViewModel,
         ISystemError error,
         IToast toast,
-        IExit exit) : base(player, loadLogic, holidayViewModel, picker, containerClass, hostService, listLogic, shellViewModel, error, toast, exit)
+        IExit exit) : base(player, loadLogic, holidayViewModel, picker, containerClass, hostService, nextLogic, shellViewModel, error, toast, exit)
     {
         _player = player;
         _loadLogic = loadLogic;

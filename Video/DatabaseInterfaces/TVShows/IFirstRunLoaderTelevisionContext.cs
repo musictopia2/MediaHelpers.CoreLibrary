@@ -1,8 +1,7 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
-public interface IFirstRunLoaderTelevisionContext : IStartLoaderTelevisionContext
+public interface IFirstRunLoaderTelevisionContext : IStartLoaderTelevisionContext, IFirstRunBasicTelevisionContext
 {
-    Task FinishVideoFirstRunAsync();
-    Task FinishVideoFirstRunAsync(int showID);
+    
     Task IntroBeginsAsync();
     Task ThemeSongOverAsync();
     //extra remote control functions will be here.

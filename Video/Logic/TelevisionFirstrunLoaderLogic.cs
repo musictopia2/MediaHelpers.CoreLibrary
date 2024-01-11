@@ -69,4 +69,18 @@ public class TelevisionFirstrunLoaderLogic(IFirstRunLoaderTelevisionContext data
         data.CurrentEpisode = episode;
         return data.ThemeSongOverAsync();
     }
+
+    IEpisodeTable IBasicTelevisionLoaderLogic.GetChosenEpisode()
+    {
+        if (ee1.EpisodeChosen is null)
+        {
+            throw new CustomBasicException("Needs a chosen episode");
+        }
+        data.PopulateChosenEpisode(ee1.EpisodeChosen.Value);
+        if (data.CurrentEpisode is null)
+        {
+            throw new CustomBasicException("No episode found");
+        }
+        return data.CurrentEpisode;
+    }
 }

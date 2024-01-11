@@ -8,4 +8,5 @@ public interface IStartLoaderTelevisionContext : IStartBasicTelevisionContext
     Task InitializeEpisodeAsync();
     Task ModifyHolidayCategoryForEpisodeAsync(EnumTelevisionHoliday holiday); //i think
     Task ForeverSkipEpisodeAsync();
+    void PopulateChosenEpisode(int episodeID);
 }

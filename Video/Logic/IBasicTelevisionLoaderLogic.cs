@@ -31,4 +31,6 @@ public interface IBasicTelevisionLoaderLogic
 
     //Task TemporarilySKipEpisodeAsync(IEpisodeTable episode);
     Task ModifyHolidayAsync(IEpisodeTable episode, EnumTelevisionHoliday holiday);
+    //since needs to know to populate all the way as needed.
+    IEpisodeTable GetChosenEpisode(); //since i have the helpers, can access from that now.
 }
