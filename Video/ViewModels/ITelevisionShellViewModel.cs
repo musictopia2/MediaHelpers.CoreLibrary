@@ -6,5 +6,8 @@ public interface ITelevisionShellViewModel
     bool IsLoaded { get; }
     Task InitAsync();
     void ResetHoliday();
-    bool DidReset { get; }
+    //i don't think you can do based on manually doing it.
+    //because when you go into the other program, its not going to know anything about it.
+
+    //bool DidReset { get; }
 }

@@ -4,7 +4,7 @@ public class TelevisionRerunsShellViewModel(ITelevisionShellLogic logic, IDateOn
     public EnumTelevisionHoliday CurrentHoliday { get; private set; } = EnumTelevisionHoliday.None;
     public IEpisodeTable? PreviousEpisode { get; private set; }
     public bool IsLoaded { get; private set; }
-    public bool DidReset { get; private set; }
+    //public bool DidReset { get; private set; }
 
     public async Task InitAsync()
     {
@@ -21,6 +21,6 @@ public class TelevisionRerunsShellViewModel(ITelevisionShellLogic logic, IDateOn
     public void ResetHoliday()
     {
         CurrentHoliday = EnumTelevisionHoliday.None;
-        DidReset = true; //this means will not be holiday because you chose no holiday.
+        //DidReset = true; //this means will not be holiday because you chose no holiday.
     }
 }

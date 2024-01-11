@@ -4,21 +4,21 @@ public class FirstRunLocalTelevisionLoaderViewModel : BaseLocalTelevisionLoaderV
     private readonly IFullVideoPlayer _player;
     private readonly IFirstRunTelevisionLoaderLogic _loadLogic;
     private readonly IFirstRunTelevisionRemoteControlHostService _hostService;
+    private readonly INextEpisodeLogic _nextLogic;
     private bool _canStart;
     public FirstRunLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
         IFirstRunTelevisionLoaderLogic loadLogic,
-        TelevisionHolidayViewModel holidayViewModel,
-        IDateOnlyPicker picker, TelevisionContainerClass containerClass,
+        TelevisionContainerClass containerClass,
         IFirstRunTelevisionRemoteControlHostService hostService,
         INextEpisodeLogic nextLogic,
-        ITelevisionShellViewModel shellViewModel,
         ISystemError error,
         IToast toast,
-        IExit exit) : base(player, loadLogic, holidayViewModel, picker, containerClass, hostService, nextLogic, shellViewModel, error, toast, exit)
+        IExit exit) : base(player, loadLogic, containerClass, hostService, error, toast, exit)
     {
         _player = player;
         _loadLogic = loadLogic;
         _hostService = hostService;
+        _nextLogic = nextLogic;
         _hostService.Start = StartAsync;
         _hostService.IntroBegins = ShowIntroBeginsAsync;
         _hostService.EndEpisode = EndEpisodeAsync;
@@ -68,5 +68,17 @@ public class FirstRunLocalTelevisionLoaderViewModel : BaseLocalTelevisionLoaderV
         //await _loadLogic.RewindAsync(SelectedItem!);
         //not sure about what to do about the video player though.
 
+    }
+
+    protected override async Task StartNextEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    {
+        IShowTable show = tempItem.ShowTable;
+        SelectedItem = await _nextLogic.GetNextEpisodeAsync(show);
+        await ReloadAppAsync();
+    }
+
+    protected override async Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    {
+        await StartNextEpisodeAsync(tempItem, holiday); //this simple.
     }
 }

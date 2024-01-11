@@ -6,8 +6,10 @@ public class TelevisionHolidayViewModel(ITelevisionHolidayLogic logic, ISystemEr
     public string HolidayFullText { get; set; } = "Full Hour";
     public bool HolidayHalfVisible { get; set; }
     public string HolidayHalfText { get; set; } = "Half Hour";
-    internal bool ManuallyChoseHoliday { get; private set; }
+    //internal bool ManuallyChoseHoliday { get; set; }
     public bool IsLoaded { get; private set; }
+    //go ahead and remove because the next episode may be the same program (but no guarantees)
+
     internal void RemoveHolidayEpisode(IEpisodeTable episode)
     {
         var lookup = _holidayList.Single(xx => xx.ID == episode.ID);
@@ -26,7 +28,7 @@ public class TelevisionHolidayViewModel(ITelevisionHolidayLogic logic, ISystemEr
             exit.ExitApp(); //just exit period.
             return null;
         }
-        ManuallyChoseHoliday = true;
+        //ManuallyChoseHoliday = true;
         IEpisodeTable episode = episodeList.GetRandomItem();
         return episode;
     }

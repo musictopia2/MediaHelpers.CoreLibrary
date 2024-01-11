@@ -2,47 +2,32 @@
 public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>, ITelevisionLoaderViewModel
 {
     private readonly IBasicTelevisionLoaderLogic _loadLogic;
-    private readonly TelevisionHolidayViewModel _holidayViewModel;
+    //private readonly TelevisionHolidayViewModel _holidayViewModel;
     private readonly IBasicTelevisionRemoteControlHostService _hostService;
-    private readonly INextEpisodeLogic _nextLogic;
 
     //private readonly ITelevisionListLogic _listLogic;
     private readonly ISystemError _error;
     private readonly IToast _toast;
-    private readonly IExit _exit;
-    protected readonly bool WasHoliday;
+    //protected readonly bool WasHoliday;
     //private readonly bool _wasHoliday;
     public BaseLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
         IBasicTelevisionLoaderLogic loadLogic,
-        TelevisionHolidayViewModel holidayViewModel,
-        IDateOnlyPicker picker,
+        //TelevisionHolidayViewModel holidayViewModel,
         TelevisionContainerClass containerClass,
         IBasicTelevisionRemoteControlHostService hostService,
-        INextEpisodeLogic nextLogic,
         //ITelevisionListLogic listLogic,
-        ITelevisionShellViewModel shellViewModel,
         ISystemError error,
         IToast toast,
         IExit exit
         ) : base(player, error, exit)
     {
         _loadLogic = loadLogic;
-        _holidayViewModel = holidayViewModel;
-        if (shellViewModel.DidReset)
-        {
-            WasHoliday = false;
-        }
-        else
-        {
-            var temps = picker.GetCurrentDate.WhichHoliday();
-            WasHoliday = temps is not EnumTelevisionHoliday.None; //its dependent on date period now.
-        }
+        //_holidayViewModel = holidayViewModel;
+        
         _hostService = hostService;
-        _nextLogic = nextLogic;
         //_listLogic = listLogic;
         _error = error;
         _toast = toast;
-        _exit = exit;
         if (ee1.EpisodeChosen.HasValue == false)
         {
             throw new CustomBasicException("No episode was chosen");
@@ -60,6 +45,10 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
         //_hostService.SkipEpisodeTemporarily = SkipEpisodeTemporarilyAsync;
         SelectedItem = containerClass.EpisodeChosen;
     }
+    protected static bool DidManuallyChooseHolidayEpisode(IEpisodeTable episode)
+    {
+        return episode.Holiday != EnumTelevisionHoliday.None;
+    }
     private async Task ModifyHolidayAsync(EnumTelevisionHoliday holiday)
     {
         if (holiday == SelectedItem!.Holiday)
@@ -68,27 +57,42 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
             return;
         }
         var tempItem = StopEpisode();
+        EnumTelevisionHoliday previous = SelectedItem.Holiday!.Value;
         await _loadLogic.ModifyHolidayAsync(tempItem, holiday);
-        await StartNextEpisodeAsync(tempItem);
+        await StartNextEpisodeAsync(tempItem, previous);
     }
-    
+    protected abstract Task StartNextEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
+
+    protected abstract Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
+
     private async Task SkipEpisodeForeverAsync()
     {
         var tempItem = StopEpisode();
         await _loadLogic.ForeverSkipEpisodeAsync(tempItem);
-        if (WasHoliday && _holidayViewModel.ManuallyChoseHoliday == false)
-        {
-            _exit.ExitApp();
-            //could eventually decide to have the choices on the remote control.
-            //this would mean that if you open and its holiday, then if you want to choose holiday, then will do it.  otherwise, load list
-            return; //has to exit the app at this point.  because its too complicated on what it should do next.
-            //_holidayViewModel.RemoveHolidayEpisode(tempItem);
-        }
-        if (WasHoliday)
-        {
-            _holidayViewModel.RemoveHolidayEpisode(tempItem);
-        }
-        await StartNextEpisodeAsync(tempItem);
+        await FinishSkippingEpisodeForeverAsync(tempItem, tempItem.Holiday!.Value);
+
+
+        //bool manuallyChose = tempItem.Holiday != EnumTelevisionHoliday.None;
+        //if (WasHoliday && manuallyChose == false)
+        //{
+        //    _exit.ExitApp();
+        //    //could eventually decide to have the choices on the remote control.
+        //    //this would mean that if you open and its holiday, then if you want to choose holiday, then will do it.  otherwise, load list
+        //    return; //has to exit the app at this point.  because its too complicated on what it should do next.
+        //    //_holidayViewModel.RemoveHolidayEpisode(tempItem);
+        //}
+        //if (WasHoliday)
+        //{
+        //    if (_holidayViewModel.IsLoaded == false)
+        //    {
+        //        await _holidayViewModel.InitAsync(tempItem.Holiday!.Value);
+        //    }
+        //    else
+        //    {
+        //        _holidayViewModel.RemoveHolidayEpisode(tempItem);
+        //    }
+        //}
+        //await StartNextEpisodeAsync(tempItem);
     }
     protected IEpisodeTable StopEpisode()
     {
@@ -107,22 +111,34 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
         Player.StopPlay();
         return tempItem;
     }
-    protected async Task StartNextEpisodeAsync(IEpisodeTable tempItem)
+    //protected async Task StartNextEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    //{
+    //    IShowTable show = tempItem.ShowTable;
+    //    bool manuallyChose = holiday != EnumTelevisionHoliday.None;
+    //    if (WasHoliday && manuallyChose == false)
+    //    {
+    //        _error.ShowSystemError("Holidays for starting next episode should have exited the app because too many possibilities");
+    //        _exit.ExitApp(); //if this is the case, not sure what we can do then.
+    //        return;
+    //        //throw new CustomBasicException("Holidays for starting next episode should have exited the app because too many possibilities");
+    //    }
+    //    SelectedItem = manuallyChose ? _holidayViewModel.GetHolidayEpisode(show.LengthType) : await _nextLogic.GetNextEpisodeAsync(show);
+    //    if (SelectedItem is null)
+    //    {
+    //        _error.ShowSystemError("Selected Item Was Null");
+    //        return;
+    //    }
+    //    try
+    //    {
+    //        await _loadLogic.ReloadAppAsync(SelectedItem!);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _error.ShowSystemError(ex.Message);
+    //    }
+    //}
+    protected async Task ReloadAppAsync()
     {
-        IShowTable show = tempItem.ShowTable;
-        if (WasHoliday && _holidayViewModel.ManuallyChoseHoliday == false)
-        {
-            _error.ShowSystemError("Holidays for starting next episode should have exited the app because too many possibilities");
-            _exit.ExitApp(); //if this is the case, not sure what we can do then.
-            return;
-            //throw new CustomBasicException("Holidays for starting next episode should have exited the app because too many possibilities");
-        }
-        SelectedItem = _holidayViewModel.ManuallyChoseHoliday ? _holidayViewModel.GetHolidayEpisode(show.LengthType) : await _nextLogic.GetNextEpisodeAsync(show);
-        if (SelectedItem is null)
-        {
-            _error.ShowSystemError("Selected Item Was Null");
-            return;
-        }
         try
         {
             await _loadLogic.ReloadAppAsync(SelectedItem!);
@@ -131,9 +147,6 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
         {
             _error.ShowSystemError(ex.Message);
         }
-        //await _loadLogiclogic.AddToHistoryAsync(SelectedItem!); 
-        //await ProcessSkipsAsync();
-        //await ShowVideoLoadedAsync();
     }
     public override Task SaveProgressAsync()
     {
