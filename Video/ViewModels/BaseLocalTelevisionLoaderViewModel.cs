@@ -228,6 +228,16 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
     }
     protected override Task SendOtherDataAsync()
     {
-        return _hostService.SendProgressAsync(new TelevisionModel(SelectedItem!.ShowTable.ShowName, ProgressText, SelectedItem.Holiday!));
+        int startAt;
+        if (SelectedItem!.StartAt.HasValue == false)
+        {
+            startAt = 0;
+        }
+        else
+        {
+            startAt = SelectedItem.StartAt.Value; //i think.
+        }
+        return _hostService.SendProgressAsync(new TelevisionModel(SelectedItem.ShowTable.ShowName, ProgressText, SelectedItem.Holiday!, CanPlay == false, startAt));
     }
+
 }
