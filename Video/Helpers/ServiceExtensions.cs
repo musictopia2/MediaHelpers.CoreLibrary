@@ -40,9 +40,14 @@ public static class ServiceExtensions
             .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel>())
             .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel>())
             .RegisterNextReRunLogic()
-            .AddSingleton<TelevisionRerunsLoaderLogic>()
-            .AddSingleton<IRerunTelevisionLoaderLogic>(pp => pp.GetRequiredService<TelevisionRerunsLoaderLogic>())
+            .RegisterRerunLoaderLogic()
             .RegisterCoreHolidayTelevisionServices();
+        return services;
+    }
+    public static IServiceCollection RegisterRerunLoaderLogic(this IServiceCollection services)
+    {
+        services.AddSingleton<TelevisionRerunsLoaderLogic>()
+            .AddSingleton<IRerunTelevisionLoaderLogic>(pp => pp.GetRequiredService<TelevisionRerunsLoaderLogic>());
         return services;
     }
     //even these needs to be public so youtube can access them.
