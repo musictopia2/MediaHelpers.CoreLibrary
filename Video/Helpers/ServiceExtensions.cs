@@ -12,7 +12,7 @@ public static class ServiceExtensions
         services.AddSingleton<IRerunTelevisionRemoteControlHostService, MockRerunTelevisionRemoteControlHostService>();
         return services;
     }
-    private static IServiceCollection RegisterTelevisionContainer(this IServiceCollection services)
+    public static IServiceCollection RegisterTelevisionContainer(this IServiceCollection services)
     {
         //this is all the stuff that does not require the video players or displays.
         services.AddSingleton<TelevisionContainerClass>();
