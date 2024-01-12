@@ -9,8 +9,8 @@ public class TelevisionHolidayViewModel(ITelevisionHolidayLogic logic, ISystemEr
     //internal bool ManuallyChoseHoliday { get; set; }
     public bool IsLoaded { get; private set; }
     //go ahead and remove because the next episode may be the same program (but no guarantees)
-
-    internal void RemoveHolidayEpisode(IEpisodeTable episode)
+    //has to be made public so youtube can access as well.
+    public void RemoveHolidayEpisode(IEpisodeTable episode)
     {
         var lookup = _holidayList.Single(xx => xx.ID == episode.ID);
         _holidayList.RemoveSpecificItem(lookup); //to guarantee the proper one gets removed no matter what.
