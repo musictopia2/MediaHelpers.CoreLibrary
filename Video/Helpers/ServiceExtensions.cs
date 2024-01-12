@@ -45,12 +45,14 @@ public static class ServiceExtensions
             .RegisterCoreHolidayTelevisionServices();
         return services;
     }
-    private static IServiceCollection RegisterNextFirstRunLogic(this IServiceCollection services)
+    //even these needs to be public so youtube can access them.
+    public static IServiceCollection RegisterNextFirstRunLogic(this IServiceCollection services)
     {
         services.AddSingleton<INextEpisodeLogic, TelevisionBasicFirstRunNextEpisodeLogic>();
         return services;
     }
-    private static IServiceCollection RegisterNextReRunLogic(this IServiceCollection services)
+
+    public static IServiceCollection RegisterNextReRunLogic(this IServiceCollection services)
     {
         services.AddSingleton<INextEpisodeLogic, TelevisionBasicRerunNextEpisodeLogic>();
         return services;
