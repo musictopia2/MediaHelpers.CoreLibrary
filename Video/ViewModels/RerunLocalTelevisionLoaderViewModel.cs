@@ -64,6 +64,12 @@ public class RerunLocalTelevisionLoaderViewModel : BaseLocalTelevisionLoaderView
             _exit.ExitApp();
             return;
         }
+        bool rets;
+        rets = await CheckNextAsync();
+        if (rets == false)
+        {
+            return;
+        }
         SelectedItem = manuallyChose ? _holidayViewModel.GetHolidayEpisode(show.LengthType) : await _nextLogic.GetNextEpisodeAsync(show);
         if (SelectedItem is null)
         {
@@ -95,14 +101,24 @@ public class RerunLocalTelevisionLoaderViewModel : BaseLocalTelevisionLoaderView
             _exit.ExitApp();
             return;
         }
+        bool rets = await CheckNextAsync();
+        if (rets == false)
+        {
+            return;
+        }
+        //may have options to completely close out and not even choose another episode
+        await StartNextEpisodeAsync(tempItem, tempItem.Holiday!.Value);
+    }
+    private async Task<bool> CheckNextAsync()
+    {
         bool rets;
         rets = await _loadLogic.CanGoToNextEpisodeAsync();
         if (rets == false)
         {
-            _exit.ExitApp();
-            return; //close out period now.
+            Execute.OnUIThread(_exit.ExitApp);
+            //_exit.ExitApp();
+            return false;
         }
-        //may have options to completely close out and not even choose another episode
-        await StartNextEpisodeAsync(tempItem, tempItem.Holiday!.Value);
+        return true;
     }
 }

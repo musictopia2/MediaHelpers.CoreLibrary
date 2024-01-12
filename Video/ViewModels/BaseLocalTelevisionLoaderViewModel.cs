@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>, ITelevisionLoaderViewModel
+public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>, ITelevisionLoaderViewModel, IStartLoadingViewModel
 {
     private readonly IBasicTelevisionLoaderLogic _loadLogic;
     //private readonly TelevisionHolidayViewModel _holidayViewModel;
@@ -8,6 +8,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
     //private readonly ITelevisionListLogic _listLogic;
     private readonly ISystemError _error;
     private readonly IToast _toast;
+
     //protected readonly bool WasHoliday;
     //private readonly bool _wasHoliday;
     public BaseLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
@@ -56,8 +57,8 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
             _toast.ShowInfoToast("No holiday change");
             return;
         }
-        var tempItem = StopEpisode();
         EnumTelevisionHoliday previous = SelectedItem.Holiday!.Value;
+        var tempItem = StopEpisode();
         await _loadLogic.ModifyHolidayAsync(tempItem, holiday);
         await StartNextEpisodeAsync(tempItem, previous);
     }
@@ -178,6 +179,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
             _error.ShowSystemError(ex.Message);
         }
     }
+    
     private (int startTime, int howLong) GetSkipData()
     {
         return (SelectedItem!.BeginAt, SelectedItem!.OpeningLength!.Value);

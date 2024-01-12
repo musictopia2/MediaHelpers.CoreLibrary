@@ -8,7 +8,8 @@ public class TelevisionBasicRerunNextEpisodeLogic(IStartBasicTelevisionContext d
         if (episode == null)
         {
             await message.ShowMessageAsync($"There are no more episodes that can be chosen for {selectedItem.ShowName}");
-            exit.ExitApp();
+            //exit.ExitApp();
+            Execute.OnUIThread(exit.ExitApp);
             return null;
         }
         return episode;

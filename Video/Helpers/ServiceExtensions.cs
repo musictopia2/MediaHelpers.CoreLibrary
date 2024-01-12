@@ -24,18 +24,24 @@ public static class ServiceExtensions
              .RegisterTelevisionContainer()
              .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel>())
              .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel>())
+             .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel>())
              .RegisterNextFirstRunLogic()
+             .AddSingleton<TelevisionFirstrunLoaderLogic>()
+            .AddSingleton<IFirstRunTelevisionLoaderLogic>(pp => pp.GetRequiredService<TelevisionFirstrunLoaderLogic>())
              .AddSingleton<IFirstRunTelevisionLoaderLogic, TelevisionFirstrunLoaderLogic>();
         return services;
     }
+    //RerunLocalTelevisionLoaderViewModel
     public static IServiceCollection RegisterCoreLocalRerunLoaderTelevisionServices(this IServiceCollection services)
     {
         services.AddSingleton<RerunLocalTelevisionLoaderViewModel>()
             .RegisterTelevisionContainer()
             .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel>())
             .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel>())
+            .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel>())
             .RegisterNextReRunLogic()
-            .AddSingleton<IRerunTelevisionLoaderLogic, TelevisionRerunsLoaderLogic>()
+            .AddSingleton<TelevisionRerunsLoaderLogic>()
+            .AddSingleton<IRerunTelevisionLoaderLogic>(pp => pp.GetRequiredService<TelevisionRerunsLoaderLogic>())
             .RegisterCoreHolidayTelevisionServices();
         return services;
     }
@@ -51,7 +57,8 @@ public static class ServiceExtensions
     }
     public static IServiceCollection RegisterCoreHolidayTelevisionServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITelevisionHolidayLogic, TelevisionHolidayLogic>()
+        services.AddSingleton<TelevisionHolidayLogic>()
+            .AddSingleton<ITelevisionHolidayLogic>(pp => pp.GetRequiredService<TelevisionHolidayLogic>())
             .AddSingleton<TelevisionHolidayViewModel>();
         return services;
     }
