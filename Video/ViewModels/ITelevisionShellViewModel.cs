@@ -1,8 +1,9 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public interface ITelevisionShellViewModel
+public interface ITelevisionShellViewModel<E>
+    where E: class, IEpisodeTable
 {
     EnumTelevisionHoliday CurrentHoliday { get; }
-    IEpisodeTable? PreviousEpisode { get; }
+    E? PreviousEpisode { get; }
     bool IsLoaded { get; }
     Task InitAsync();
     void ResetHoliday();

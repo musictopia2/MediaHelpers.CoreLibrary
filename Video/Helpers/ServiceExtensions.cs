@@ -12,61 +12,68 @@ public static class ServiceExtensions
         services.AddSingleton<IRerunTelevisionRemoteControlHostService, MockRerunTelevisionRemoteControlHostService>();
         return services;
     }
-    public static IServiceCollection RegisterTelevisionContainer(this IServiceCollection services)
+    public static IServiceCollection RegisterTelevisionContainer<E>(this IServiceCollection services)
+        where E: class, IEpisodeTable
     {
         //this is all the stuff that does not require the video players or displays.
-        services.AddSingleton<TelevisionContainerClass>();
+        services.AddSingleton<TelevisionContainerClass<E>>();
         return services;
     }
-    public static IServiceCollection RegisterCoreLocalFirstRunLoaderTelevisionServices(this IServiceCollection services)
+    public static IServiceCollection RegisterCoreLocalFirstRunLoaderTelevisionServices<E>(this IServiceCollection services)
+        where E : class, IEpisodeTable
     {
-        services.AddSingleton<FirstRunLocalTelevisionLoaderViewModel>()
-             .RegisterTelevisionContainer()
-             .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel>())
-             .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel>())
-             .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel>())
-             .RegisterNextFirstRunLogic()
-             .AddSingleton<TelevisionFirstrunLoaderLogic>()
-            .AddSingleton<IFirstRunTelevisionLoaderLogic>(pp => pp.GetRequiredService<TelevisionFirstrunLoaderLogic>())
-             .AddSingleton<IFirstRunTelevisionLoaderLogic, TelevisionFirstrunLoaderLogic>();
+        services.AddSingleton<FirstRunLocalTelevisionLoaderViewModel<E>>()
+             .RegisterTelevisionContainer<E>()
+             .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel<E>>())
+             .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel<E>>())
+             .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel<E>>())
+             .RegisterNextFirstRunLogic<E>()
+             .AddSingleton<TelevisionFirstrunLoaderLogic<E>>()
+            .AddSingleton<IFirstRunTelevisionLoaderLogic<E>>(pp => pp.GetRequiredService<TelevisionFirstrunLoaderLogic<E>>())
+             .AddSingleton<IFirstRunTelevisionLoaderLogic<E>, TelevisionFirstrunLoaderLogic<E>>();
         return services;
     }
     //RerunLocalTelevisionLoaderViewModel
-    public static IServiceCollection RegisterCoreLocalRerunLoaderTelevisionServices(this IServiceCollection services)
+    public static IServiceCollection RegisterCoreLocalRerunLoaderTelevisionServices<E>(this IServiceCollection services)
+        where E : class, IEpisodeTable
     {
-        services.AddSingleton<RerunLocalTelevisionLoaderViewModel>()
-            .RegisterTelevisionContainer()
-            .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel>())
-            .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel>())
-            .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel>())
-            .RegisterNextReRunLogic()
-            .RegisterRerunLoaderLogic()
-            .RegisterCoreHolidayTelevisionServices();
+        services.AddSingleton<RerunLocalTelevisionLoaderViewModel<E>>()
+            .RegisterTelevisionContainer<E>()
+            .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel<E>>())
+            .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel<E>>())
+            .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel<E>>())
+            .RegisterNextReRunLogic<E>()
+            .RegisterRerunLoaderLogic<E>()
+            .RegisterCoreHolidayTelevisionServices<E>();
         return services;
     }
-    public static IServiceCollection RegisterRerunLoaderLogic(this IServiceCollection services)
+    public static IServiceCollection RegisterRerunLoaderLogic<E>(this IServiceCollection services)
+        where E : class, IEpisodeTable
     {
-        services.AddSingleton<TelevisionRerunsLoaderLogic>()
-            .AddSingleton<IRerunTelevisionLoaderLogic>(pp => pp.GetRequiredService<TelevisionRerunsLoaderLogic>());
+        services.AddSingleton<TelevisionRerunsLoaderLogic<E>>()
+            .AddSingleton<IRerunTelevisionLoaderLogic<E>>(pp => pp.GetRequiredService<TelevisionRerunsLoaderLogic<E>>());
         return services;
     }
     //even these needs to be public so youtube can access them.
-    public static IServiceCollection RegisterNextFirstRunLogic(this IServiceCollection services)
+    public static IServiceCollection RegisterNextFirstRunLogic<E>(this IServiceCollection services)
+        where E : class, IEpisodeTable
     {
-        services.AddSingleton<INextEpisodeLogic, TelevisionBasicFirstRunNextEpisodeLogic>();
+        services.AddSingleton<INextEpisodeLogic<E>, TelevisionBasicFirstRunNextEpisodeLogic<E>>();
         return services;
     }
 
-    public static IServiceCollection RegisterNextReRunLogic(this IServiceCollection services)
+    public static IServiceCollection RegisterNextReRunLogic<E>(this IServiceCollection services)
+        where E : class, IEpisodeTable
     {
-        services.AddSingleton<INextEpisodeLogic, TelevisionBasicRerunNextEpisodeLogic>();
+        services.AddSingleton<INextEpisodeLogic<E>, TelevisionBasicRerunNextEpisodeLogic<E>>();
         return services;
     }
-    public static IServiceCollection RegisterCoreHolidayTelevisionServices(this IServiceCollection services)
+    public static IServiceCollection RegisterCoreHolidayTelevisionServices<E>(this IServiceCollection services)
+        where E : class, IEpisodeTable
     {
-        services.AddSingleton<TelevisionHolidayLogic>()
-            .AddSingleton<ITelevisionHolidayLogic>(pp => pp.GetRequiredService<TelevisionHolidayLogic>())
-            .AddSingleton<TelevisionHolidayViewModel>();
+        services.AddSingleton<TelevisionHolidayLogic<E>>()
+            .AddSingleton<ITelevisionHolidayLogic<E>>(pp => pp.GetRequiredService<TelevisionHolidayLogic<E>>())
+            .AddSingleton<TelevisionHolidayViewModel<E>>();
         return services;
     }
 }

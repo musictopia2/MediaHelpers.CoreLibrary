@@ -1,13 +1,14 @@
 namespace MediaHelpers.CoreLibrary.Video.Components;
-public partial class TelevisionListComponent
+public partial class TelevisionListComponent<E>
+    where E: class, IEpisodeTable
 {
     [Inject]
-    private TelevisionListViewModel? DataContext { get; set; }
+    private TelevisionListViewModel<E>? DataContext { get; set; }
     [Inject]
-    private ITelevisionVideoLoader? Loader { get; set; }
+    private ITelevisionVideoLoader<E>? Loader { get; set; }
     private async Task DoChooseShowAsync()
     {
-        IEpisodeTable? ee = await DataContext!.GetEpisodeChosenAsync() ?? throw new CustomBasicException("There was no episode chosen");
+        E? ee = await DataContext!.GetEpisodeChosenAsync() ?? throw new CustomBasicException("There was no episode chosen");
         Loader!.ChoseEpisode(ee);
     }
 }

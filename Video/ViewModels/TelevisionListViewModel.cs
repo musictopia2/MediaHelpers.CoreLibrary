@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class TelevisionListViewModel(ITelevisionListLogic list, INextEpisodeLogic next) : MainVideoListViewModel<IShowTable>
+public class TelevisionListViewModel<E>(ITelevisionListLogic list, INextEpisodeLogic<E> next) : MainVideoListViewModel<IShowTable>
+    where E : class, IEpisodeTable
 {
     public override async Task InitAsync()
     {
@@ -7,14 +8,14 @@ public class TelevisionListViewModel(ITelevisionListLogic list, INextEpisodeLogi
         FocusCombo?.Invoke();
     }
 
-    public async Task<IEpisodeTable?> GetEpisodeChosenAsync()
+    public async Task<E?> GetEpisodeChosenAsync()
     {
         //still needs this though.
         if (SelectedItem is null)
         {
             throw new CustomBasicException("You never chose a show to watch.  Rethink");
         }
-        IEpisodeTable? output = await next.GetNextEpisodeAsync(SelectedItem);
+        E? output = await next.GetNextEpisodeAsync(SelectedItem);
         return output;
     }
 }

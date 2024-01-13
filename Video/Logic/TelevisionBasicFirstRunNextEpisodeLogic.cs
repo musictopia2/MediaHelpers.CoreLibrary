@@ -1,9 +1,10 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionBasicFirstRunNextEpisodeLogic(IFirstRunBasicTelevisionContext data) : INextEpisodeLogic
+public class TelevisionBasicFirstRunNextEpisodeLogic<E>(IFirstRunBasicTelevisionContext<E> data) : INextEpisodeLogic<E>
+    where E : class, IEpisodeTable
 {
-    async Task<IEpisodeTable?> INextEpisodeLogic.GetNextEpisodeAsync(IShowTable selectedItem)
+    async Task<E?> INextEpisodeLogic<E>.GetNextEpisodeAsync(IShowTable selectedItem)
     {
-        IEpisodeTable? episode = await data.GetNextEpisodeAsync(selectedItem.ID);
+        E? episode = await data.GetNextEpisodeAsync(selectedItem.ID);
         if (episode is null)
         {
             await data.FinishVideoFirstRunAsync(selectedItem.ID);

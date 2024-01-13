@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
-public interface IFirstRunBasicTelevisionContext : IStartBasicTelevisionContext
+﻿namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
+public interface IFirstRunBasicTelevisionContext<E> : IStartBasicTelevisionContext<E>
+    where E : class, IEpisodeTable
 {
     Task FinishVideoFirstRunAsync();
     Task FinishVideoFirstRunAsync(int showID);

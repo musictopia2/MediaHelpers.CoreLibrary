@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public interface ITelevisionHolidayLogic
+public interface ITelevisionHolidayLogic<E>
+    where E : class, IEpisodeTable
 {
-    Task<BasicList<IEpisodeTable>> GetHolidayEpisodeListAsync(EnumTelevisionHoliday holiday);
+    Task<BasicList<E>> GetHolidayEpisodeListAsync(EnumTelevisionHoliday holiday);
 }

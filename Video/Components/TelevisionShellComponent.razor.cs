@@ -1,10 +1,11 @@
 namespace MediaHelpers.CoreLibrary.Video.Components;
-public partial class TelevisionShellComponent
+public partial class TelevisionShellComponent<E>
+    where E: class, IEpisodeTable
 {
     [Inject]
-    private ITelevisionShellViewModel? DataContext { get; set; }
+    private ITelevisionShellViewModel<E>? DataContext { get; set; }
     [Inject]
-    private ITelevisionVideoLoader? Loader { get; set; }
+    private ITelevisionVideoLoader<E>? Loader { get; set; }
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
     [Parameter]

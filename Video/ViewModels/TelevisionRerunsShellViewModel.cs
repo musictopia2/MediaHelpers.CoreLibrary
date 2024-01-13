@@ -1,9 +1,11 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class TelevisionRerunsShellViewModel(ITelevisionShellLogic logic, IDateOnlyPicker datePicker) : ITelevisionShellViewModel
+public class TelevisionRerunsShellViewModel<E>(ITelevisionShellLogic<E> logic, IDateOnlyPicker datePicker) : ITelevisionShellViewModel<E>
+    where E: class, IEpisodeTable
 {
     public EnumTelevisionHoliday CurrentHoliday { get; private set; } = EnumTelevisionHoliday.None;
-    public IEpisodeTable? PreviousEpisode { get; private set; }
+    public E? PreviousEpisode { get; private set; }
     public bool IsLoaded { get; private set; }
+
     //public bool DidReset { get; private set; }
 
     public async Task InitAsync()

@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public interface ITelevisionShellLogic
+public interface ITelevisionShellLogic<E>
+    where E: class, IEpisodeTable
 {
-    Task<IEpisodeTable?> GetPreviousEpisodeAsync(); //if it returns nothing, then there was no previous episode 
+    Task<E?> GetPreviousEpisodeAsync(); //if it returns nothing, then there was no previous episode 
 }

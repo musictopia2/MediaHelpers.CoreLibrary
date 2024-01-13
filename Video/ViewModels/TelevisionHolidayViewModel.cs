@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class TelevisionHolidayViewModel(ITelevisionHolidayLogic logic, ISystemError error, IExit exit)
+public class TelevisionHolidayViewModel<E>(ITelevisionHolidayLogic<E> logic, ISystemError error, IExit exit)
+    where E : class, IEpisodeTable
 {
     public string NonHolidayText { get; set; } = "";
     public bool HolidayFullVisible { get; set; }
@@ -15,7 +16,7 @@ public class TelevisionHolidayViewModel(ITelevisionHolidayLogic logic, ISystemEr
         var lookup = _holidayList.Single(xx => xx.ID == episode.ID);
         _holidayList.RemoveSpecificItem(lookup); //to guarantee the proper one gets removed no matter what.
     }
-    public IEpisodeTable? GetHolidayEpisode(EnumTelevisionLengthType lengthType)
+    public E? GetHolidayEpisode(EnumTelevisionLengthType lengthType)
     {
         if (IsLoaded == false)
         {
@@ -29,10 +30,10 @@ public class TelevisionHolidayViewModel(ITelevisionHolidayLogic logic, ISystemEr
             return null;
         }
         //ManuallyChoseHoliday = true;
-        IEpisodeTable episode = episodeList.GetRandomItem();
+        E episode = episodeList.GetRandomItem();
         return episode;
     }
-    private BasicList<IEpisodeTable> _holidayList = [];
+    private BasicList<E> _holidayList = [];
     public async Task InitAsync(EnumTelevisionHoliday holiday) //has to send in.  so i can mock a holiday if needed to make sure holidays work before they happen.
     {
         IsLoaded = false;

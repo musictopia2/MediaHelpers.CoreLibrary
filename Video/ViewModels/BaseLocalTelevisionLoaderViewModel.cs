@@ -1,7 +1,8 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewModel<IEpisodeTable>, ITelevisionLoaderViewModel, IStartLoadingViewModel
+public abstract class BaseLocalTelevisionLoaderViewModel<E> : VideoMainLoaderViewModel<E>, ITelevisionLoaderViewModel, IStartLoadingViewModel
+    where E: class, IEpisodeTable
 {
-    private readonly IBasicTelevisionLoaderLogic _loadLogic;
+    private readonly IBasicTelevisionLoaderLogic<E> _loadLogic;
     //private readonly TelevisionHolidayViewModel _holidayViewModel;
     private readonly IBasicTelevisionRemoteControlHostService _hostService;
 
@@ -12,9 +13,9 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
     //protected readonly bool WasHoliday;
     //private readonly bool _wasHoliday;
     public BaseLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
-        IBasicTelevisionLoaderLogic loadLogic,
+        IBasicTelevisionLoaderLogic<E> loadLogic,
         //TelevisionHolidayViewModel holidayViewModel,
-        TelevisionContainerClass containerClass,
+        TelevisionContainerClass<E> containerClass,
         IBasicTelevisionRemoteControlHostService hostService,
         //ITelevisionListLogic listLogic,
         ISystemError error,
@@ -95,7 +96,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
         //}
         //await StartNextEpisodeAsync(tempItem);
     }
-    protected IEpisodeTable StopEpisode()
+    protected E StopEpisode()
     {
         ResumeSecs = 0;
         VideoPosition = 0;
@@ -241,5 +242,4 @@ public abstract class BaseLocalTelevisionLoaderViewModel : VideoMainLoaderViewMo
         }
         return _hostService.SendProgressAsync(new TelevisionModel(SelectedItem.ShowTable.ShowName, ProgressText, SelectedItem.Holiday!, CanPlay == false, startAt));
     }
-
 }

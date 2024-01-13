@@ -1,10 +1,11 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
 //this may be list or may be loader.
-public class TelevisionBasicRerunNextEpisodeLogic(IStartBasicTelevisionContext data, IMessageBox message, IExit exit) : INextEpisodeLogic
+public class TelevisionBasicRerunNextEpisodeLogic<E>(IStartBasicTelevisionContext<E> data, IMessageBox message, IExit exit) : INextEpisodeLogic<E>
+    where E: class, IEpisodeTable
 {
-    async Task<IEpisodeTable?> INextEpisodeLogic.GetNextEpisodeAsync(IShowTable selectedItem)
+    async Task<E?> INextEpisodeLogic<E>.GetNextEpisodeAsync(IShowTable selectedItem)
     {
-        IEpisodeTable? episode = await data.GetNextEpisodeAsync(selectedItem.ID);
+        E? episode = await data.GetNextEpisodeAsync(selectedItem.ID);
         if (episode == null)
         {
             await message.ShowMessageAsync($"There are no more episodes that can be chosen for {selectedItem.ShowName}");

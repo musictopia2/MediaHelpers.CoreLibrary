@@ -1,4 +1,5 @@
-﻿@if (DataContext is null || DataContext.IsLoaded == false)
+﻿@typeparam E 
+@if (DataContext is null || DataContext.IsLoaded == false)
 {
     return;
 }

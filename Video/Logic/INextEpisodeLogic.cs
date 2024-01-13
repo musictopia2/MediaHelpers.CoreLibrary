@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public interface INextEpisodeLogic
+public interface INextEpisodeLogic<E>
+    where E : class, IEpisodeTable
 {
     /// <summary>
     /// the view model is responsible for figuring out what was chosen.
@@ -8,6 +9,6 @@ public interface INextEpisodeLogic
     /// </summary>
     /// <param name="selectedItem"></param>
     /// <returns></returns>
-    Task<IEpisodeTable?> GetNextEpisodeAsync(IShowTable selectedItem);
+    Task<E?> GetNextEpisodeAsync(IShowTable selectedItem);
     //can no longer be part of the television list.  since the loader can't know anything about the list anymore.
 }

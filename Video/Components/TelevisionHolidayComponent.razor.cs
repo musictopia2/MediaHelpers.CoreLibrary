@@ -1,5 +1,6 @@
 namespace MediaHelpers.CoreLibrary.Video.Components;
-public partial class TelevisionHolidayComponent
+public partial class TelevisionHolidayComponent<E>
+    where E: class, IEpisodeTable
 {
     [Inject]
     private ISystemError? Error { get; set; }
@@ -8,12 +9,12 @@ public partial class TelevisionHolidayComponent
     [Parameter]
     public EnumTelevisionHoliday Holiday { get; set; }
     [Inject]
-    private TelevisionHolidayViewModel? DataContext { get; set; }
+    private TelevisionHolidayViewModel<E>? DataContext { get; set; }
     [Inject]
-    private ITelevisionVideoLoader? Loader { get; set; }
+    private ITelevisionVideoLoader<E>? Loader { get; set; }
     private void ChoseHolidayEpisode(EnumTelevisionLengthType lengthType)
     {
-        IEpisodeTable? episode = DataContext?.GetHolidayEpisode(lengthType);
+        E? episode = DataContext?.GetHolidayEpisode(lengthType);
         if (episode is null)
         {
             Error!.ShowSystemError("No episode was chosen even though I chose a holiday episode");

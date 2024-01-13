@@ -1,21 +1,22 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class RerunLocalTelevisionLoaderViewModel : BaseLocalTelevisionLoaderViewModel
+public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderViewModel<E>
+    where E : class, IEpisodeTable
 {
-    private readonly IRerunTelevisionLoaderLogic _loadLogic;
-    private readonly TelevisionHolidayViewModel _holidayViewModel;
+    private readonly IRerunTelevisionLoaderLogic<E> _loadLogic;
+    private readonly TelevisionHolidayViewModel<E> _holidayViewModel;
     private readonly IDateOnlyPicker _picker;
     private readonly IRerunTelevisionRemoteControlHostService _hostService;
-    private readonly INextEpisodeLogic _nextLogic;
+    private readonly INextEpisodeLogic<E> _nextLogic;
     private readonly ISystemError _error;
     private readonly IExit _exit;
     private bool _wasHoliday;
     public RerunLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
-        IRerunTelevisionLoaderLogic loadLogic,
-        TelevisionHolidayViewModel holidayViewModel, //this one needs it though.
+        IRerunTelevisionLoaderLogic<E> loadLogic,
+        TelevisionHolidayViewModel<E> holidayViewModel, //this one needs it though.
         IDateOnlyPicker picker,
-        TelevisionContainerClass containerClass,
+        TelevisionContainerClass<E> containerClass,
         IRerunTelevisionRemoteControlHostService hostService,
-        INextEpisodeLogic nextLogic,
+        INextEpisodeLogic<E> nextLogic,
         ISystemError error,
         IToast toast,
         IExit exit) : base(player, loadLogic, containerClass, hostService, error, toast, exit)

@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Helpers;
-public class TelevisionContainerClass
+public class TelevisionContainerClass<E>
+    where E : class, IEpisodeTable
 {
-    public IEpisodeTable? EpisodeChosen { get; set; }
+    public E? EpisodeChosen { get; set; }
 }

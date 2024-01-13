@@ -1,7 +1,8 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionFirstrunLoaderLogic(IFirstRunLoaderTelevisionContext data) : IFirstRunTelevisionLoaderLogic
+public class TelevisionFirstrunLoaderLogic<E>(IFirstRunLoaderTelevisionContext<E> data) : IFirstRunTelevisionLoaderLogic<E>
+    where E : class, IEpisodeTable
 {
-    async Task IBasicTelevisionLoaderLogic.InitializeEpisodeAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic<E>.InitializeEpisodeAsync(E episode)
     {
         await InitializeEpisodeAsync(episode);
     }
@@ -9,49 +10,49 @@ public class TelevisionFirstrunLoaderLogic(IFirstRunLoaderTelevisionContext data
     //{
     //    await AddToHistoryAsync(episode);
     //}
-    private async Task InitializeEpisodeAsync(IEpisodeTable episode)
+    private async Task InitializeEpisodeAsync(E episode)
     {
         data.CurrentEpisode = episode;
         await data.InitializeEpisodeAsync();
         //await _data.AddFirstRunViewHistoryAsync();
     }
-    async Task IBasicTelevisionLoaderLogic.EndTVEpisodeEarlyAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic<E>.EndTVEpisodeEarlyAsync(E episode)
     {
         await EndEpisodeAsync(episode);
     }
 
-    private async Task EndEpisodeAsync(IEpisodeTable episode)
+    private async Task EndEpisodeAsync(E episode)
     {
         episode.ResumeAt = null;
         data.CurrentEpisode = episode;
         await data.FinishVideoFirstRunAsync(); //should not need a way to be able to end episode since it most likely will close out.
     }
-    async Task IBasicTelevisionLoaderLogic.FinishTVEpisodeAsync(IEpisodeTable episode)
+    async Task IBasicTelevisionLoaderLogic<E>.FinishTVEpisodeAsync(E episode)
     {
         await EndEpisodeAsync(episode);
     }
-    int IBasicTelevisionLoaderLogic.GetSeconds(IEpisodeTable episode)
+    int IBasicTelevisionLoaderLogic<E>.GetSeconds(E episode)
     {
         return episode.GetSeconds(data);
     }
-    Task IBasicTelevisionLoaderLogic.UpdateTVShowProgressAsync(IEpisodeTable episode, int position)
+    Task IBasicTelevisionLoaderLogic<E>.UpdateTVShowProgressAsync(E episode, int position)
     {
         data.CurrentEpisode = episode;
         data.Seconds = position;
         return Task.CompletedTask;
     }
-    Task IBasicTelevisionLoaderLogic.ForeverSkipEpisodeAsync(IEpisodeTable episode) //even reruns can skip forever.
+    Task IBasicTelevisionLoaderLogic<E>.ForeverSkipEpisodeAsync(E episode) //even reruns can skip forever.
     {
         data.CurrentEpisode = episode;
         return data.ForeverSkipEpisodeAsync();
     }
-    Task IBasicTelevisionLoaderLogic.ModifyHolidayAsync(IEpisodeTable episode, EnumTelevisionHoliday holiday)
+    Task IBasicTelevisionLoaderLogic<E>.ModifyHolidayAsync(E episode, EnumTelevisionHoliday holiday)
     {
         data.CurrentEpisode = episode;
         return data.ModifyHolidayCategoryForEpisodeAsync(holiday);
     }
     //was going to not support it but decided that if somehow it happened, then go ahead and close out and go back in (even on firstrun shows).
-    async Task IBasicTelevisionLoaderLogic.ReloadAppAsync(IEpisodeTable newEpisode)
+    async Task IBasicTelevisionLoaderLogic<E>.ReloadAppAsync(E newEpisode)
     {
         //may have to rethink if one is youtube and the other is not.
         await InitializeEpisodeAsync(newEpisode); //i think.
@@ -59,18 +60,18 @@ public class TelevisionFirstrunLoaderLogic(IFirstRunLoaderTelevisionContext data
         //await AddToHistoryAsync(newEpisode);
     }
 
-    Task IFirstRunTelevisionLoaderLogic.IntroBeginsAsync(IEpisodeTable episode)
+    Task IFirstRunTelevisionLoaderLogic<E>.IntroBeginsAsync(E episode)
     {
         data.CurrentEpisode = episode;
         return data.IntroBeginsAsync();
     }
-    Task IFirstRunTelevisionLoaderLogic.ThemeSongOverAsync(IEpisodeTable episode)
+    Task IFirstRunTelevisionLoaderLogic<E>.ThemeSongOverAsync(E episode)
     {
         data.CurrentEpisode = episode;
         return data.ThemeSongOverAsync();
     }
 
-    IEpisodeTable IBasicTelevisionLoaderLogic.GetChosenEpisode()
+    E IBasicTelevisionLoaderLogic<E>.GetChosenEpisode()
     {
         if (ee1.EpisodeChosen is null)
         {

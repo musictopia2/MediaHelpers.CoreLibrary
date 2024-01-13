@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
-public interface IStartLoaderTelevisionContext : IStartBasicTelevisionContext
+public interface IStartLoaderTelevisionContext<E> : IStartBasicTelevisionContext<E>
+    where E : class, IEpisodeTable
 {
     //anything that is needed on both is here.
     int Seconds { get; set; }

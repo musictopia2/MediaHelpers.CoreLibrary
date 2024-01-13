@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
-public interface IRerunLoaderTelevisionContext : IStartLoaderTelevisionContext, IRerunStartTelevisionContext
+public interface IRerunLoaderTelevisionContext<E> : IStartLoaderTelevisionContext<E>, IRerunStartTelevisionContext<E>
+    where E : class, IEpisodeTable
 {
     Task<IEpisodeTable> GetManuelEpisodeAsync(int showID, int episodeID);
     Task TemporarilySkipEpisodeAsync();

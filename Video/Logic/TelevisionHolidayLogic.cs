@@ -1,8 +1,8 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
-public class TelevisionHolidayLogic(IRerunStartTelevisionContext dats) : ITelevisionHolidayLogic
+public class TelevisionHolidayLogic<E>(IRerunStartTelevisionContext<E> dats) : ITelevisionHolidayLogic<E>
+    where E : class, IEpisodeTable
 {
-    //now needs holiday logic
-    async Task<BasicList<IEpisodeTable>> ITelevisionHolidayLogic.GetHolidayEpisodeListAsync(EnumTelevisionHoliday currentHoliday)
+    async Task<BasicList<E>> ITelevisionHolidayLogic<E>.GetHolidayEpisodeListAsync(EnumTelevisionHoliday currentHoliday)
     {
         return await dats.GetHolidayListAsync(currentHoliday);
     }

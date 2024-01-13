@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.DatabaseInterfaces.TVShows;
-public interface IFirstRunLoaderTelevisionContext : IStartLoaderTelevisionContext, IFirstRunBasicTelevisionContext
+public interface IFirstRunLoaderTelevisionContext<E> : IStartLoaderTelevisionContext<E>, IFirstRunBasicTelevisionContext<E>
+    where E : class, IEpisodeTable
 {
     
     Task IntroBeginsAsync();

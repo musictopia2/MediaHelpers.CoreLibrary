@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediaHelpers.CoreLibrary.Video.Logic;
-public interface IRerunTelevisionLoaderLogic : IBasicTelevisionLoaderLogic
+﻿namespace MediaHelpers.CoreLibrary.Video.Logic;
+public interface IRerunTelevisionLoaderLogic<E> : IBasicTelevisionLoaderLogic<E>
+    where E : class, IEpisodeTable
 {
-    Task TemporarilySKipEpisodeAsync(IEpisodeTable episode);
+    Task TemporarilySKipEpisodeAsync(E episode);
     Task<bool> CanGoToNextEpisodeAsync();
     //this means the firstrun can have other functions for that remote control.
 }

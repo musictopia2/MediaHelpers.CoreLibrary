@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Helpers;
-public interface ITelevisionVideoLoader
+public interface ITelevisionVideoLoader<T>
+    where T: class, IEpisodeTable
 {
-    void ChoseEpisode(IEpisodeTable episode);
+    void ChoseEpisode(T episode);
 }

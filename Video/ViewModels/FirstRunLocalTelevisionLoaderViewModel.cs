@@ -1,16 +1,17 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class FirstRunLocalTelevisionLoaderViewModel : BaseLocalTelevisionLoaderViewModel
+public class FirstRunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderViewModel<E>
+    where E : class, IEpisodeTable
 {
     private readonly IFullVideoPlayer _player;
-    private readonly IFirstRunTelevisionLoaderLogic _loadLogic;
+    private readonly IFirstRunTelevisionLoaderLogic<E> _loadLogic;
     private readonly IFirstRunTelevisionRemoteControlHostService _hostService;
-    private readonly INextEpisodeLogic _nextLogic;
+    private readonly INextEpisodeLogic<E> _nextLogic;
     private bool _canStart;
     public FirstRunLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
-        IFirstRunTelevisionLoaderLogic loadLogic,
-        TelevisionContainerClass containerClass,
+        IFirstRunTelevisionLoaderLogic<E> loadLogic,
+        TelevisionContainerClass<E> containerClass,
         IFirstRunTelevisionRemoteControlHostService hostService,
-        INextEpisodeLogic nextLogic,
+        INextEpisodeLogic<E> nextLogic,
         ISystemError error,
         IToast toast,
         IExit exit) : base(player, loadLogic, containerClass, hostService, error, toast, exit)
@@ -39,7 +40,7 @@ public class FirstRunLocalTelevisionLoaderViewModel : BaseLocalTelevisionLoaderV
     {
         //may decide later to not always stop it (depending on conditions).
         //this can't be youtube either.
-        IEpisodeTable episode = StopEpisode();
+        E episode = StopEpisode();
         await _loadLogic.EndTVEpisodeEarlyAsync(episode);
         //for now, no questions asked.  eventually figure out a better way to figure out whether to really end it or ignore (because done by mistake)
         //await _loadLogic.EndTVEpisodeEarlyAsync(SelectedItem!);
