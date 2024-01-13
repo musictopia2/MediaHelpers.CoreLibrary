@@ -4,14 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <Version>8.0.24</Version>
+	  <Version>8.0.25</Version>
   </PropertyGroup>
 	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommonBasicLibraries" Version="8.0.1" />
-	  <PackageReference Include="BasicBlazorLibrary" Version="8.0.1" />
+    <PackageReference Include="CommonBasicLibraries" Version="8.0.2" />
+	  <PackageReference Include="BasicBlazorLibrary" Version="8.0.4" />
   </ItemGroup>
 
 </Project>
