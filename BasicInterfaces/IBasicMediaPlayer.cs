@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.BasicInterfaces;
-public interface IBasicMediaPlayer
+public interface IBasicMediaPlayer : IPausePlayer
 {
     bool IsFinished();
     int Length();
@@ -11,7 +11,6 @@ public interface IBasicMediaPlayer
     Task PlayAsync();
     Task PlayAsync(int position);
     Task PlayAsync(int length, int position);
-    void Pause();
     void StopPlay();
     bool IsPaused();
     int TimeElapsedSeconds();
