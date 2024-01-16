@@ -5,6 +5,7 @@ public class MockRerunTelevisionRemoteControlHostService : IRerunTelevisionRemot
     Func<Task>? IBasicTelevisionRemoteControlHostService.SkipEpisodeForever { get; set; }
     Func<EnumTelevisionHoliday, Task>? IBasicTelevisionRemoteControlHostService.ModifyHoliday { get; set; }
     Func<Task>? IRerunTelevisionRemoteControlHostService.SkipEpisodeTemporarily { get; set; }
+    Func<Task>? IBasicTelevisionRemoteControlHostService.EditLater { get; set; }
 
     Task IBasicTelevisionRemoteControlHostService.InitializeAsync()
     {

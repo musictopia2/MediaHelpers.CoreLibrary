@@ -9,6 +9,7 @@ public class MockFirstRunTelevisionRemoteControlHostService : IFirstRunTelevisio
     Func<Task>? IFirstRunTelevisionRemoteControlHostService.EndEpisode { get; set; }
     Func<Task>? IFirstRunTelevisionRemoteControlHostService.Rewind { get; set; }
     Func<Task>? IFirstRunTelevisionRemoteControlHostService.ThemeSongOver { get; set; }
+    Func<Task>? IBasicTelevisionRemoteControlHostService.EditLater { get; set; }
 
     //anything else needed will be generated as well.
     Task IBasicTelevisionRemoteControlHostService.InitializeAsync()
