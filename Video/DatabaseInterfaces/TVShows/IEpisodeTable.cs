@@ -19,4 +19,5 @@ public interface IEpisodeTable
     //this is now questionable.  bad news is even though bad design, don't know how to do without figuring out even more names (?)
     string FullPath();
     IShowTable ShowTable { get; }
+    bool CanEdit { get; } // determine whether the episode can even be edited.
 }

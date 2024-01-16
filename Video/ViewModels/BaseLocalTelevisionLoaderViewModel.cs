@@ -240,6 +240,6 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E> : VideoMainLoaderVie
         {
             startAt = SelectedItem.StartAt.Value; //i think.
         }
-        return _hostService.SendProgressAsync(new TelevisionModel(SelectedItem.ShowTable.ShowName, ProgressText, SelectedItem.Holiday!, CanPlay == false, startAt));
+        return _hostService.SendProgressAsync(new TelevisionModel(SelectedItem.ShowTable.ShowName, ProgressText, SelectedItem.Holiday!, CanPlay == false, startAt, SelectedItem.CanEdit));
     }
 }
