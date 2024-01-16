@@ -28,7 +28,13 @@ public interface IBasicTelevisionLoaderLogic<E>
     /// </summary>
     /// <param name="newEpisode"></param>
     /// <returns></returns>
-    Task ReloadAppAsync(E newEpisode);
+    //Task ReloadAppAsync(E newEpisode);
+
+
+    //can no longer reload same app because not only does it require arguments now
+    //but also, may even be forced to load another app as well.
+
+
     Task ForeverSkipEpisodeAsync(E episode);
     Task EditEpisodeLaterAsync(E episode);
 

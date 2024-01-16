@@ -9,9 +9,11 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
     private readonly INextEpisodeLogic<E> _nextLogic;
     private readonly ISystemError _error;
     private readonly IExit _exit;
+    private readonly IMessageBox _message;
     private bool _wasHoliday;
     public RerunLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
         IRerunTelevisionLoaderLogic<E> loadLogic,
+        ITelevisionVideoLoader<E> reload,
         TelevisionHolidayViewModel<E> holidayViewModel, //this one needs it though.
         IDateOnlyPicker picker,
         TelevisionContainerClass<E> containerClass,
@@ -19,7 +21,9 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         INextEpisodeLogic<E> nextLogic,
         ISystemError error,
         IToast toast,
-        IExit exit) : base(player, loadLogic, containerClass, hostService, error, toast, exit)
+        IExit exit,
+        IMessageBox message
+        ) : base(player, loadLogic, reload, containerClass, hostService, error, toast, exit)
     {
         _loadLogic = loadLogic;
         _holidayViewModel = holidayViewModel;
@@ -28,6 +32,7 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         _nextLogic = nextLogic;
         _error = error;
         _exit = exit;
+        _message = message;
         _hostService.SkipEpisodeTemporarily = SkipEpisodeTemporarilyAsync;
     }
 
@@ -82,10 +87,12 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         SelectedItem = manuallyChose ? _holidayViewModel.GetHolidayEpisode(show.LengthType) : await _nextLogic.GetNextEpisodeAsync(show);
         if (SelectedItem is null)
         {
-            _error.ShowSystemError("Selected Item Was Null");
+            await _message.ShowMessageAsync("No more episodes was found");
+            Execute.OnUIThread(_exit.ExitApp);
+            //_error.ShowSystemError("Selected Item Was Null");
             return;
         }
-        await ReloadAppAsync();
+        LoadNewEpisode(); //not even same app
     }
     private void ProcessHoliday(IEpisodeTable tempItem)
     {

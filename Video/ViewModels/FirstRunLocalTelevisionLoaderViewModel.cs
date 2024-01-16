@@ -9,12 +9,13 @@ public class FirstRunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoad
     private bool _canStart;
     public FirstRunLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
         IFirstRunTelevisionLoaderLogic<E> loadLogic,
+        ITelevisionVideoLoader<E> reload,
         TelevisionContainerClass<E> containerClass,
         IFirstRunTelevisionRemoteControlHostService hostService,
         INextEpisodeLogic<E> nextLogic,
         ISystemError error,
         IToast toast,
-        IExit exit) : base(player, loadLogic, containerClass, hostService, error, toast, exit)
+        IExit exit) : base(player, loadLogic, reload, containerClass, hostService, error, toast, exit)
     {
         _player = player;
         _loadLogic = loadLogic;
@@ -75,7 +76,7 @@ public class FirstRunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoad
     {
         IShowTable show = tempItem.ShowTable;
         SelectedItem = await _nextLogic.GetNextEpisodeAsync(show);
-        await ReloadAppAsync();
+        LoadNewEpisode();
     }
 
     protected override async Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)

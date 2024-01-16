@@ -56,15 +56,6 @@ public class TelevisionFirstrunLoaderLogic<E>(IFirstRunLoaderTelevisionContext<E
         data.CurrentEpisode = episode;
         return data.ModifyHolidayCategoryForEpisodeAsync(holiday);
     }
-    //was going to not support it but decided that if somehow it happened, then go ahead and close out and go back in (even on firstrun shows).
-    async Task IBasicTelevisionLoaderLogic<E>.ReloadAppAsync(E newEpisode)
-    {
-        //may have to rethink if one is youtube and the other is not.
-        await InitializeEpisodeAsync(newEpisode); //i think.
-        await data.ReloadAppAsync();
-        //await AddToHistoryAsync(newEpisode);
-    }
-
     Task IFirstRunTelevisionLoaderLogic<E>.IntroBeginsAsync(E episode)
     {
         data.CurrentEpisode = episode;

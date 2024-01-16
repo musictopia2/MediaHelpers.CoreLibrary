@@ -3,11 +3,13 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E> : VideoMainLoaderVie
     where E: class, IEpisodeTable
 {
     private readonly IBasicTelevisionLoaderLogic<E> _loadLogic;
+    private readonly ITelevisionVideoLoader<E> _reload;
     private readonly IBasicTelevisionRemoteControlHostService _hostService;
     private readonly ISystemError _error;
     private readonly IToast _toast;
     public BaseLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
         IBasicTelevisionLoaderLogic<E> loadLogic,
+        ITelevisionVideoLoader<E> reload,
         TelevisionContainerClass<E> containerClass,
         IBasicTelevisionRemoteControlHostService hostService,
         ISystemError error,
@@ -16,6 +18,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E> : VideoMainLoaderVie
         ) : base(player, error, exit)
     {
         _loadLogic = loadLogic;
+        _reload = reload;
         _hostService = hostService;
         _error = error;
         _toast = toast;
@@ -83,16 +86,13 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E> : VideoMainLoaderVie
         Player.StopPlay();
         return tempItem;
     }
-    protected async Task ReloadAppAsync()
+    protected void LoadNewEpisode()
     {
-        try
+        if (SelectedItem is null)
         {
-            await _loadLogic.ReloadAppAsync(SelectedItem!);
+            throw new CustomBasicException("No episode was even chosen");
         }
-        catch (Exception ex)
-        {
-            _error.ShowSystemError(ex.Message);
-        }
+        _reload.ChoseEpisode(SelectedItem);
     }
     public override Task SaveProgressAsync()
     {

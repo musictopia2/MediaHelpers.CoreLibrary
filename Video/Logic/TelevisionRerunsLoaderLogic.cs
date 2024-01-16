@@ -42,21 +42,7 @@ public class TelevisionRerunsLoaderLogic<E>(IRerunLoaderTelevisionContext<E> dat
         data.CurrentEpisode = episode;
         return data.ModifyHolidayCategoryForEpisodeAsync(holiday);
     }
-    //private async Task AddToHistoryAsync(IEpisodeTable episode)
-    //{
-    //    _data.CurrentEpisode = episode;
-    //    await _data.AddReRunViewHistory();
-    //}
-    /// <summary>
-    /// this will initialize the episode so it can do whatever is needed.  then the context has to decide how it will reload
-    /// </summary>
-    /// <param name="newEpisode">this is the new episode chosen</param>
-    /// <returns></returns>
-    async Task IBasicTelevisionLoaderLogic<E>.ReloadAppAsync(E newEpisode)
-    {
-        await InitializeEpisodeAsync(newEpisode);
-        await data.ReloadAppAsync();
-    }
+    
     async Task IBasicTelevisionLoaderLogic<E>.InitializeEpisodeAsync(E episode)
     {
         await InitializeEpisodeAsync(episode);
