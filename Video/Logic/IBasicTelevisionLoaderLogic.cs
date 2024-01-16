@@ -30,6 +30,7 @@ public interface IBasicTelevisionLoaderLogic<E>
     /// <returns></returns>
     Task ReloadAppAsync(E newEpisode);
     Task ForeverSkipEpisodeAsync(E episode);
+    Task EditEpisodeLaterAsync(E episode);
 
     //not everything can temporarily skip though.
 

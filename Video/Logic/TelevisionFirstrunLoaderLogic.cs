@@ -46,6 +46,11 @@ public class TelevisionFirstrunLoaderLogic<E>(IFirstRunLoaderTelevisionContext<E
         data.CurrentEpisode = episode;
         return data.ForeverSkipEpisodeAsync();
     }
+    Task IBasicTelevisionLoaderLogic<E>.EditEpisodeLaterAsync(E episode)
+    {
+        data.CurrentEpisode = episode;
+        return data.EditEpisodeLaterAsync();
+    }
     Task IBasicTelevisionLoaderLogic<E>.ModifyHolidayAsync(E episode, EnumTelevisionHoliday holiday)
     {
         data.CurrentEpisode = episode;
@@ -84,4 +89,6 @@ public class TelevisionFirstrunLoaderLogic<E>(IFirstRunLoaderTelevisionContext<E
         }
         return data.CurrentEpisode;
     }
+
+    
 }

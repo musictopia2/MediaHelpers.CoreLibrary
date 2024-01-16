@@ -22,6 +22,11 @@ public class TelevisionRerunsLoaderLogic<E>(IRerunLoaderTelevisionContext<E> dat
         data.CurrentEpisode = episode; //just in case.
         return data.ForeverSkipEpisodeAsync();
     }
+    Task IBasicTelevisionLoaderLogic<E>.EditEpisodeLaterAsync(E episode)
+    {
+        data.CurrentEpisode = episode;
+        return data.EditEpisodeLaterAsync();
+    }
     int IBasicTelevisionLoaderLogic<E>.GetSeconds(E episode)
     {
         return episode.GetSeconds(data);
@@ -86,4 +91,6 @@ public class TelevisionRerunsLoaderLogic<E>(IRerunLoaderTelevisionContext<E> dat
         }
         return data.CurrentEpisode;
     }
+
+    
 }

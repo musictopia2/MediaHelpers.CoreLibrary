@@ -32,8 +32,11 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
     }
 
     public override bool CanPlay => true;
-
-    protected override async Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    protected override async Task FinishEditEpisodeLaterAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    {
+        await FinishDisablingEpisodeAsync(tempItem, holiday);
+    }
+    private async Task FinishDisablingEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
     {
         ProcessHoliday(tempItem);
         bool manuallyChose = holiday != EnumTelevisionHoliday.None;
@@ -54,6 +57,11 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
             }
         }
         await StartNextEpisodeAsync(tempItem, holiday);
+    }
+    protected override async Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    {
+        await FinishDisablingEpisodeAsync(tempItem, holiday);
+        
     }
     protected override async Task StartNextEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
     {
@@ -122,4 +130,6 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         }
         return true;
     }
+
+    
 }
