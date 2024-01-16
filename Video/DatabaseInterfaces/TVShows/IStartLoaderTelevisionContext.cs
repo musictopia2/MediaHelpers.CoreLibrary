@@ -4,7 +4,7 @@ public interface IStartLoaderTelevisionContext<E> : IStartBasicTelevisionContext
 {
     //anything that is needed on both is here.
     int Seconds { get; set; }
-    Task ReloadAppAsync();
+    //Task ReloadAppAsync();
     Task UpdateEpisodeAsync();
     Task InitializeEpisodeAsync();
     Task ModifyHolidayCategoryForEpisodeAsync(EnumTelevisionHoliday holiday); //i think
