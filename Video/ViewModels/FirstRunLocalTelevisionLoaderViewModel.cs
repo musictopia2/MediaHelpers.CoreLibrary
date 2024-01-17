@@ -89,4 +89,9 @@ public class FirstRunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoad
         await StartNextEpisodeAsync(tempItem, holiday);
         //throw new NotImplementedException();
     }
+
+    protected override async Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    {
+        await StartNextEpisodeAsync(tempItem, holiday); //for now until i figure out something else.
+    }
 }

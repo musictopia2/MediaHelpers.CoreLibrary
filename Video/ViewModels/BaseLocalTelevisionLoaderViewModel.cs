@@ -51,8 +51,10 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E> : VideoMainLoaderVie
         EnumTelevisionHoliday previous = SelectedItem.Holiday!.Value;
         var tempItem = StopEpisode();
         await _loadLogic.ModifyHolidayAsync(tempItem, holiday);
-        await StartNextEpisodeAsync(tempItem, previous);
+        await FinishModifyingHoliday(tempItem, previous);
+        //await StartNextEpisodeAsync(tempItem, previous);
     }
+    protected abstract Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
     protected abstract Task StartNextEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
 
     protected abstract Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
