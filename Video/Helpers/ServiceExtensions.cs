@@ -1,12 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Helpers;
 public static class ServiceExtensions
 {
-    //this is all the stuff that does not rely on wpf stuff  or custom stuff like databases..
-    public static IServiceCollection RegisterMockFirstRunRemoteControls(this IServiceCollection services)
-    {
-        services.AddSingleton<IFirstRunTelevisionRemoteControlHostService, MockFirstRunTelevisionRemoteControlHostService>();
-        return services;
-    }
     public static IServiceCollection RegisterMockRerunRemoteControls(this IServiceCollection services)
     {
         services.AddSingleton<IRerunTelevisionRemoteControlHostService, MockRerunTelevisionRemoteControlHostService>();
@@ -33,20 +27,6 @@ public static class ServiceExtensions
             .AddSingleton<ITelevisionVideoLoader<E>, L>();
         return services;
     }
-    public static IServiceCollection RegisterCoreLocalFirstRunLoaderTelevisionServices<E>(this IServiceCollection services)
-        where E : class, IEpisodeTable
-    {
-        services.AddSingleton<FirstRunLocalTelevisionLoaderViewModel<E>>()
-             .RegisterTelevisionContainer<E>()
-             .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel<E>>())
-             .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel<E>>())
-             .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<FirstRunLocalTelevisionLoaderViewModel<E>>())
-             .RegisterNextFirstRunLogic<E>()
-             .AddSingleton<TelevisionFirstrunLoaderLogic<E>>()
-            .AddSingleton<IFirstRunTelevisionLoaderLogic<E>>(pp => pp.GetRequiredService<TelevisionFirstrunLoaderLogic<E>>())
-             .AddSingleton<IFirstRunTelevisionLoaderLogic<E>, TelevisionFirstrunLoaderLogic<E>>();
-        return services;
-    }
     public static IServiceCollection RegisterCoreLocalRerunLoaderTelevisionServices<E>(this IServiceCollection services)
         where E : class, IEpisodeTable
     {
@@ -68,12 +48,7 @@ public static class ServiceExtensions
         return services;
     }
     //even these needs to be public so youtube can access them.
-    public static IServiceCollection RegisterNextFirstRunLogic<E>(this IServiceCollection services)
-        where E : class, IEpisodeTable
-    {
-        services.AddSingleton<INextEpisodeLogic<E>, TelevisionBasicFirstRunNextEpisodeLogic<E>>();
-        return services;
-    }
+    
 
     public static IServiceCollection RegisterNextReRunLogic<E>(this IServiceCollection services)
         where E : class, IEpisodeTable
