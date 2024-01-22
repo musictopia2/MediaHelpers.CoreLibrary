@@ -1,17 +1,18 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public abstract class BaseLocalTelevisionLoaderViewModel<E> : VideoMainLoaderViewModel<E>, ITelevisionLoaderViewModel, IStartLoadingViewModel
+public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoaderViewModel<E>, ITelevisionLoaderViewModel, IStartLoadingViewModel
     where E: class, IEpisodeTable
+    where T: class, IBasicTelevisionModel, new()
 {
     private readonly IBasicTelevisionLoaderLogic<E> _loadLogic;
     private readonly ITelevisionVideoLoader<E> _reload;
-    private readonly IBasicTelevisionRemoteControlHostService _hostService;
+    private readonly IBasicTelevisionRemoteControlHostService<T> _hostService;
     private readonly ISystemError _error;
     private readonly IToast _toast;
     public BaseLocalTelevisionLoaderViewModel(IFullVideoPlayer player,
         IBasicTelevisionLoaderLogic<E> loadLogic,
         ITelevisionVideoLoader<E> reload,
         TelevisionContainerClass<E> containerClass,
-        IBasicTelevisionRemoteControlHostService hostService,
+        IBasicTelevisionRemoteControlHostService<T> hostService,
         ISystemError error,
         IToast toast,
         IExit exit
@@ -176,15 +177,8 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E> : VideoMainLoaderVie
     }
     protected override Task SendOtherDataAsync()
     {
-        int startAt;
-        if (SelectedItem!.StartAt.HasValue == false)
-        {
-            startAt = 0;
-        }
-        else
-        {
-            startAt = SelectedItem.StartAt.Value; //i think.
-        }
-        return _hostService.SendProgressAsync(new TelevisionModel(SelectedItem.ShowTable.ShowName, ProgressText, SelectedItem.Holiday!, CanPlay == false, startAt, SelectedItem.CanEdit));
+        T television = GetTelevisionDataToSend();
+        return _hostService.SendProgressAsync(television);
     }
+    protected abstract T GetTelevisionDataToSend();
 }

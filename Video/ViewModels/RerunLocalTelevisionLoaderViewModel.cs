@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderViewModel<E>
+public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderViewModel<E, BasicTelevisionModel>
     where E : class, IEpisodeTable
 {
     private readonly IRerunTelevisionLoaderLogic<E> _loadLogic;
@@ -143,5 +143,16 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
     protected override async Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
     {
         await FinishEditingEpisodeAsync(tempItem, holiday);
+    }
+
+    protected override BasicTelevisionModel GetTelevisionDataToSend()
+    {
+        BasicTelevisionModel output = new();
+        output.ShowName = SelectedItem!.ShowTable.ShowName;
+        output.Progress = ProgressText;
+        output.Holiday = SelectedItem.Holiday;
+        output.CanEdit = SelectedItem.CanEdit; //for now.
+        output.NeedsStart = false; //never needs start for this since its reruns.  firstrun can vary.  plus send other information as well.
+        return output;
     }
 }
