@@ -35,8 +35,8 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         _message = message;
         _hostService.SkipEpisodeTemporarily = SkipEpisodeTemporarilyAsync;
     }
-
     public override bool CanPlay => true;
+    protected override bool CanInitializeRemoteControlAfterPlayerInit => true;
     protected override async Task FinishEditEpisodeLaterAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
     {
         await FinishEditingEpisodeAsync(tempItem, holiday);

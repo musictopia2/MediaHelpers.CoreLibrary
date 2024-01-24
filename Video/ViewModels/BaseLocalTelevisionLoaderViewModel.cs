@@ -150,13 +150,16 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
         var tvLength = Player.Length();
         await CalculateDurationAsync(tvLength);
     }
+    protected abstract bool CanInitializeRemoteControlAfterPlayerInit { get; }
     protected override async Task AfterPlayerInitAsync()
     {
         try
         {
             await ProcessSkipsAsync();
-
-            await _hostService.InitializeAsync();
+            if (CanInitializeRemoteControlAfterPlayerInit)
+            {
+                await _hostService.InitializeAsync();
+            }
         }
         catch (Exception ex)
         {
