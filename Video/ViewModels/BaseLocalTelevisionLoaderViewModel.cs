@@ -106,6 +106,9 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
         return _loadLogic.FinishTVEpisodeAsync(SelectedItem!);
     }
     private bool _hasIntro;
+
+    public Action? StateHasChange { get; set; }
+
     private void BeforeInitEpisode()
     {
         int secs = _loadLogic.GetSeconds(SelectedItem!);
