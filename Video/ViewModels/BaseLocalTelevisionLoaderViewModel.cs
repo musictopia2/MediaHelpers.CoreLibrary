@@ -178,8 +178,11 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
     private async Task CalculateDurationAsync(int tvLength)
     {
         int newLength;
-        TimeSpan thisSpan = TimeSpan.FromSeconds(tvLength);
-        if (thisSpan.Minutes >= 20 && SelectedItem!.ClosingLength.HasValue == true)
+        //used to have the part where the show had to be at least 20 minutes in order to show the length.
+        //however, cartoons like woody woodpecker was only around 6 minutes.  too unpredictable to be smart enough.
+        //thsi means if the closing length was there, then use it no matter what.  if it causes part of an episode to be missed, too bad.  the solution would be to update the episode in the data source to 0 for closing length
+        //TimeSpan thisSpan = TimeSpan.FromSeconds(tvLength);
+        if (SelectedItem!.ClosingLength.HasValue == true)
         {
             newLength = tvLength - SelectedItem.ClosingLength!.Value;
         }
