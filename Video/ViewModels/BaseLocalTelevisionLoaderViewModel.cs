@@ -107,7 +107,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
     }
     private bool _hasIntro;
 
-    public Action? StateHasChange { get; set; }
+    public Action? StartLoadingPlayer { get; set; }
 
     private void BeforeInitEpisode()
     {
