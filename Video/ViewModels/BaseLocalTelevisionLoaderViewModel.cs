@@ -37,6 +37,15 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
         _hostService.ModifyHoliday = ModifyHolidayAsync;
         _hostService.EditLater = EditEpisodeLaterAsync;
         SelectedItem = containerClass.EpisodeChosen;
+        if (CanInitializeRemoteControlAfterPlayerInit == false)
+        {
+            StartPossibleRemoteControl(); //means do here.
+        }
+    }
+    protected async void StartPossibleRemoteControl()
+    {
+        await _hostService.InitializeAsync();
+        await SendOtherDataAsync();
     }
     protected static bool DidManuallyChooseHolidayEpisode(IEpisodeTable episode)
     {
