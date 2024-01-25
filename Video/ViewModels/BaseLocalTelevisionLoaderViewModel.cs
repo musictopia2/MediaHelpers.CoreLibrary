@@ -70,7 +70,6 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
         }
         await _loadLogic.ModifyHolidayAsync(tempItem, holiday);
         await FinishModifyingHoliday(tempItem, previous);
-        //await StartNextEpisodeAsync(tempItem, previous);
     }
     protected virtual bool DoStopForHoliday => true;
     protected abstract Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
