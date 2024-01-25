@@ -59,11 +59,20 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
             return;
         }
         EnumTelevisionHoliday previous = SelectedItem.Holiday!.Value;
-        var tempItem = StopEpisode();
+        E tempItem;
+        if (DoStopForHoliday)
+        {
+            tempItem = StopEpisode();
+        }
+        else
+        {
+            tempItem = SelectedItem;
+        }
         await _loadLogic.ModifyHolidayAsync(tempItem, holiday);
         await FinishModifyingHoliday(tempItem, previous);
         //await StartNextEpisodeAsync(tempItem, previous);
     }
+    protected virtual bool DoStopForHoliday => true;
     protected abstract Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
     protected abstract Task StartNextEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
 
