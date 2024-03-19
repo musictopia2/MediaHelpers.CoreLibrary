@@ -1,6 +1,8 @@
 namespace MediaHelpers.CoreLibrary.Music.Components.Playlists;
 public partial class PlaylistShellComponent
 {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
     public static Type? PlaylistCreaterRenderType { get; set; }
     public static bool PartOfCreater { get; set; }
     private static EnumPlaylistUIStage _stage;

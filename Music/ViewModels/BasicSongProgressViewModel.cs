@@ -134,6 +134,12 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
             LaterCheck(); //has to later check
             return;
         }
+        if (await NeedsToClearAsync())
+        {
+            IsSongPlaying = await NextSongFromClearingAsync(); //if there is a song, then will call the updatesong and will still work.
+            StateChanged?.Invoke();
+            return;
+        }
         if (_mp3.IsFinished())
         {
             IsSongPlaying = await _player.NextSongAsync();
@@ -147,6 +153,10 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
         Start();
         StateChanged?.Invoke();
     }
+    //this will allow me to create a custom playlist progress view model.  to hook into most of the current stuff.
+    //except will have extras as well.
+    protected virtual Task<bool> NeedsToClearAsync() => Task.FromResult(false);
+    protected virtual Task<bool> NextSongFromClearingAsync() => Task.FromResult(false);
     protected virtual Task SendRemoteControlProcessAsync() { return Task.CompletedTask; }
     private void MP3_ErrorRaised(string message)
     {

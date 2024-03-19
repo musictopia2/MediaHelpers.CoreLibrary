@@ -1,4 +1,6 @@
-﻿<PlaylistNavigationComponent Stage="@_stage" StageChanged="PrivateSetStage" />
+﻿<PlaylistNavigationComponent Stage="@_stage" StageChanged="PrivateSetStage">
+    @ChildContent
+</PlaylistNavigationComponent>
 @if (_stage == EnumPlaylistUIStage.Songs)
 {
     <PlaylistSongDashboardComponent StageChanged="PrivateSetStage"

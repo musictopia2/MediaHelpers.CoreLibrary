@@ -1,39 +1,21 @@
 ﻿namespace MediaHelpers.CoreLibrary.Music.PlaySongsClasses;
-public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgressPlayer
+public class PlaylistSongsLogic<P>(IPlaylistMusicDataAccess data,
+    IMP3Player mp3,
+    ChangeSongContainer changeSong,
+    ISongListCreater query,
+    IPlayListInfo playListInfo,
+    IMusicShuffleProcesses ras,
+    IExit exit,
+    ISystemError error) : IPlaylistSongMainLogic, IPlaylistSongProgressPlayer
     where P : BasicPlayListData, new()
 {
-    private readonly IPlaylistMusicDataAccess _data;
-    private readonly IMP3Player _mp3;
-    private readonly ChangeSongContainer _changeSong;
-    private readonly ISongListCreater _query;
-    private readonly IPlayListInfo _playListInfo;
+    private readonly IPlaylistMusicDataAccess _data = data;
     private IBaseSong? _currentSong;
-    private readonly IMusicShuffleProcesses _ras;
-    private readonly IExit _exit;
-    private readonly ISystemError _error;
-    public PlaylistSongsLogic(IPlaylistMusicDataAccess data,
-        IMP3Player mp3,
-        ChangeSongContainer changeSong,
-        ISongListCreater query,
-        IPlayListInfo playListInfo,
-        IMusicShuffleProcesses ras,
-        IExit exit,
-        ISystemError error)
-    {
-        _error = error;
-        _data = data;
-        _mp3 = mp3;
-        _ras = ras;
-        _exit = exit;
-        _changeSong = changeSong;
-        _query = query;
-        _playListInfo = playListInfo;
-    }
     public int UpTo { get; set; }
     public int SongsLeft { get; set; }
     public Action UpdateProgress { get; set; } = () => { };
     private int? _playlistId;
-    private BasicList<IBaseSong> _songs = new();
+    private BasicList<IBaseSong> _songs = [];
     Task IPlaylistSongMainLogic.ClearSongsAsync(int playlist)
     {
         return _data.ClearSongsAsync(playlist);
@@ -59,7 +41,7 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
             throw new CustomBasicException("Never saved the playlistid for the playlist used.  Rethink");
         }
         await Task.CompletedTask;
-        _ras.Clear();
+        ras.Clear();
         return _data.GetPlayListDetails(_playlistId.Value).ToBasicList();
     }
     async Task<bool> IPlaylistSongMainLogic.HasPlaylistCreatedAsync(int playlist)
@@ -98,14 +80,14 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
             HowManySongs = howmanySongs
         };
         P data = await fs1.DeserializeObjectAsync<P>(detail.JsonData);
-        BasicList<ICondition> firstList = _query.GetMusicList(data);
+        BasicList<ICondition> firstList = query.GetMusicList(data);
         section.SongList = _data.GetCompleteSongList(firstList);
         if (section.SongList.Any() == false)
         {
             throw new CustomBasicException("I know this play list has more than 0 songs");
         }
-        await _ras.AddSectionAsync(section);
-        int sofar = _ras.SongsSoFar();
+        await ras.AddSectionAsync(section);
+        int sofar = ras.SongsSoFar();
         if (sofar == 0)
         {
             throw new CustomBasicException("Can't actually choose 0 songs");
@@ -118,11 +100,11 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
         {
             throw new CustomBasicException("Never created playlist id.  Rethink");
         }
-        var list = await _ras.GetRandomListAsync();
+        var list = await ras.GetRandomListAsync();
         var newList = new BasicList<IPlayListSong>();
         list.ForEach(song =>
         {
-            IPlayListSong fins = _playListInfo.GetNewPlayListSong();
+            IPlayListSong fins = playListInfo.GetNewPlayListSong();
             if (fins.ID != 0)
             {
                 throw new CustomBasicException("Did not use new object");
@@ -141,11 +123,11 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
         {
             throw new CustomBasicException("Can't go to next song because we don't have a playlist id.  rethink");
         }
-        _mp3.StopPlay();
+        mp3.StopPlay();
         if (SongsLeft == 0)
         {
             await _data.ErasePlayListAsync(_playlistId.Value);
-            _exit.ExitApp();
+            exit.ExitApp();
             return false;
         }
         UpTo++;
@@ -160,7 +142,7 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
         {
             return await NextSongAsync();
         }
-        await _changeSong.UpdateSongAsync?.Invoke(_currentSong, 0)!;
+        await changeSong.UpdateSongAsync?.Invoke(_currentSong, 0)!;
         return true;
     }
     async Task<bool> IProgressMusicPlayer.NextSongAsync()
@@ -185,7 +167,7 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
         {
             if (progress == null)
             {
-                progress = _playListInfo.GetNewPlayListProgress();
+                progress = playListInfo.GetNewPlayListProgress();
                 progress.PlayList = _playlistId.Value;
                 progress.ResumeAt = 0;
                 progress.SongNumber = 1;
@@ -198,12 +180,12 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
                 resumeat = progress.ResumeAt;
                 UpTo = progress.SongNumber;
             }
-            _songs = new();
+            _songs = [];
             foreach (IPlayListSong thisTemp in tempsongs)
             {
                 if (thisTemp.Song == null)
                 {
-                    _error.ShowSystemError("The Song From PlayList Song Was Nothing.  Rethink");
+                    error.ShowSystemError("The Song From PlayList Song Was Nothing.  Rethink");
                     break;
                 }
                 thisTemp.Song.SongNumber = thisTemp.SongNumber;
@@ -218,7 +200,7 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
         }
         catch (Exception ex)
         {
-            _error.ShowSystemError(ex.Message);
+            error.ShowSystemError(ex.Message);
             return;
         }
         UpdateProgress.Invoke();
@@ -227,6 +209,6 @@ public class PlaylistSongsLogic<P> : IPlaylistSongMainLogic, IPlaylistSongProgre
             await NextSongAsync();
             return;
         }
-        await _changeSong.UpdateSongAsync?.Invoke(_currentSong, resumeat)!;
+        await changeSong.UpdateSongAsync?.Invoke(_currentSong, resumeat)!;
     }
 }

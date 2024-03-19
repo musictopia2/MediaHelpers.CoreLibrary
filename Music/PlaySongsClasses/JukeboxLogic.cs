@@ -1,41 +1,32 @@
 ﻿namespace MediaHelpers.CoreLibrary.Music.PlaySongsClasses;
-public class JukeboxLogic : IJukeboxLogic, IProgressMusicPlayer
+public class JukeboxLogic(IMP3Player mp3,
+    ISimpleMusicDataAccess dats,
+    ChangeSongContainer changeSong
+        ) : IJukeboxLogic, IProgressMusicPlayer
 {
-    private readonly IMP3Player _mp3;
-    private readonly ISimpleMusicDataAccess _dats;
-    private readonly ChangeSongContainer _changeSong;
-    public BasicList<SongResult> SongsToPlay { get; set; } = new();
+    public BasicList<SongResult> SongsToPlay { get; set; } = [];
     private IBaseSong? _currentSong;
-    public JukeboxLogic(IMP3Player mp3,
-        ISimpleMusicDataAccess dats,
-        ChangeSongContainer changeSong
-        )
-    {
-        _mp3 = mp3;
-        _dats = dats;
-        _changeSong = changeSong;
-    }
     async Task IJukeboxLogic.AddSongToListAsync(SongResult song)
     {
         SongsToPlay.Add(song);
         if (SongsToPlay.Count == 1)
         {
-            _currentSong = _dats.GetSong(song.ID);
-            await _changeSong.UpdateSongAsync?.Invoke(_currentSong!, 0)!;
+            _currentSong = dats.GetSong(song.ID);
+            await changeSong.UpdateSongAsync?.Invoke(_currentSong!, 0)!;
         }
     }
     BasicList<ArtistResult> IJukeboxLogic.GetArtistList(bool isChristmas)
     {
         if (isChristmas == false)
         {
-            var tempList = _dats.GetSortedArtistList();
+            var tempList = dats.GetSortedArtistList();
             return tempList.Select
                 (xx => new ArtistResult { ArtistName = xx.ArtistName, ID = xx.ID }).ToBasicList();
         }
         else
         {
             var starts = StartWithOneCondition(nameof(IBaseSong.Christmas), true);
-            var firstList = _dats.GetCompleteSongList(starts);
+            var firstList = dats.GetCompleteSongList(starts);
             var nextList = firstList.Where(xx => xx.Christmas == true).ToBasicList();
             var groups = nextList.GroupBy(xx => new { xx.ArtistName, xx.ArtistID })
                 .Select(Items => new ArtistResult { ArtistName = Items.Key.ArtistName, ID = Items.Key.ArtistID }).ToBasicList();
@@ -49,7 +40,7 @@ public class JukeboxLogic : IJukeboxLogic, IProgressMusicPlayer
         {
             if (artistChosen == null)
             {
-                return new();
+                return [];
             }
         }
         if (searchOption == EnumJukeboxSearchOption.Artist)
@@ -60,7 +51,7 @@ public class JukeboxLogic : IJukeboxLogic, IProgressMusicPlayer
             }
             BasicList<ICondition> cList = StartWithOneCondition(nameof(IBaseSong.ArtistID), artistChosen.ID)
                 .AppendCondition(nameof(IBaseSong.Christmas), isChristmas);
-            var firstList = _dats.GetCompleteSongList(cList, true);
+            var firstList = dats.GetCompleteSongList(cList, true);
             return firstList.Select(items =>
             new SongResult { ID = items.ID, PlayListDisplay = items.GetSongArtistDisplay(), ResultDisplay = items.GetSongArtistDisplay() }).ToBasicList();
         }
@@ -69,18 +60,18 @@ public class JukeboxLogic : IJukeboxLogic, IProgressMusicPlayer
         {
             BasicList<ICondition> cList = StartWithOneCondition(nameof(IBaseSong.SongName), searchTerm)
                  .AppendCondition(nameof(IBaseSong.Christmas), isChristmas);
-            var firstList = _dats.GetCompleteSongList(cList, true);
+            var firstList = dats.GetCompleteSongList(cList, true);
             nextList = firstList.ToBasicList();
         }
         else
         {
-            BasicList<ICondition> conList = new();
+            BasicList<ICondition> conList = [];
             if (isChristmas == true)
             {
                 conList.AppendCondition(nameof(IBaseSong.Christmas), true);
             }
             conList.AppendCondition(nameof(IBaseSong.SongName), cs1.Like, searchTerm);
-            var tempList = _dats.GetCompleteSongList(conList, true);
+            var tempList = dats.GetCompleteSongList(conList, true);
             nextList = tempList.ToBasicList();
         }
         return nextList.OrderBy(items => items.SongName).Select(items =>
@@ -88,19 +79,19 @@ public class JukeboxLogic : IJukeboxLogic, IProgressMusicPlayer
     }
     public async Task<bool> NextSongAsync()
     {
-        _mp3.StopPlay();
+        mp3.StopPlay();
         if (SongsToPlay.Count == 0)
         {
             throw new CustomBasicException("Cannot have 0 songs left to play");
         }
         SongsToPlay.RemoveFirstItem();
-        _changeSong.UpdatePlaylist?.Invoke();
+        changeSong.UpdatePlaylist?.Invoke();
         if (SongsToPlay.Count == 0)
         {
             return false;
         }
-        _currentSong = _dats.GetSong(SongsToPlay.First().ID);
-        await _changeSong.UpdateSongAsync?.Invoke(_currentSong, 0)!;
+        _currentSong = dats.GetSong(SongsToPlay.First().ID);
+        await changeSong.UpdateSongAsync?.Invoke(_currentSong, 0)!;
         return true;
     }
     async Task IJukeboxLogic.RemoveSongFromListAsync(SongResult song)
