@@ -5,8 +5,6 @@ public partial class PlaylistNavigationComponent
     public EnumPlaylistUIStage Stage { get; set; }
     [Parameter]
     public EventCallback<EnumPlaylistUIStage> StageChanged { get; set; }
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
     public static Action? OnBackToCreater { get; set; }
     private bool SongsEnabled => Stage != EnumPlaylistUIStage.Songs;
     private bool CreaterEnabled => Stage != EnumPlaylistUIStage.Creater;
