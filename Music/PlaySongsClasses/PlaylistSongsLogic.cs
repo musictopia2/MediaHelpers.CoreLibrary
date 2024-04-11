@@ -163,7 +163,7 @@ public class PlaylistSongsLogic<P>(IPlaylistMusicDataAccess data,
             return;
         }
         int resumeat = 0;
-        await _data.PerformAdvancedMusicProcessAsync(async (cons, trans) =>
+        await _data.PerformAdvancedMusicProcessAsync(async (capture, trans) =>
         {
             if (progress == null)
             {
@@ -173,7 +173,7 @@ public class PlaylistSongsLogic<P>(IPlaylistMusicDataAccess data,
                 progress.SongNumber = 1;
                 UpTo = 1;
                 resumeat = 0;
-                await _data.AddNewPlayListProgressAsync(progress, cons, trans);
+                await _data.AddNewPlayListProgressAsync(progress, capture, trans);
             }
             else
             {
