@@ -10,7 +10,11 @@ public interface IEpisodeTable
     //bool AlreadySkippedOpening { get; set; }
     //bool Finished { get; set; }
     bool AlwaysSkipBeginning { get; set; }
+    //needs this for backward compatibility.
     int BeginAt { get; set; }
+    //if you use new version, will need to enable the skiplist.
+    //more stuff may be needed but this is a first step.
+    BasicList<SkipSceneClass> Skips { get; set; }
     int? ResumeAt { get; set; }
     bool WatchedAtLeastOnce { get; set; }
     int? EpisodeNumber { get; set; }
