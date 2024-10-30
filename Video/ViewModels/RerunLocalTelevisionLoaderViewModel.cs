@@ -37,11 +37,11 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
     }
     public override bool CanPlay => true;
     protected override bool CanInitializeRemoteControlAfterPlayerInit => true;
-    protected override async Task FinishEditEpisodeLaterAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    protected override async Task FinishEditEpisodeLaterAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday, EnumNextMode nextMode)
     {
-        await FinishEditingEpisodeAsync(tempItem, holiday);
+        await FinishEditingEpisodeAsync(tempItem, holiday, nextMode);
     }
-    private async Task FinishEditingEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    private async Task FinishEditingEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday, EnumNextMode nextMode)
     {
         ProcessHoliday(tempItem);
         bool manuallyChose = holiday != EnumTelevisionHoliday.None;
@@ -49,6 +49,12 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         {
             _exit.ExitApp();
             return;
+        }
+        if (nextMode == EnumNextMode.CloseOut)
+        {
+            _exit.ExitApp(); //since you chose to close out, will close out.
+            return;
+            //if you chose holiday and chose to close out, hopefully when you go back in again, you have to choose whether you want holiday or not again.
         }
         if (manuallyChose)
         {
@@ -64,10 +70,9 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         }
         await StartNextEpisodeAsync(tempItem, holiday);
     }
-    protected override async Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    protected override async Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday, EnumNextMode nextMode)
     {
-        await FinishEditingEpisodeAsync(tempItem, holiday);
-        
+        await FinishEditingEpisodeAsync(tempItem, holiday, nextMode);
     }
     protected override async Task StartNextEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
     {
@@ -107,7 +112,7 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
             _wasHoliday = temps is not EnumTelevisionHoliday.None; //its depend
         }
     }
-    private async Task SkipEpisodeTemporarilyAsync()
+    private async Task SkipEpisodeTemporarilyAsync(EnumNextMode mode)
     {
         var tempItem = StopEpisode();
         await _loadLogic.TemporarilySKipEpisodeAsync(tempItem);
@@ -123,7 +128,7 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         {
             return;
         }
-        await FinishEditingEpisodeAsync(tempItem, tempItem.Holiday!.Value);
+        await FinishEditingEpisodeAsync(tempItem, tempItem.Holiday!.Value, mode);
         //may have options to completely close out and not even choose another episode
         //await StartNextEpisodeAsync(tempItem, tempItem.Holiday!.Value);
     }
@@ -140,9 +145,9 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         return true;
     }
 
-    protected override async Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday)
+    protected override async Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday, EnumNextMode nextMode)
     {
-        await FinishEditingEpisodeAsync(tempItem, holiday);
+        await FinishEditingEpisodeAsync(tempItem, holiday, nextMode);
     }
 
     protected override BasicTelevisionModel GetTelevisionDataToSend()

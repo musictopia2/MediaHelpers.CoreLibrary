@@ -51,9 +51,9 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
     {
         return episode.Holiday != EnumTelevisionHoliday.None;
     }
-    private async Task ModifyHolidayAsync(EnumTelevisionHoliday holiday)
+    private async Task ModifyHolidayAsync(HolidayModel holiday)
     {
-        if (holiday == SelectedItem!.Holiday)
+        if (holiday.Holiday == SelectedItem!.Holiday)
         {
             _toast.ShowInfoToast("No holiday change");
             return;
@@ -68,26 +68,25 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
         {
             tempItem = SelectedItem;
         }
-        await _loadLogic.ModifyHolidayAsync(tempItem, holiday);
-        await FinishModifyingHoliday(tempItem, previous);
+        await _loadLogic.ModifyHolidayAsync(tempItem, holiday.Holiday);
+        await FinishModifyingHoliday(tempItem, previous, holiday.NextMode);
     }
     protected virtual bool DoStopForHoliday => true;
-    protected abstract Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
+    protected abstract Task FinishModifyingHoliday(IEpisodeTable tempItem, EnumTelevisionHoliday holiday, EnumNextMode nextMode);
     protected abstract Task StartNextEpisodeAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
-
-    protected abstract Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
-    protected abstract Task FinishEditEpisodeLaterAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday);
-    private async Task EditEpisodeLaterAsync()
+    protected abstract Task FinishSkippingEpisodeForeverAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday, EnumNextMode nextMode);
+    protected abstract Task FinishEditEpisodeLaterAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday, EnumNextMode nextMode);
+    private async Task EditEpisodeLaterAsync(EnumNextMode mode)
     {
         var tempItem = StopEpisode();
         await _loadLogic.EditEpisodeLaterAsync(tempItem);
-        await FinishEditEpisodeLaterAsync(tempItem, tempItem.Holiday!.Value);
+        await FinishEditEpisodeLaterAsync(tempItem, tempItem.Holiday!.Value, mode);
     }
-    private async Task SkipEpisodeForeverAsync()
+    private async Task SkipEpisodeForeverAsync(EnumNextMode mode)
     {
         var tempItem = StopEpisode();
         await _loadLogic.ForeverSkipEpisodeAsync(tempItem);
-        await FinishSkippingEpisodeForeverAsync(tempItem, tempItem.Holiday!.Value);
+        await FinishSkippingEpisodeForeverAsync(tempItem, tempItem.Holiday!.Value, mode);
     }
     protected E StopEpisode()
     {
