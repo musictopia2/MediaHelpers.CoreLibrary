@@ -147,7 +147,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
             _error.ShowSystemError(ex.Message);
         }
     }
-    private (int startTime, int howLong) GetSkipData()
+    private (int startTime, int howLong) GetSimpleSkipData()
     {
         return (SelectedItem!.BeginAt, SelectedItem!.OpeningLength!.Value);
     }
@@ -155,7 +155,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
     {
         if (_hasIntro)
         {
-            var (StartTime, HowLong) = GetSkipData();
+            var (StartTime, HowLong) = GetSimpleSkipData();
             SkipSceneClass skip = new()
             {
                 StartTime = StartTime,
@@ -163,6 +163,10 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
             };
             var list = new BasicList<SkipSceneClass> { skip };
             Player.AddScenesToSkip(list);
+        }
+        else if (SelectedItem!.Skips.Count > 0)
+        {
+            Player.AddScenesToSkip(SelectedItem.Skips); //hopefully this simple.
         }
         var tvLength = Player.Length();
         await CalculateDurationAsync(tvLength);
