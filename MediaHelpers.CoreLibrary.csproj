@@ -1,17 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Razor">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	  <Version>8.0.57</Version>
+    <Version>9.0.1</Version>
   </PropertyGroup>
-	<ItemGroup>
-		<SupportedPlatform Include="browser" />
-	</ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommonBasicLibraries" Version="8.0.29" />
-	  <PackageReference Include="BasicBlazorLibrary" Version="8.0.7" />
+    <SupportedPlatform Include="browser" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="CommonBasicLibraries" Version="9.0.1" />
+    <PackageReference Include="BasicBlazorLibrary" Version="9.0.1" />
+  </ItemGroup>
 </Project>
