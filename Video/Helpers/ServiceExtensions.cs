@@ -13,6 +13,16 @@ public static class ServiceExtensions
         services.AddSingleton<TelevisionContainerClass<E>>();
         return services;
     }
+    public static IServiceCollection RegisterCoreRerunListMovieServices<L, M>(this IServiceCollection services)
+        where M: class, IMainMovieTable
+        where L : class, IMovieVideoLoader<M>
+    {
+        services.AddSingleton<MovieContainerClass<M>>()
+            .AddSingleton<MovieListViewModel<M>>()
+            .AddSingleton<IMovieListLogic<M>, MovieRerunsListLogic<M>>()
+            .AddSingleton<IMovieVideoLoader<M>, L>();
+        return services;
+    }
     public static IServiceCollection RegisterCoreRerunListTelevisionServices<L, E>(this IServiceCollection services)
         where E : class, IEpisodeTable
         where L : class, ITelevisionVideoLoader<E>
@@ -22,7 +32,7 @@ public static class ServiceExtensions
             .AddSingleton<ITelevisionShellLogic<E>, TelevisionCompleteShellLogic<E>>()
             .RegisterCoreHolidayTelevisionServices<E>()
             .AddSingleton<TelevisionListViewModel<E>>()
-            .RegisterNextReRunLogic<E>()
+            .RegisterNextReRunTelevisionLogic<E>()
             .AddSingleton<ITelevisionListLogic, TelevisionListRerunLogic<E>>()
             .AddSingleton<ITelevisionVideoLoader<E>, L>();
         return services;
@@ -35,12 +45,23 @@ public static class ServiceExtensions
             .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel<E>>())
             .AddSingleton<ITelevisionLoaderViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel<E>>())
             .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<RerunLocalTelevisionLoaderViewModel<E>>())
-            .RegisterNextReRunLogic<E>()
-            .RegisterRerunLoaderLogic<E>()
+            .RegisterNextReRunTelevisionLogic<E>()
+            .RegisterRerunTelevisionLoaderLogic<E>()
             .RegisterCoreHolidayTelevisionServices<E>();
         return services;
     }
-    public static IServiceCollection RegisterRerunLoaderLogic<E>(this IServiceCollection services)
+    public static IServiceCollection RegisterCoreLocalRerunLoaderMovieServices<M>(this IServiceCollection services)
+        where M : class, IMainMovieTable
+    {
+        services.AddSingleton<MovieContainerClass<M>>()
+            .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())
+            .AddSingleton<IMovieLoaderViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())
+            .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())
+            .AddSingleton<MovieRerunsLoaderLogic<M>>()
+            .AddSingleton<IRerunMovieLoaderLogic<M>>(pp => pp.GetRequiredService<MovieRerunsLoaderLogic<M>>());
+        return services;
+    }
+    public static IServiceCollection RegisterRerunTelevisionLoaderLogic<E>(this IServiceCollection services)
         where E : class, IEpisodeTable
     {
         services.AddSingleton<TelevisionRerunsLoaderLogic<E>>()
@@ -50,7 +71,7 @@ public static class ServiceExtensions
     //even these needs to be public so youtube can access them.
     
 
-    public static IServiceCollection RegisterNextReRunLogic<E>(this IServiceCollection services)
+    public static IServiceCollection RegisterNextReRunTelevisionLogic<E>(this IServiceCollection services)
         where E : class, IEpisodeTable
     {
         services.AddSingleton<INextEpisodeLogic<E>, TelevisionBasicRerunNextEpisodeLogic<E>>();

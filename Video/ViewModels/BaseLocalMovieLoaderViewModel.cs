@@ -1,15 +1,18 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class MovieLoaderViewModel : VideoMainLoaderViewModel<IMainMovieTable>
+public abstract class BaseLocalMovieLoaderViewModel<M> : VideoMainLoaderViewModel<M>,
+    IStartLoadingViewModel,
+    IMovieLoaderViewModel
+    where M: class, IMainMovieTable
 {
     private readonly IFullVideoPlayer _player;
-    private readonly IMovieLoaderLogic _loader;
-    private readonly IMoviesRemoteControlHostService _hostService;
+    private readonly IMovieLoaderLogic<M> _loader;
+    private readonly IBasicMoviesRemoteControlHostService _hostService;
     private readonly IExit _exit;
     private readonly ISystemError _error;
-    public MovieLoaderViewModel(IFullVideoPlayer player,
-        IMovieLoaderLogic loader,
-        MovieContainerClass movieContainer,
-        IMoviesRemoteControlHostService hostService,
+    public BaseLocalMovieLoaderViewModel(IFullVideoPlayer player,
+        IMovieLoaderLogic<M> loader,
+        MovieContainerClass<M> movieContainer,
+        IBasicMoviesRemoteControlHostService hostService,
         IExit exit,
         ISystemError error
         ) : base(player, error, exit)
@@ -20,13 +23,17 @@ public class MovieLoaderViewModel : VideoMainLoaderViewModel<IMainMovieTable>
         _exit = exit;
         _error = error;
         _hostService.NewClient = SendOtherDataAsync;
-
-        _hostService.DislikeMovie = async () =>
-        {
-            await DislikeMovieAsync();
-        };
-
+        _hostService.DislikeMovie = DislikeMovieAsync;
         SelectedItem = movieContainer.MovieChosen;
+        if (CanInitializeRemoteControlAfterPlayerInit == false)
+        {
+            StartPossibleRemoteControl(); //means do here.
+        }
+    }
+    protected async void StartPossibleRemoteControl()
+    {
+        await _hostService.InitializeAsync();
+        await SendOtherDataAsync();
     }
     private async Task DislikeMovieAsync()
     {
@@ -38,12 +45,11 @@ public class MovieLoaderViewModel : VideoMainLoaderViewModel<IMainMovieTable>
         await _loader.DislikeMovieAsync(SelectedItem);
         _exit.ExitApp();
     }
+    protected abstract bool CanInitializeRemoteControlAfterPlayerInit { get; }
     protected override Task SendOtherDataAsync()
     {
         return _hostService.SendProgressAsync(new MoviesModel(SelectedItem!.Title, ProgressText));
     }
-    public string Button3Text { get; set; } = "";
-    public bool Button3Visible { get; set; }
     public override async Task SaveProgressAsync()
     {
         if (SelectedItem!.ResumeAt.HasValue == false || SelectedItem.ResumeAt!.Value < VideoPosition)
@@ -81,15 +87,11 @@ public class MovieLoaderViewModel : VideoMainLoaderViewModel<IMainMovieTable>
             {
                 _secs = SelectedItem.Opening!.Value;
             }
-            VideoPath = SelectedItem!.Path;
-            SelectedItem.LastWatched = DateTime.Now;
+            VideoPath = SelectedItem!.FullPath();
+            SelectedItem.LastWatched = DateOnly.FromDateTime(DateTime.Now);
             if (SelectedItem.ResumeAt.HasValue == false)
             {
                 await _loader.UpdateMovieAsync(SelectedItem);
-            }
-            else
-            {
-                await _loader.AddToHistoryAsync(SelectedItem);
             }
         }
         catch (Exception ex)
@@ -97,19 +99,18 @@ public class MovieLoaderViewModel : VideoMainLoaderViewModel<IMainMovieTable>
             _error.ShowSystemError(ex.Message);
         }
     }
+    //eventually requires rethinking here.
     protected override async Task AfterPlayerInitAsync()
     {
         try
         {
             if (SelectedItem!.Opening.HasValue == false)
             {
-                Button3Text = "Movie Started";
-                VideoLength = 0;
+                throw new CustomBasicException("Must have opening values now");
             }
             else if (SelectedItem.Closing.HasValue == false)
             {
-                Button3Text = "Movie Ended";
-                VideoLength = 0;
+                throw new CustomBasicException("Must have closing values now");
             }
             else
             {
@@ -125,49 +126,6 @@ public class MovieLoaderViewModel : VideoMainLoaderViewModel<IMainMovieTable>
             _error.ShowSystemError(ex.Message);
         }
     }
-    public bool CanButton3Process => Button3Visible;
-
     public override bool CanPlay => true; //for now, can always play a movie.
-
-    public async Task Button3ProcessAsync()
-    {
-        if (Button3Text == "Movie Started")
-        {
-            await StartMovieAsync();
-        }
-        else if (Button3Text == "Movie Ended")
-        {
-            await EndMovieAsync();
-        }
-    }
-    private async Task StartMovieAsync()
-    {
-        if (VideoPosition > 0)
-        {
-            SelectedItem!.Opening = VideoPosition;
-            await _loader.UpdateMovieAsync(SelectedItem);
-        }
-        Button3Visible = true;
-        Button3Text = "Movie Ended";
-        await Task.Delay(2000);
-        Button3Visible = false;
-    }
-    private async Task EndMovieAsync()
-    {
-        //because fat albert was less than 20 minutes.
-        //may do something else eventually.
-        if (VideoLength < 1200)
-        {
-            if (VideoPosition + 120 < VideoLength)
-            {
-                return;
-            }
-        }
-        else if (VideoPosition < 1200)
-        {
-            return;
-        }
-        SelectedItem!.Closing = VideoPosition;
-        await VideoFinishedAsync();
-    }
+    public Action? StartLoadingPlayer { get; set; }
 }

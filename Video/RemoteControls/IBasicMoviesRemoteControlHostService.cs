@@ -1,5 +1,5 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.RemoteControls;
-public interface IMoviesRemoteControlHostService
+public interface IBasicMoviesRemoteControlHostService
 {
     Task InitializeAsync();
     Task SendProgressAsync(MoviesModel movie);

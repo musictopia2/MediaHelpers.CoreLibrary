@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Helpers;
-public class MovieContainerClass
+public class MovieContainerClass<M>
+    where M : class, IMainMovieTable
 {
-    public IMainMovieTable? MovieChosen { get; set; }
+    public M? MovieChosen { get; set; }
 }

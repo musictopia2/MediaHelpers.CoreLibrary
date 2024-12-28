@@ -1,9 +1,10 @@
-﻿@if (DataContext is null)
+﻿@typeparam M
+@if (DataContext is null)
 {
     return;
 }
 <ColumnLayout Columns="6fr 3fr" ColumnGap="5px">
-    <VideoListComponent V="IMainMovieTable"
+    <VideoListComponent V="M"
                         DataContext="DataContext"
                         IsChild="true"
                         VideoChanged="Refresh"
@@ -18,33 +19,8 @@
                 Choose Movie
             </VideoButton>
         </div>
-        <RadioButtonGroupComponent Name="Main">
-            <div style="@GetMargins">
-                <RadioButtonItemComponent TValue="EnumMovieSelectionMode"
-                                          @bind-Value="DataContext.SelectionMode"
-                                          SelectedValue="EnumMovieSelectionMode.AllMovies"
-                                          ShowLabel="true"
-                                          Zoom="3" />
-            </div>
-            <div style="@GetMargins">
-                <RadioButtonItemComponent TValue="EnumMovieSelectionMode"
-                                          @bind-Value="DataContext.SelectionMode"
-                                          SelectedValue="EnumMovieSelectionMode.NewMovies"
-                                          ShowLabel="true"
-                                          Zoom="3" />
-            </div>
-            <div style="@GetMargins">
-                <RadioButtonItemComponent TValue="EnumMovieSelectionMode"
-                                          @bind-Value="DataContext.SelectionMode"
-                                          SelectedValue="EnumMovieSelectionMode.AlreadyWatched"
-                                          ShowLabel="true"
-                                          Zoom="3" />
-            </div>
-            <div style="@GetMargins">
-                <VideoButton OnClick="DataContext.GetMovieListAsync">
-                    List Movies
-                </VideoButton>
-            </div>
+        
+            
             <div style="@GetMargins">
                 <VideoButton IsEnabled="DataContext.CanAutoResume" OnClick="AutoResume">
                     Auto Resume
@@ -63,6 +39,6 @@
                     Info Last
                 </VideoButton>
             </div>
-        </RadioButtonGroupComponent>
+        
     </div>
 </ColumnLayout>

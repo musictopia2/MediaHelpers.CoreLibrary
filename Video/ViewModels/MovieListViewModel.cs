@@ -1,11 +1,11 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class MovieListViewModel(IMovieListLogic movieListLogic, IMessageBox message) : MainVideoListViewModel<IMainMovieTable>
+public class MovieListViewModel<M>(IMovieListLogic<M> movieListLogic, IMessageBox message) : MainVideoListViewModel<M>
+    where M : class, IMainMovieTable
 {
-    public EnumMovieSelectionMode SelectionMode { get; set; } = EnumMovieSelectionMode.AlreadyWatched;
-    private IMainMovieTable? _lastMovie;
+    private M? _lastMovie;
     public async Task GetMovieListAsync()
     {
-        VideoList = await movieListLogic.GetMovieListAsync(SelectionMode);
+        VideoList = await movieListLogic.GetMovieListAsync();
         _lastMovie = movieListLogic.GetLastMovie(VideoList);
         CanAutoResume = _lastMovie != null;
         FocusCombo?.Invoke();

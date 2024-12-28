@@ -1,10 +1,11 @@
 namespace MediaHelpers.CoreLibrary.Video.Components;
-public partial class MovieListComponent
+public partial class MovieListComponent<M>
+    where M : class, IMainMovieTable
 {
     [Inject]
-    private MovieListViewModel? DataContext { get; set; }
+    private MovieListViewModel<M>? DataContext { get; set; }
     [Inject]
-    private IMovieVideoLoader? Loader { get; set; }
+    private IMovieVideoLoader<M>? Loader { get; set; }
     private static string GetMargins => "margin-bottom: 5px";
     private static void Refresh() //needed so it can refresh its state.
     {

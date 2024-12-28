@@ -1,5 +1,6 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Helpers;
-public interface IMovieVideoLoader
+public interface IMovieVideoLoader<M>
+    where M : class, IMainMovieTable
 {
-    void ChoseMovie(IMainMovieTable movie);
+    void ChoseMovie(M movie);
 }
