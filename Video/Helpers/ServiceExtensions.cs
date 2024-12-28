@@ -1,9 +1,14 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.Helpers;
 public static class ServiceExtensions
 {
-    public static IServiceCollection RegisterMockRerunRemoteControls(this IServiceCollection services)
+    public static IServiceCollection RegisterMockTelevisionRerunRemoteControls(this IServiceCollection services)
     {
         services.AddSingleton<IRerunTelevisionRemoteControlHostService, MockRerunTelevisionRemoteControlHostService>();
+        return services;
+    }
+    public static IServiceCollection RegisterMockMovieRerunRemoteControls(this IServiceCollection services)
+    {
+        services.AddSingleton<IRerunMoviesRemoveControlHostService, MockRerunMoviesRemoteControlHostService>();
         return services;
     }
     public static IServiceCollection RegisterTelevisionContainer<E>(this IServiceCollection services)
