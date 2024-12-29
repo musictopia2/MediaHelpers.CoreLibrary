@@ -1,18 +1,19 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public abstract class BaseLocalMovieLoaderViewModel<M> : VideoMainLoaderViewModel<M>,
+public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewModel<M>,
     IStartLoadingViewModel,
     IMovieLoaderViewModel
     where M: class, IMainMovieTable
+    where T : class, IBasicMoviesModel, new()
 {
     private readonly IFullVideoPlayer _player;
     private readonly IMovieLoaderLogic<M> _loader;
-    private readonly IBasicMoviesRemoteControlHostService _hostService;
+    private readonly IBasicMoviesRemoteControlHostService<T> _hostService;
     private readonly IExit _exit;
     private readonly ISystemError _error;
     public BaseLocalMovieLoaderViewModel(IFullVideoPlayer player,
         IMovieLoaderLogic<M> loader,
         MovieContainerClass<M> movieContainer,
-        IBasicMoviesRemoteControlHostService hostService,
+        IBasicMoviesRemoteControlHostService<T> hostService,
         IExit exit,
         ISystemError error
         ) : base(player, error, exit)
@@ -48,7 +49,12 @@ public abstract class BaseLocalMovieLoaderViewModel<M> : VideoMainLoaderViewMode
     protected abstract bool CanInitializeRemoteControlAfterPlayerInit { get; }
     protected override Task SendOtherDataAsync()
     {
-        return _hostService.SendProgressAsync(new MoviesModel(SelectedItem!.Title, ProgressText));
+        T model = new()
+        {
+            Progress = ProgressText,
+            MovieName = SelectedItem!.Title
+        };
+        return _hostService.SendProgressAsync(model);
     }
     public override async Task SaveProgressAsync()
     {

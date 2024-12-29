@@ -1,15 +1,15 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.RemoteControls;
-public class MockRerunMoviesRemoteControlHostService : IRerunMoviesRemoveControlHostService
+public class MockRerunMoviesRemoteControlHostService : IRerunMoviesRemoveControlHostService<BasicMoviesModel>, IBasicMoviesRemoteControlHostService<BasicMoviesModel>
 {
-    Func<Task>? IBasicMoviesRemoteControlHostService.NewClient { get; set; }
-    Func<Task>? IBasicMoviesRemoteControlHostService.DislikeMovie { get; set; }
-    Func<Task>? IRerunMoviesRemoveControlHostService.EditLater { get; set; }
-    Func<Task>? IRerunMoviesRemoveControlHostService.ExitEarly { get; set; }
-    Task IBasicMoviesRemoteControlHostService.InitializeAsync()
+    Func<Task>? IBasicMoviesRemoteControlHostService<BasicMoviesModel>.NewClient { get; set; }
+    Func<Task>? IBasicMoviesRemoteControlHostService<BasicMoviesModel>.DislikeMovie { get; set; }
+    Func<Task>? IRerunMoviesRemoveControlHostService<BasicMoviesModel>.EditLater { get; set; }
+    Func<Task>? IRerunMoviesRemoveControlHostService<BasicMoviesModel>.ExitEarly { get; set; }
+    Task IBasicMoviesRemoteControlHostService<BasicMoviesModel>.InitializeAsync()
     {
         return Task.CompletedTask;
     }
-    Task IBasicMoviesRemoteControlHostService.SendProgressAsync(MoviesModel show)
+    Task IBasicMoviesRemoteControlHostService<BasicMoviesModel>.SendProgressAsync(BasicMoviesModel movie)
     {
         return Task.CompletedTask;
     }

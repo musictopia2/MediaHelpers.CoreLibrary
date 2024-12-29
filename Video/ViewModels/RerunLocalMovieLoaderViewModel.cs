@@ -1,11 +1,11 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
-public class RerunLocalMovieLoaderViewModel<M> : BaseLocalMovieLoaderViewModel<M>
+public class RerunLocalMovieLoaderViewModel<M> : BaseLocalMovieLoaderViewModel<M, BasicMoviesModel>
     where M : class, IMainMovieTable
 {
     public RerunLocalMovieLoaderViewModel(IFullVideoPlayer player,
         IRerunMovieLoaderLogic<M> loader,
         MovieContainerClass<M> movieContainer,
-        IRerunMoviesRemoveControlHostService hostService,
+        IRerunMoviesRemoveControlHostService<BasicMoviesModel> hostService,
         IExit exit,
         ISystemError error) : base(player, loader, movieContainer, hostService, exit, error)
     {

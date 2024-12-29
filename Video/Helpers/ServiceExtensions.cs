@@ -8,7 +8,7 @@ public static class ServiceExtensions
     }
     public static IServiceCollection RegisterMockMovieRerunRemoteControls(this IServiceCollection services)
     {
-        services.AddSingleton<IRerunMoviesRemoveControlHostService, MockRerunMoviesRemoteControlHostService>();
+        services.AddSingleton<IRerunMoviesRemoveControlHostService<BasicMoviesModel>, MockRerunMoviesRemoteControlHostService>();
         return services;
     }
     public static IServiceCollection RegisterMovieContainer<M>(this IServiceCollection services)

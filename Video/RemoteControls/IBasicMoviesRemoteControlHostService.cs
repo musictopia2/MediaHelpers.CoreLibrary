@@ -1,8 +1,9 @@
 ﻿namespace MediaHelpers.CoreLibrary.Video.RemoteControls;
-public interface IBasicMoviesRemoteControlHostService
+public interface IBasicMoviesRemoteControlHostService<T>
+    where T: class, IBasicMoviesModel, new()
 {
     Task InitializeAsync();
-    Task SendProgressAsync(MoviesModel movie);
+    Task SendProgressAsync(T movie);
     Func<Task>? NewClient { get; set; }
     Func<Task>? DislikeMovie { get; set; }
 }
