@@ -11,6 +11,12 @@ public static class ServiceExtensions
         services.AddSingleton<IRerunMoviesRemoveControlHostService, MockRerunMoviesRemoteControlHostService>();
         return services;
     }
+    public static IServiceCollection RegisterMovieContainer<M>(this IServiceCollection services)
+        where M : class, IMainMovieTable
+    {
+        services.AddSingleton<MovieContainerClass<M>>();
+        return services;
+    }
     public static IServiceCollection RegisterTelevisionContainer<E>(this IServiceCollection services)
         where E : class, IEpisodeTable
     {
@@ -22,7 +28,7 @@ public static class ServiceExtensions
         where M: class, IMainMovieTable
         where L : class, IMovieVideoLoader<M>
     {
-        services.AddSingleton<MovieContainerClass<M>>()
+        services.RegisterMovieContainer<M>()
             .AddSingleton<MovieListViewModel<M>>()
             .AddSingleton<IMovieListLogic<M>, MovieRerunsListLogic<M>>()
             .AddSingleton<IMovieVideoLoader<M>, L>();
@@ -58,7 +64,7 @@ public static class ServiceExtensions
     public static IServiceCollection RegisterCoreLocalRerunLoaderMovieServices<M>(this IServiceCollection services)
         where M : class, IMainMovieTable
     {
-        services.AddSingleton<MovieContainerClass<M>>()
+        services.RegisterMovieContainer<M>()
             .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())
             .AddSingleton<IMovieLoaderViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())
             .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())
