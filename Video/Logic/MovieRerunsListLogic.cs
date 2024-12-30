@@ -4,13 +4,12 @@ public class MovieRerunsListLogic<M>(IRerunListMovieContext<M> dats, IDateOnlyPi
 {
     M? IMovieListLogic<M>.GetLastMovie(BasicList<M> movies)
     {
-        var tempList = movies.GetConditionalItems(Items => Items.LastWatched.HasValue == true);
+        var tempList = movies.GetConditionalItems(x => x.LastWatched.HasValue == true);
         tempList.Sort(comparison: (xx, yy) =>
         {
             return yy.LastWatched!.Value.CompareTo(xx.LastWatched!.Value);
         });
-        M output = tempList.Find(Items => Items.ResumeAt.HasValue == true
-            || Items.Opening.HasValue == false && Items.Closing.HasValue == false)!;
+        M output = tempList.Find(x => x.ResumeAt.HasValue == true)!;
         return output;
     }
     async Task<BasicList<M>> IMovieListLogic<M>.GetMovieListAsync()
