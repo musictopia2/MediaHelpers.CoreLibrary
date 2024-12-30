@@ -25,6 +25,15 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
         _error = error;
         _hostService.NewClient = SendOtherDataAsync;
         _hostService.DislikeMovie = DislikeMovieAsync;
+        if (mm1.MovieChosen.HasValue == false)
+        {
+            throw new CustomBasicException("No movie was chosen");
+        }
+        movieContainer.MovieChosen = _loader.GetChosenMovie();
+        if (movieContainer.MovieChosen is null)
+        {
+            throw new CustomBasicException("There was no movie chosen.  Rethink");
+        }
         SelectedItem = movieContainer.MovieChosen;
         if (CanInitializeRemoteControlAfterPlayerInit == false)
         {

@@ -19,6 +19,15 @@ public class MovieRerunsLoaderLogic<M>(IRerunLoaderMovieContext<M> dats, IExit e
         await UpdateMovieAsync(selectedMovie);
         exit.ExitApp();
     }
+    M IMovieLoaderLogic<M>.GetChosenMovie()
+    {
+        if (mm1.MovieChosen is null)
+        {
+            throw new CustomBasicException("No movie chosen");
+        }
+        dats.PopulateChosenMovie(mm1.MovieChosen.Value);
+        return dats.CurrentMovie!;
+    }
     private Task UpdateMovieAsync(M selectedMovie)
     {
         dats.CurrentMovie = selectedMovie;

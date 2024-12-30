@@ -41,5 +41,6 @@ global using MediaHelpers.CoreLibrary.Music.ViewModels;
 global using BasicBlazorLibrary.Components.InputNavigations;
 global using MediaHelpers.CoreLibrary.Music.Components.Playlists;
 global using ee1 = MediaHelpers.CoreLibrary.Video.TelevisionMiscClasses.Helpers;
+global using mm1 = MediaHelpers.CoreLibrary.Video.Helpers.MovieHelpers;
 global using Microsoft.Extensions.DependencyInjection;
 global using CommonBasicLibraries.DatabaseHelpers.MiscInterfaces;

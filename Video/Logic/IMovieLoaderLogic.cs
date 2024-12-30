@@ -6,6 +6,7 @@
 public interface IMovieLoaderLogic<M>
     where M: class, IMainMovieTable
 {
+    M GetChosenMovie();
     Task FinishMovieAsync(M selectedMovie);
     Task UpdateMovieAsync(M selectedMovie);
     Task DislikeMovieAsync(M selectedMovie);
