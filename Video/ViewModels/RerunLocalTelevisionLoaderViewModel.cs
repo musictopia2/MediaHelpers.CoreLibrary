@@ -116,7 +116,7 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
     }
     private async Task SkipEpisodeTemporarilyAsync(EnumNextMode mode)
     {
-        var tempItem = StopEpisode();
+        var tempItem = StopVideo();
         await _loadLogic.TemporarilySKipEpisodeAsync(tempItem);
         ProcessHoliday(tempItem);
         bool manuallyChose = tempItem.Holiday != EnumTelevisionHoliday.None;

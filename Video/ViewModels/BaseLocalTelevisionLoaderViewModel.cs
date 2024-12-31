@@ -62,7 +62,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
         E tempItem;
         if (DoStopForHoliday)
         {
-            tempItem = StopEpisode();
+            tempItem = StopVideo();
         }
         else
         {
@@ -78,13 +78,13 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
     protected abstract Task FinishEditEpisodeLaterAsync(IEpisodeTable tempItem, EnumTelevisionHoliday holiday, EnumNextMode nextMode);
     private async Task EditEpisodeLaterAsync(EnumNextMode mode)
     {
-        var tempItem = StopEpisode();
+        var tempItem = StopVideo();
         await _loadLogic.EditEpisodeLaterAsync(tempItem);
         await FinishEditEpisodeLaterAsync(tempItem, tempItem.Holiday!.Value, mode);
     }
     private async Task SkipEpisodeForeverAsync(EnumNextMode mode)
     {
-        var tempItem = StopEpisode();
+        var tempItem = StopVideo();
         await _loadLogic.ForeverSkipEpisodeAsync(tempItem);
         await FinishSkippingEpisodeForeverAsync(tempItem, tempItem.Holiday!.Value, mode);
     }

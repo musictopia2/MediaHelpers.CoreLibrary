@@ -125,13 +125,13 @@ public abstract class VideoMainLoaderViewModel<V>(IFullVideoPlayer player, ISyst
     {
         error.ShowSystemError(message);
     }
-    protected V StopEpisode()
+    protected V StopVideo()
     {
         ResumeSecs = 0;
         VideoPosition = 0;
         if (SelectedItem is null)
         {
-            throw new CustomBasicException("No episode was even chosen");
+            throw new CustomBasicException("No video was even chosen");
         }
         var tempItem = SelectedItem;
         SelectedItem = null;

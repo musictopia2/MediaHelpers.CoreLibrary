@@ -5,7 +5,6 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
     where M : class, IMainMovieTable
     where T : class, IBasicMoviesModel, new()
 {
-    private readonly IFullVideoPlayer _player;
     private readonly IBasicMovieLoaderLogic<M> _loader;
     private readonly IBasicMoviesRemoteControlHostService<T> _hostService;
     private readonly IExit _exit;
@@ -18,7 +17,6 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
         ISystemError error
         ) : base(player, error, exit)
     {
-        _player = player;
         _loader = loader;
         _hostService = hostService;
         _exit = exit;
@@ -53,7 +51,7 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
         }
         await Execute.OnUIThreadAsync(async () =>
         {
-            var tempItem = StopEpisode();
+            var tempItem = StopVideo();
             await _loader.DislikeMovieAsync(tempItem);
             _exit.ExitApp();
         });

@@ -25,7 +25,7 @@ public class RerunLocalMovieLoaderViewModel<M> : BaseLocalMovieLoaderViewModel<M
         }
         await Execute.OnUIThreadAsync(async () =>
         {
-            var tempItem = StopEpisode();
+            var tempItem = StopVideo();
             await _loader.EditMovieLaterAsync(tempItem);
             _exit.ExitApp();
         });
@@ -38,7 +38,7 @@ public class RerunLocalMovieLoaderViewModel<M> : BaseLocalMovieLoaderViewModel<M
         }
         await Execute.OnUIThreadAsync(async () =>
         {
-            var tempItem = StopEpisode();
+            var tempItem = StopVideo();
             await _loader.FinishMovieAsync(tempItem);
             _exit.ExitApp();
         });
