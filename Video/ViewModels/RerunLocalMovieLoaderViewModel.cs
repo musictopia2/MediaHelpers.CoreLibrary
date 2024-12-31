@@ -48,7 +48,8 @@ public class RerunLocalMovieLoaderViewModel<M> : BaseLocalMovieLoaderViewModel<M
         BasicMoviesModel model = new()
         {
             Progress = ProgressText,
-            MovieName = SelectedItem!.Title
+            MovieName = SelectedItem!.Title,
+            NeedsStart = false //i think.
         };
         return model;
     }

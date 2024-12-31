@@ -3,4 +3,5 @@ public interface IBasicMoviesModel
 {
     string MovieName { get; set; }
     string Progress { get; set; }
+    bool NeedsStart { get; set; }
 }
