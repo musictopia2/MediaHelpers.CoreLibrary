@@ -29,6 +29,11 @@ public class MovieRerunsLoaderLogic<M>(IRerunLoaderMovieContext<M> dats, IExit e
         dats.PopulateChosenMovie(mm1.MovieChosen.Value);
         return dats.CurrentMovie!;
     }
+    Task IBasicMovieLoaderLogic<M>.InitializeMovieAsync(M selectedMovie)
+    {
+        dats.CurrentMovie = selectedMovie;
+        return dats.InitializeMovieAsync();
+    }
     private Task UpdateMovieAsync(M selectedMovie)
     {
         dats.CurrentMovie = selectedMovie;

@@ -10,5 +10,5 @@ public interface IBasicMovieLoaderLogic<M>
     Task FinishMovieAsync(M selectedMovie);
     Task UpdateMovieAsync(M selectedMovie);
     Task DislikeMovieAsync(M selectedMovie);
-    
+    Task InitializeMovieAsync(M selectedMovie);
 }

@@ -101,22 +101,27 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
         return SelectedItem.ResumeAt.Value;
     }
     private int _secs;
+    private async Task BeforeInitMovieAsync()
+    {
+        _secs = await ResumeAtAsync();
+        if (_secs == 0 && SelectedItem!.Opening.HasValue == true)
+        {
+            _secs = SelectedItem.Opening!.Value;
+        }
+        VideoPath = SelectedItem!.FullPath();
+        SelectedItem.LastWatched = DateOnly.FromDateTime(DateTime.Now);
+        if (SelectedItem.ResumeAt.HasValue == false)
+        {
+            await _loader.UpdateMovieAsync(SelectedItem);
+        }
+    }
     protected override async Task BeforePlayerInitAsync()
     {
         try
         {
             await base.BeforePlayerInitAsync();
-            _secs = await ResumeAtAsync();
-            if (_secs == 0 && SelectedItem!.Opening.HasValue == true)
-            {
-                _secs = SelectedItem.Opening!.Value;
-            }
-            VideoPath = SelectedItem!.FullPath();
-            SelectedItem.LastWatched = DateOnly.FromDateTime(DateTime.Now);
-            if (SelectedItem.ResumeAt.HasValue == false)
-            {
-                await _loader.UpdateMovieAsync(SelectedItem);
-            }
+            await BeforeInitMovieAsync();
+            await _loader.InitializeMovieAsync(SelectedItem!);
         }
         catch (Exception ex)
         {

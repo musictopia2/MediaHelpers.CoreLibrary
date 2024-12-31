@@ -6,4 +6,5 @@ public interface IStartLoaderMovieContext<M>
     void PopulateChosenMovie(int movieID);
     Task DislikeMovieAsync();
     Task UpdateMovieAsync(); //needs a way to update a movie.
+    Task InitializeMovieAsync();
 }
