@@ -1,4 +1,6 @@
-﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
+﻿using CommonBasicLibraries.BasicUIProcesses;
+
+namespace MediaHelpers.CoreLibrary.Video.ViewModels;
 public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderViewModel<E, BasicTelevisionModel>
     where E : class, IEpisodeTable
 {
@@ -47,12 +49,12 @@ public class RerunLocalTelevisionLoaderViewModel<E> : BaseLocalTelevisionLoaderV
         bool manuallyChose = holiday != EnumTelevisionHoliday.None;
         if (_wasHoliday && manuallyChose == false)
         {
-            _exit.ExitApp();
+            Execute.OnUIThread(_exit.ExitApp);
             return;
         }
         if (nextMode == EnumNextMode.CloseOut)
         {
-            _exit.ExitApp(); //since you chose to close out, will close out.
+            Execute.OnUIThread(_exit.ExitApp);
             return;
             //if you chose holiday and chose to close out, hopefully when you go back in again, you have to choose whether you want holiday or not again.
         }

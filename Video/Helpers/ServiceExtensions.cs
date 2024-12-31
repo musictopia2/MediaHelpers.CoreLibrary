@@ -65,6 +65,7 @@ public static class ServiceExtensions
         where M : class, IMainMovieTable
     {
         services.RegisterMovieContainer<M>()
+            .AddSingleton<RerunLocalMovieLoaderViewModel<M>>()
             .AddSingleton<IVideoPlayerViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())
             .AddSingleton<IMovieLoaderViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())
             .AddSingleton<IStartLoadingViewModel>(pp => pp.GetRequiredService<RerunLocalMovieLoaderViewModel<M>>())

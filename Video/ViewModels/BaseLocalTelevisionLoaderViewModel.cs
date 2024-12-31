@@ -88,23 +88,6 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
         await _loadLogic.ForeverSkipEpisodeAsync(tempItem);
         await FinishSkippingEpisodeForeverAsync(tempItem, tempItem.Holiday!.Value, mode);
     }
-    protected E StopEpisode()
-    {
-        ResumeSecs = 0;
-        VideoPosition = 0;
-        if (SelectedItem is null)
-        {
-            throw new CustomBasicException("No episode was even chosen");
-        }
-        var tempItem = SelectedItem;
-        SelectedItem = null;
-        if (tempItem is null)
-        {
-            throw new CustomBasicException("The temp item is null.  Wrong");
-        }
-        Player.StopPlay();
-        return tempItem;
-    }
     protected void LoadNewEpisode()
     {
         if (SelectedItem is null)

@@ -1,4 +1,6 @@
-﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
+﻿using CommonBasicLibraries.BasicUIProcesses;
+
+namespace MediaHelpers.CoreLibrary.Video.ViewModels;
 public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewModel<M>,
     IStartLoadingViewModel,
     IMovieLoaderViewModel
@@ -51,9 +53,12 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
         {
             return;
         }
-        _player.StopPlay();
-        await _loader.DislikeMovieAsync(SelectedItem);
-        _exit.ExitApp();
+        await Execute.OnUIThreadAsync(async () =>
+        {
+            var tempItem = StopEpisode();
+            await _loader.DislikeMovieAsync(tempItem);
+            _exit.ExitApp();
+        });
     }
     protected abstract bool CanInitializeRemoteControlAfterPlayerInit { get; }
     protected override Task SendOtherDataAsync()
@@ -67,11 +72,19 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
     }
     public override async Task SaveProgressAsync()
     {
-        if (SelectedItem!.ResumeAt.HasValue == false || SelectedItem.ResumeAt!.Value < VideoPosition)
+        try
         {
-            SelectedItem.ResumeAt = VideoPosition;
+            if (SelectedItem!.ResumeAt.HasValue == false || SelectedItem.ResumeAt!.Value < VideoPosition)
+            {
+                SelectedItem.ResumeAt = VideoPosition;
+            }
+            await _loader.UpdateMovieAsync(SelectedItem);
         }
-        await _loader.UpdateMovieAsync(SelectedItem);
+        catch (Exception ex)
+        {
+            _error.ShowSystemError(ex.Message);
+        }
+        
     }
     public override Task VideoFinishedAsync()
     {

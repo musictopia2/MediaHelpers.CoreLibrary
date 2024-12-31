@@ -16,6 +16,7 @@ public class MovieRerunsLoaderLogic<M>(IRerunLoaderMovieContext<M> dats, IExit e
     }
     async Task IMovieLoaderLogic<M>.FinishMovieAsync(M selectedMovie)
     {
+        selectedMovie.ResumeAt = null; //must be here.  otherwise, autoresume does not work.
         await UpdateMovieAsync(selectedMovie);
         exit.ExitApp();
     }
@@ -31,7 +32,6 @@ public class MovieRerunsLoaderLogic<M>(IRerunLoaderMovieContext<M> dats, IExit e
     private Task UpdateMovieAsync(M selectedMovie)
     {
         dats.CurrentMovie = selectedMovie;
-        selectedMovie.ResumeAt = null;
         return dats.UpdateMovieAsync();
     }
     Task IMovieLoaderLogic<M>.UpdateMovieAsync(M selectedMovie)
