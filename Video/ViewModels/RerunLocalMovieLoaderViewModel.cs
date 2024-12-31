@@ -43,6 +43,7 @@ public class RerunLocalMovieLoaderViewModel<M> : BaseLocalMovieLoaderViewModel<M
             _exit.ExitApp();
         });
     }
+    public override bool CanPlay => true;
     protected override bool CanInitializeRemoteControlAfterPlayerInit => true;
 
 }

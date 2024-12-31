@@ -1,10 +1,8 @@
-﻿using CommonBasicLibraries.BasicUIProcesses;
-
-namespace MediaHelpers.CoreLibrary.Video.ViewModels;
+﻿namespace MediaHelpers.CoreLibrary.Video.ViewModels;
 public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewModel<M>,
     IStartLoadingViewModel,
     IMovieLoaderViewModel
-    where M: class, IMainMovieTable
+    where M : class, IMainMovieTable
     where T : class, IBasicMoviesModel, new()
 {
     private readonly IFullVideoPlayer _player;
@@ -84,7 +82,7 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
         {
             _error.ShowSystemError(ex.Message);
         }
-        
+
     }
     public override Task VideoFinishedAsync()
     {
@@ -127,26 +125,17 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
             _error.ShowSystemError(ex.Message);
         }
     }
-    //eventually requires rethinking here.
     protected override async Task AfterPlayerInitAsync()
     {
         try
         {
-            if (SelectedItem!.Opening.HasValue == false)
-            {
-                throw new CustomBasicException("Must have opening values now");
-            }
-            else if (SelectedItem.Closing.HasValue == false)
-            {
-                throw new CustomBasicException("Must have closing values now");
-            }
-            else
-            {
-                VideoLength = SelectedItem.Closing!.Value;
-            }
+            await ProcessSkipsAsync();
             ResumeSecs = _secs;
             VideoPosition = _secs;
-            await _hostService.InitializeAsync();
+            if (CanInitializeRemoteControlAfterPlayerInit)
+            {
+                await _hostService.InitializeAsync();
+            }
             await ShowVideoLoadedAsync();
         }
         catch (Exception ex)
@@ -154,6 +143,25 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
             _error.ShowSystemError(ex.Message);
         }
     }
-    public override bool CanPlay => true; //for now, can always play a movie.
+    private async Task ProcessSkipsAsync()
+    {
+        Player.AddScenesToSkip(SelectedItem!.Skips); //hopefully this simple.
+        var tvLength = Player.Length();
+        await CalculateDurationAsync(tvLength);
+    }
+    private async Task CalculateDurationAsync(int movieLength)
+    {
+        int newLength;
+        if (SelectedItem!.Closing.HasValue == true)
+        {
+            newLength = SelectedItem.Closing!.Value;
+        }
+        else
+        {
+            newLength = movieLength;
+        }
+        VideoLength = newLength;
+        await ShowVideoLoadedAsync();
+    }
     public Action? StartLoadingPlayer { get; set; }
 }
