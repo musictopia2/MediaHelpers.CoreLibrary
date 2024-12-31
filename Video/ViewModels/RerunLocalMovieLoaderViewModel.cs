@@ -43,6 +43,15 @@ public class RerunLocalMovieLoaderViewModel<M> : BaseLocalMovieLoaderViewModel<M
             _exit.ExitApp();
         });
     }
+    protected override BasicMoviesModel GetMovieDataToSend()
+    {
+        BasicMoviesModel model = new()
+        {
+            Progress = ProgressText,
+            MovieName = SelectedItem!.Title
+        };
+        return model;
+    }
     public override bool CanPlay => true;
     protected override bool CanInitializeRemoteControlAfterPlayerInit => true;
 

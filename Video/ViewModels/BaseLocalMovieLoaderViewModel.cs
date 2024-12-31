@@ -57,13 +57,13 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
         });
     }
     protected abstract bool CanInitializeRemoteControlAfterPlayerInit { get; }
+
+    protected abstract T GetMovieDataToSend();
+
     protected override Task SendOtherDataAsync()
     {
-        T model = new()
-        {
-            Progress = ProgressText,
-            MovieName = SelectedItem!.Title
-        };
+        T model = GetMovieDataToSend();
+        
         return _hostService.SendProgressAsync(model);
     }
     public override async Task SaveProgressAsync()
