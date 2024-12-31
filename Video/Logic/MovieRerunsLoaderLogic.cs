@@ -2,7 +2,7 @@
 public class MovieRerunsLoaderLogic<M>(IRerunLoaderMovieContext<M> dats, IExit exit) : IRerunMovieLoaderLogic<M>
     where M : class, IMainMovieTable
 {
-    async Task IMovieLoaderLogic<M>.DislikeMovieAsync(M selectedMovie)
+    async Task IBasicMovieLoaderLogic<M>.DislikeMovieAsync(M selectedMovie)
     {
         dats.CurrentMovie = selectedMovie;
         await dats.DislikeMovieAsync();
@@ -14,13 +14,13 @@ public class MovieRerunsLoaderLogic<M>(IRerunLoaderMovieContext<M> dats, IExit e
         await dats.EditMovieLaterAsync();
         exit.ExitApp();
     }
-    async Task IMovieLoaderLogic<M>.FinishMovieAsync(M selectedMovie)
+    async Task IBasicMovieLoaderLogic<M>.FinishMovieAsync(M selectedMovie)
     {
         selectedMovie.ResumeAt = null; //must be here.  otherwise, autoresume does not work.
         await UpdateMovieAsync(selectedMovie);
         exit.ExitApp();
     }
-    M IMovieLoaderLogic<M>.GetChosenMovie()
+    M IBasicMovieLoaderLogic<M>.GetChosenMovie()
     {
         if (mm1.MovieChosen is null)
         {
@@ -34,7 +34,7 @@ public class MovieRerunsLoaderLogic<M>(IRerunLoaderMovieContext<M> dats, IExit e
         dats.CurrentMovie = selectedMovie;
         return dats.UpdateMovieAsync();
     }
-    Task IMovieLoaderLogic<M>.UpdateMovieAsync(M selectedMovie)
+    Task IBasicMovieLoaderLogic<M>.UpdateMovieAsync(M selectedMovie)
     {
         return UpdateMovieAsync(selectedMovie);
     }

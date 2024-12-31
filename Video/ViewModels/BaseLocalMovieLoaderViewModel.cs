@@ -6,12 +6,12 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
     where T : class, IBasicMoviesModel, new()
 {
     private readonly IFullVideoPlayer _player;
-    private readonly IMovieLoaderLogic<M> _loader;
+    private readonly IBasicMovieLoaderLogic<M> _loader;
     private readonly IBasicMoviesRemoteControlHostService<T> _hostService;
     private readonly IExit _exit;
     private readonly ISystemError _error;
     public BaseLocalMovieLoaderViewModel(IFullVideoPlayer player,
-        IMovieLoaderLogic<M> loader,
+        IBasicMovieLoaderLogic<M> loader,
         MovieContainerClass<M> movieContainer,
         IBasicMoviesRemoteControlHostService<T> hostService,
         IExit exit,

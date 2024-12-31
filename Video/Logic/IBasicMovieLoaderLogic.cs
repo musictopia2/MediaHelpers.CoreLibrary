@@ -3,7 +3,7 @@
 /// this is used in cases where you chose a movie and it loads the movie.
 /// shows all the processes that get called when you are watching a movie.
 /// </summary>
-public interface IMovieLoaderLogic<M>
+public interface IBasicMovieLoaderLogic<M>
     where M: class, IMainMovieTable
 {
     M GetChosenMovie();
