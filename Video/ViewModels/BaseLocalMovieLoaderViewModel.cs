@@ -101,6 +101,10 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
         return SelectedItem.ResumeAt.Value;
     }
     private int _secs;
+    protected virtual void RecordLastWatched()
+    {
+        SelectedItem!.LastWatched = DateOnly.FromDateTime(DateTime.Now);
+    }
     private async Task BeforeInitMovieAsync()
     {
         _secs = await ResumeAtAsync();
@@ -109,7 +113,7 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
             _secs = SelectedItem.Opening!.Value;
         }
         VideoPath = SelectedItem!.FullPath();
-        SelectedItem.LastWatched = DateOnly.FromDateTime(DateTime.Now);
+        RecordLastWatched();
         if (SelectedItem.ResumeAt.HasValue == false)
         {
             await _loader.UpdateMovieAsync(SelectedItem);
