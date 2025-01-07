@@ -153,7 +153,7 @@ public abstract class BaseLocalMovieLoaderViewModel<M, T> : VideoMainLoaderViewM
     private async Task ProcessSkipsAsync()
     {
         Player.AddScenesToSkip(SelectedItem!.Skips); //hopefully this simple.
-        var tvLength = Player.Length();
+        var tvLength = await Player.LengthAsync();
         await CalculateDurationAsync(tvLength);
     }
     private async Task CalculateDurationAsync(int movieLength)

@@ -49,7 +49,7 @@ public abstract class VideoMainLoaderViewModel<V>(IFullVideoPlayer player, ISyst
     {
         if (VideoLength == 0)
         {
-            VideoLength = Player.Length();
+            VideoLength = await Player.LengthAsync();
         }
         if (VideoLength == -1)
         {

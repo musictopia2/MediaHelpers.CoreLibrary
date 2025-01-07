@@ -2,7 +2,8 @@
 public interface IBasicMediaPlayer : IPausePlayer
 {
     bool IsFinished();
-    int Length();
+    Task<int> LengthAsync(); //try to make this async so i have more options on how to get the length of something.
+    //int Length();
     string Path { get; set; }
     void SetPathBinding(string path);
     int Volume { get; set; }

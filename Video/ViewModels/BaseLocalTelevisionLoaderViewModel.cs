@@ -150,7 +150,7 @@ public abstract class BaseLocalTelevisionLoaderViewModel<E, T> : VideoMainLoader
         {
             Player.AddScenesToSkip(SelectedItem.Skips); //hopefully this simple.
         }
-        var tvLength = Player.Length();
+        var tvLength = await Player.LengthAsync();
         await CalculateDurationAsync(tvLength);
     }
     protected abstract bool CanInitializeRemoteControlAfterPlayerInit { get; }
