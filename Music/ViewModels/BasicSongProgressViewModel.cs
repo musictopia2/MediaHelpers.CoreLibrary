@@ -7,6 +7,11 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
     private readonly IPrepareSong _prepare;
     private readonly IToast _toast;
     public static Func<bool> CanMusicPlay { get; set; } = () => true; //default to music can always play.
+    /// <summary>
+    /// Fired once per second of active playback; no parameters provided.
+    /// Consumers should track time/state independently.
+    /// </summary>
+    public static Func<Task> OnMusicSecondElapsedAsync { get; set; } = () => Task.CompletedTask; //default to nothing.
     public BasicSongProgressViewModel(IMP3Player mp3,
         IProgressMusicPlayer player,
         IPrepareSong prepare,
@@ -134,6 +139,7 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
             LaterCheck(); //has to later check
             return;
         }
+
         if (await NeedsToClearAsync())
         {
             IsSongPlaying = await NextSongFromClearingAsync(); //if there is a song, then will call the updatesong and will still work.
@@ -146,10 +152,12 @@ public class BasicSongProgressViewModel : IPlayPauseClass, INextSongClass
             StateChanged?.Invoke();
             return;
         }
+        await OnMusicSecondElapsedAsync();
         ResumeAt = _mp3.TimeElapsedSeconds();
         ProgressText = ResumeAt.MusicProgressStringFromSeconds(SongLength);
         await SendRemoteControlProcessAsync();
         await _player.SongInProgressAsync(ResumeAt);
+        
         Start();
         StateChanged?.Invoke();
     }
