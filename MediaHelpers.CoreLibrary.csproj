@@ -12,8 +12,8 @@
     <SupportedPlatform Include="browser" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommonBasicLibraries" Version="10.0.1" />
-    <PackageReference Include="BasicBlazorLibrary" Version="10.0.1" />
+    <PackageReference Include="CommonBasicLibraries" Version="10.0.13" />
+    <PackageReference Include="BasicBlazorLibrary" Version="10.0.10" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="C:\VS\OneNet\Apps\CommandLines\PostBuildPackageHandler\bin\Release\net10.0\PostBuildPackageHandler.exe $(ProjectName) $(ProjectDir) $(ProjectFileName) $(TargetDir)" Condition="'$(Configuration)' == 'Release' and '$(RunPostBuildAppCondition)' == 'true'" />

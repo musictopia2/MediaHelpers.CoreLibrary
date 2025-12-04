@@ -19,7 +19,7 @@ public partial class JukeboxTopComponent
     {
         _artistCombo = null;
         _resultCombo = null;
-        _lastModel.ComboTextColor = cc1.Green.ToWebColor();
+        _lastModel.ComboTextColor = cc1.Green.ToWebColor;
         Container!.UpdatePlaylist = () => InvokeAsync(StateHasChanged);
         DataContext!.ComboFocus = async (item) =>
         {

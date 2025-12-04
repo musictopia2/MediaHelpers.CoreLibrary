@@ -9,7 +9,7 @@ public static class HolidayExtensions
         }
         if (whichDate.Month == 11)
         {
-            DateOnly tempDate = DateTime.Now.ToDateOnly().WhenIsThanksgivingThisYear();
+            DateOnly tempDate = DateTime.Now.ToDateOnly.WhenIsThanksgivingThisYear;
             int Day = tempDate.Day - 7;
             if (whichDate.Day >= Day && whichDate <= tempDate)
             {

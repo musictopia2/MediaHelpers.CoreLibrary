@@ -15,7 +15,7 @@ public class MovieRerunsListLogic<M>(IRerunListMovieContext<M> dats, IDateOnlyPi
     async Task<BasicList<M>> IMovieListLogic<M>.GetMovieListAsync()
     {
         DateOnly thisDate = picker.GetCurrentDate; //has to use picker so i can mock it if necessary
-        bool isChristmas = thisDate.IsBetweenThanksgivingAndChristmas();
+        bool isChristmas = thisDate.IsBetweenThanksgivingAndChristmas;
         return await dats.GetMovieListAsync(isChristmas);
     }
 }
