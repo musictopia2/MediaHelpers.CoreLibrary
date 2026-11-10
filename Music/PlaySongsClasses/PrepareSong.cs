@@ -1,14 +1,8 @@
 ﻿namespace MediaHelpers.CoreLibrary.Music.PlaySongsClasses;
-public class PrepareSong : IPrepareSong
+public class PrepareSong(IMP3Player mP3, ISystemError error) : IPrepareSong
 {
-    private readonly IMP3Player _mP3;
-    private readonly ISystemError _error;
     public static bool ShowErrors { get; set; }
-    public PrepareSong(IMP3Player mP3, ISystemError error)
-    {
-        _mP3 = mP3;
-        _error = error;
-    }
+
     private static bool IsMp3(string path)
     {
         if (path.ToLower().EndsWith(".mp3") == true)
@@ -27,7 +21,7 @@ public class PrepareSong : IPrepareSong
     }
     async Task<bool> IPrepareSong.PrepareSongAsync(IPlaySong currentSong, int resumeAt)
     {
-        _mP3.StopPlay();
+        mP3.StopPlay();
         string paths = currentSong.FullPath;
         if (IsMp3(paths) == false)
         {
@@ -39,18 +33,18 @@ public class PrepareSong : IPrepareSong
         {
             if (ShowErrors == true)
             {
-                _error.ShowSystemError($"Cannot find the path {paths}  when trying to play a song.  Maybe the hard drive is having problems or you have been disconnected from the network");
+                error.ShowSystemError($"Cannot find the path {paths}  when trying to play a song.  Maybe the hard drive is having problems or you have been disconnected from the network");
                 return false;
             }
         }
-        _mP3.Path = paths;
+        mP3.Path = paths;
         if (resumeAt == 0)
         {
-            await _mP3.PlayAsync();
+            await mP3.PlayAsync();
         }
         else
         {
-            await _mP3.PlayAsync(resumeAt);
+            await mP3.PlayAsync(resumeAt);
         }
         return true;
     }
